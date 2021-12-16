@@ -580,7 +580,7 @@ int main(int argc, char* argv[])
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(100, 100);
-	idfg = glutCreateWindow("mimeCraft");
+	idfg = glutCreateWindow("littleCraft");
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(resize);
 	glutMouseFunc(mouse);
