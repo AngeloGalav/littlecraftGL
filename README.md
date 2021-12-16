@@ -1,6 +1,6 @@
 # littlecraftGL
 
-> :warning: **This project is still very much under completition!**, wait until it will be finished...
+> :warning: **This project is still very much under development!**, wait until it will be finished...
 
 
 This is the code for the second project for the Computer Graphics course at the University Of Bologna. The goal was to make an interactable 3D scene in OpenGL.
