@@ -11,13 +11,13 @@ Some of the features of the original are missing due to time and complexity cons
 
 ## How to compile
 
-This branch represents the <b>Linux version</b> of the code (which is essentially the same aside from some minor tweaks and the compilation method). You can check the Windows version of the code [here](https://github.com/AngeloGalav/doodleJumpGL/tree/windows).
+This branch represents the <b>Linux version</b> of the code (which is essentially the same aside from some minor tweaks and the compilation method). You can check the Windows version of the code [here](https://github.com/AngeloGalav/littlecraftGL/tree/windows).
 
 To compile and run in Linux, simply use the following commands:
 
 ```
-cd doodleJumpGL
-make && ./DoodleJumpGL
+cd littlecraftGL
+make && ./glCraft
 ```
 
 and that's pretty much it.
