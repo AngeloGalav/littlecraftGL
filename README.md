@@ -4,7 +4,7 @@
 
 
 This is the code for the second project for the Computer Graphics course at the University Of Bologna. The goal was to make an interactable 3D scene in OpenGL.
-I decided to make a clone of the popular game "Minecraft", in order to challenge my knoledge and capabilities.
+I decided to make a clone of the popular game "Minecraft", in order to challenge my knowledge and capabilities.
 
 Some of the features of the original are missing due to time and complexity constraints.
 
