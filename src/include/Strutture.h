@@ -20,10 +20,8 @@ typedef struct {
 	GLuint EBO_indici;
 	GLuint VBO_coord_texture;
 	string nome;
-} Mesh;
-static vector<Mesh> Scena;
-static vector<vec3> centri;
-static vector<float> raggi;
+} Mesh_;
+
 typedef enum {
 	GOURAD_SHADING,
 	PHONG_SHADING,
@@ -37,7 +35,7 @@ struct {
 	vec4 target;
 	vec4 upVector;
 	vec4 direction;
-} ViewSetup;
+} ViewSetup; // camera setup
 
 struct {
 	float fovY, aspect, near_plane, far_plane;

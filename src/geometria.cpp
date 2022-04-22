@@ -3,8 +3,7 @@
  * 
  */
 
-#include "include/Strutture.h"
-#include "include/Lib.h"
+#include "include/geometria.h"
 
 void crea_cubo(Mesh* mesh)
 {
@@ -28,9 +27,9 @@ void crea_cubo(Mesh* mesh)
 	mesh->colori.push_back(vec4(1.0, 1.0, 1.0, 0.5));
 
 	
-	
-	mesh->vertici.push_back(vec3(0.0, 0.0, 0.0));
-	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
+	// parte della geometria
+	// mesh->vertici.push_back(vec3(0.0, 0.0, 0.0));
+	// mesh->colori.push_back(vec4(1.0, 1.0, 0.0, 1.0));
 
 
 	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
@@ -47,10 +46,10 @@ void crea_cubo(Mesh* mesh)
 	mesh->indici.push_back(6); mesh->indici.push_back(7); mesh->indici.push_back(3);
 	int nv = mesh->vertici.size();
  
-	mesh->indici.push_back(nv-1);
-
-
+	// mesh->indici.push_back(nv-1);
 }
+
+
 void crea_piramide(Mesh* mesh)
 {
 	mesh->vertici.push_back(vec3(-1.0, 0.0, 1.0));
@@ -64,8 +63,6 @@ void crea_piramide(Mesh* mesh)
 	// Apice piramide
 	mesh->vertici.push_back(vec3(0.0,1.0,0.0));
 	mesh->colori.push_back(vec4(1.0, 1.0, 1.0, 1.0));
-
-
 	
 
 	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
@@ -214,6 +211,91 @@ void crea_sfera (Mesh* mesh)
 	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
 	int nv = mesh->vertici.size();
 	mesh->indici.push_back(nv - 1);
+}
 
+/** Mia funzione per la costruzione di un semplice cubo
+ *	(di colore blu) 
+ */
+void build_cube(Mesh* mesh) {
+
+	// vertici del front 
+	mesh->vertici.push_back(vec3(-1.0, -1.0, 1.0));
+	mesh->vertici.push_back(vec3(1.0, -1.0, 1.0));
+	mesh->vertici.push_back(vec3(1.0, 1.0, 1.0));
+	mesh->vertici.push_back(vec3(-1.0, 1.0, 1.0));
+	// vertici del back
+	mesh->vertici.push_back(vec3(-1.0, -1.0, -1.0));
+	mesh->vertici.push_back(vec3(1.0, -1.0, -1.0));
+	mesh->vertici.push_back(vec3(1.0, 1.0, -1.0));
+	mesh->vertici.push_back(vec3(-1.0, 1.0, -1.0));
+	// siccome poi facciamo uso degli ebos e degli indici, ci bastano solo 4 vertici.
+
+	//colori (il colore di default è blu un po' trasparentino)
+	for (int i = 0; i < mesh->vertici.size(); i++)
+		mesh->colori.push_back(vec4(0.0, 0.0, 1.0, 0.5));
+
+	
+	mesh->vertici.push_back(vec3(0.0, 0.0, 0.0));
+	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
+
+	// con gli ebo definiamo ogni triangolo del cubo
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
+	mesh->indici.push_back(2); mesh->indici.push_back(3); mesh->indici.push_back(0);
+	mesh->indici.push_back(1); mesh->indici.push_back(5); mesh->indici.push_back(6);
+	mesh->indici.push_back(6); mesh->indici.push_back(2); mesh->indici.push_back(1);
+	mesh->indici.push_back(7); mesh->indici.push_back(6); mesh->indici.push_back(5);
+	mesh->indici.push_back(5); mesh->indici.push_back(4); mesh->indici.push_back(7);
+	mesh->indici.push_back(4); mesh->indici.push_back(0); mesh->indici.push_back(3);
+	mesh->indici.push_back(3); mesh->indici.push_back(7); mesh->indici.push_back(4);
+	mesh->indici.push_back(4); mesh->indici.push_back(5); mesh->indici.push_back(1);
+	mesh->indici.push_back(1); mesh->indici.push_back(0); mesh->indici.push_back(4);
+	mesh->indici.push_back(3); mesh->indici.push_back(2); mesh->indici.push_back(6);
+	mesh->indici.push_back(6); mesh->indici.push_back(7); mesh->indici.push_back(3);
+	int nv = mesh->vertici.size();
  
+	mesh->indici.push_back(nv-1);
+}
+
+
+/** Mia funzione per la costruzione di un semplice cubo
+ *	(di colore blu) 
+ */
+void build_cube(Mesh* mesh, vec4 color_cube) {
+
+	// vertici del front 
+	mesh->vertici.push_back(vec3(-1.0, -1.0, 1.0));
+	mesh->vertici.push_back(vec3(1.0, -1.0, 1.0));
+	mesh->vertici.push_back(vec3(1.0, 1.0, 1.0));
+	mesh->vertici.push_back(vec3(-1.0, 1.0, 1.0));
+	// vertici del back
+	mesh->vertici.push_back(vec3(-1.0, -1.0, -1.0));
+	mesh->vertici.push_back(vec3(1.0, -1.0, -1.0));
+	mesh->vertici.push_back(vec3(1.0, 1.0, -1.0));
+	mesh->vertici.push_back(vec3(-1.0, 1.0, -1.0));
+	// siccome poi facciamo uso degli ebos e degli indici, ci bastano solo 4 vertici.
+
+	//colori (il colore di default è blu un po' trasparentino)
+	for (int i = 0; i < mesh->vertici.size(); i++)
+		mesh->colori.push_back(color_cube);
+
+	
+	mesh->vertici.push_back(vec3(0.0, 0.0, 0.0));
+	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
+
+	// con gli ebo definiamo ogni triangolo del cubo
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
+	mesh->indici.push_back(2); mesh->indici.push_back(3); mesh->indici.push_back(0);
+	mesh->indici.push_back(1); mesh->indici.push_back(5); mesh->indici.push_back(6);
+	mesh->indici.push_back(6); mesh->indici.push_back(2); mesh->indici.push_back(1);
+	mesh->indici.push_back(7); mesh->indici.push_back(6); mesh->indici.push_back(5);
+	mesh->indici.push_back(5); mesh->indici.push_back(4); mesh->indici.push_back(7);
+	mesh->indici.push_back(4); mesh->indici.push_back(0); mesh->indici.push_back(3);
+	mesh->indici.push_back(3); mesh->indici.push_back(7); mesh->indici.push_back(4);
+	mesh->indici.push_back(4); mesh->indici.push_back(5); mesh->indici.push_back(1);
+	mesh->indici.push_back(1); mesh->indici.push_back(0); mesh->indici.push_back(4);
+	mesh->indici.push_back(3); mesh->indici.push_back(2); mesh->indici.push_back(6);
+	mesh->indici.push_back(6); mesh->indici.push_back(7); mesh->indici.push_back(3);
+	int nv = mesh->vertici.size();
+ 
+	mesh->indici.push_back(nv-1);
 }

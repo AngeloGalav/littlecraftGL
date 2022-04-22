@@ -1,3 +1,8 @@
+/** Creates the shader program
+ * 
+ */
+
+
 #include "include/ShaderMaker.h"
 #include <iostream>
 #include <fstream>

@@ -5,13 +5,11 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-
-
 std::map<GLchar, Character> Characters;
 
 void Init_Freetype() {
 	// FreeType
-   // --------
+   	// --------
 	FT_Library ft;
 
 
