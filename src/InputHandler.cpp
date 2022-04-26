@@ -114,37 +114,35 @@ void my_passive_mouse(int xpos, int ypos) // camera rotation function
 
 // ruota la camera in base al valore
 void rotateView(float speed, int y, int x){
-	float alfa = 0.05; // serve ridimensionare l'offset tra due posizioni successive del mosue
-	ypos = height - ypos;
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
+	// float alfa = 0.05; // serve ridimensionare l'offset tra due posizioni successive del mosue
+	// ypos = height - ypos;
+	// if (firstMouse)
+	// {
+	// 	lastX = xpos;
+	// 	lastY = ypos;
+	// 	firstMouse = false;
+	// }
 
-	float xoffset = xpos - lastX;
-	float yoffset = ypos - lastY;
-	lastX = xpos;
-	lastY = ypos;
+	// float xoffset = xpos - lastX;
+	// float yoffset = ypos - lastY;
+	// lastX = xpos;
+	// lastY = ypos;
 
-	xoffset *= alfa;
-	yoffset *= alfa;
-	yaw_ += xoffset;   // aggiorno l'angolo yaw
-	pitch_ += yoffset; // aggiorno l'angolo Pitch
+	// xoffset *= alfa;
+	// yoffset *= alfa;
+	// yaw_ += xoffset;   // aggiorno l'angolo yaw
+	// pitch_ += yoffset; // aggiorno l'angolo Pitch
 
-	// Facciamo si' che l'angolo di Picht vari tra -90 e 90.
-	if (pitch_ > 89.0f)
-		pitch_ = 89.0f;
-	if (pitch_ < -89.0f)
-		pitch_ = -89.0f;
+	// // Facciamo si' che l'angolo di Picht vari tra -90 e 90.
+	// if (pitch_ > 89.0f)
+	// 	pitch_ = 89.0f;
+	// if (pitch_ < -89.0f)
+	// 	pitch_ = -89.0f;
 
-	glm::vec3 front;
-	front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-	front.y = sin(glm::radians(pitch_));
-	front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-	mainCamera.ViewSetup.direction = vec4(normalize(front), 0.0);
-	mainCamera.ViewSetup.target = mainCamera.ViewSetup.position + mainCamera.ViewSetup.direction;
-
-}
+	// glm::vec3 front;
+	// front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+	// front.y = sin(glm::radians(pitch_));
+	// front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+	// mainCamera.ViewSetup.direction = vec4(normalize(front), 0.0);
+	// mainCamera.ViewSetup.target = mainCamera.ViewSetup.position + mainCamera.ViewSetup.direction;
 }
