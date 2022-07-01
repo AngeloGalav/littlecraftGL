@@ -17,5 +17,8 @@ void onLeftMouseEvent(int x, int y);
 
 // handles rightMouse event
 void onRightMouseEvent(int x, int y);
+
+// rotates camera using the keyboard
+void rotateCameraKeyboard(int x, int y);
 #endif
  

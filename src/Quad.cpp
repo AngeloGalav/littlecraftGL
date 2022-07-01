@@ -13,13 +13,13 @@ Quad::Quad() {
 
 void Quad::initQuad(){
     
-	vertici.push_back(vec3(-1.0, -1.0, 1.0));
+	vertici.push_back(vec3(-1.0, -1.0, 0.0));
 	colori.push_back(vec4(1.0, 0.0, 0.0, 1.0));
-	vertici.push_back(vec3(1.0, -1.0, 1.0));
+	vertici.push_back(vec3(1.0, -1.0, 0.0));
 	colori.push_back(vec4(0.0, 1.0, 0.0, 1.0));
-	vertici.push_back(vec3(1.0, 1.0, 1.0));
+	vertici.push_back(vec3(1.0, 1.0, 0.0));
 	colori.push_back(vec4(0.0, 0.0, 1.0, 1.0));
-	vertici.push_back(vec3(-1.0, 1.0, 1.0));
+	vertici.push_back(vec3(-1.0, 1.0, 0.0));
 	colori.push_back(vec4(1.0, 0.0, 1.0, 1.0));
 
 	indici.push_back(0); indici.push_back(1); indici.push_back(2);
@@ -30,13 +30,13 @@ void Quad::initQuad(){
  * 
  */
 void Quad::initQuadWithSingleColor(){
-	vertici.push_back(vec3(-1.0, -1.0, 1.0));
+	vertici.push_back(vec3(-1.0, -1.0, 0.0));
 	colori.push_back(quadColor);
-	vertici.push_back(vec3(1.0, -1.0, 1.0));
+	vertici.push_back(vec3(1.0, -1.0, 0.0));
 	colori.push_back(quadColor);
-	vertici.push_back(vec3(1.0, 1.0, 1.0));
+	vertici.push_back(vec3(1.0, 1.0, 0.0));
 	colori.push_back(quadColor);
-	vertici.push_back(vec3(-1.0, 1.0, 1.0));
+	vertici.push_back(vec3(-1.0, 1.0, 0.0));
 	colori.push_back(quadColor);
 
 	indici.push_back(0); indici.push_back(1); indici.push_back(2);

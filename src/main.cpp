@@ -30,6 +30,9 @@ int selected_obj = -1;
 Quad testQuad(vec4(0.0, 1.0f, 0.0, 1.0f));
 Quad testQuad_2(vec4(1.0f, 0.0f, 0.0, 1.0f));
 Quad testQuad_3(vec4(0.0f, 0.0f, 1.0f, 1.0f));
+Quad testQuad_4(vec4(0.0, 1.0f, 1.0f, 1.0f));
+Quad testQuad_5(vec4(1.0f, 1.0f, 0.0, 1.0f));
+Quad testQuad_6(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -51,21 +54,42 @@ void INIT_VAO(void)
 	testQuad.crea_VAO_Vector();
 	testQuad.Model = mat4(1.0);
 	testQuad.Model = scale(testQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	testQuad.Model = translate(testQuad.Model, vec3(6.5, 0.5, 2.5));
+	testQuad.Model = translate(testQuad.Model, vec3(0.0, 0.0, 0.0));
 	Scena.push_back((Mesh) testQuad);
 
 	testQuad_2.crea_VAO_Vector();
 	testQuad_2.Model = mat4(1.0);
 	testQuad_2.Model = scale(testQuad_2.Model, vec3(2.0f, 2.0f, 2.0f));
-	testQuad_2.Model = translate(testQuad_2.Model, vec3(6.5, 0.5, 3.5));
+	testQuad_2.Model = translate(testQuad_2.Model, vec3(0.0, 0.0, 2.0));
 	Scena.push_back((Mesh) testQuad_2);
 
 	testQuad_3.crea_VAO_Vector();
 	testQuad_3.Model = mat4(1.0);
 	testQuad_3.Model = scale(testQuad_3.Model, vec3(2.0f, 2.0f, 2.0f));
+	testQuad_3.Model = translate(testQuad_3.Model, vec3(0.0, 0.0, 0.0));
 	testQuad_3.Model = rotate(testQuad_3.Model, radians(90.0f), vec3(0, 1, 0));
-	testQuad_3.Model = translate(testQuad_3.Model, vec3(6.5, 0.5, 3.5));
 	Scena.push_back((Mesh) testQuad_3);
+
+	testQuad_4.crea_VAO_Vector();
+	testQuad_4.Model = mat4(1.0);
+	testQuad_4.Model = scale(testQuad_4.Model, vec3(2.0f, 2.0f, 2.0f));
+	testQuad_4.Model = rotate(testQuad_4.Model, radians(-90.0f), vec3(0, 1, 0));
+	testQuad_4.Model = translate(testQuad_4.Model, vec3(1.0, 0.0, 0.0));
+	Scena.push_back((Mesh) testQuad_4);
+
+	// testQuad_5.crea_VAO_Vector();
+	// testQuad_5.Model = mat4(1.0);
+	// testQuad_5.Model = scale(testQuad_5.Model, vec3(2.0f, 2.0f, 2.0f));
+	// testQuad_5.Model = translate(testQuad_5.Model, vec3(0, 1.5, 0.0));
+	// testQuad_5.Model = rotate(testQuad_5.Model, radians(90.0f), vec3(1, 0, 0));
+	// Scena.push_back((Mesh) testQuad_5);
+
+	// testQuad_6.crea_VAO_Vector();
+	// testQuad_6.Model = mat4(1.0);
+	// testQuad_6.Model = translate(testQuad_6.Model, vec3(0.0, 0.0, 0.0));
+	// testQuad_6.Model = rotate(testQuad_6.Model, radians(-90.0f), vec3(1, 0, 0));
+	// testQuad_6.Model = scale(testQuad_6.Model, vec3(2.0f, 2.0f, 2.0f));
+	// Scena.push_back((Mesh) testQuad_6);
 }
 
 void drawScene(void)
@@ -94,15 +118,8 @@ void drawScene(void)
 	{
 		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Scena[k].Model));
 		glBindVertexArray(Scena[k].VAO);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLES, (Scena[k].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
-		int ind = Scena[k].indici.size() - 1;
-		glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawElements(GL_TRIANGLES, (Scena[k].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
-
-		// Disegno il centro della mesh: un punto in quella posizione
-		glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
 
 		glBindVertexArray(0);
 	}
