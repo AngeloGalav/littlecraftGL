@@ -29,7 +29,7 @@ int main_window_id;
 static unsigned int programId, MatrixProj, MatModel, MatView;
 int selected_obj = -1;
 Mesh Cubo, Piano, Piramide, Centri, Sfera;
-Quad testQuad(vec4(0.0, 1.0f, 0.0, 0.0));
+Quad testQuad(vec4(0.0, 1.0f, 0.0, 1.0f));
 
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -48,58 +48,16 @@ void INIT_SHADER(void)
 
 void INIT_VAO(void)
 {
-	// crea_cubo(&Cubo);
-	// //crea_VAO_Vector(&Cubo);
-	// Cubo.crea_VAO_Vector();
-	// Cubo.nome = "Cubo"; // O.O
-	// Cubo.Model = mat4(1.0);
-	// Cubo.Model = translate(Cubo.Model, vec3(4.5, 0.5, 2.5));
-	// // CENTRO CUBO
-	// centri.push_back(vec3(4.5, 0.5, 3.5));
-	// Cubo.Model = scale(Cubo.Model, vec3(2.0f, 2.0f, 2.0f));
-	// raggi.push_back(1.5);
-	// Cubo.Model = translate(Cubo.Model, vec3(-0.5, 0.0, -0.5));
-	// Scena.push_back(Cubo);
-
-	testQuad.initQuad();
 	testQuad.crea_VAO_Vector();
 	testQuad.Model = mat4(1.0);
 	testQuad.Model = translate(testQuad.Model, vec3(6.5, 0.5, 2.5));
 	testQuad.Model = scale(testQuad.Model, vec3(2.0f, 2.0f, 2.0f));
 	Scena.push_back((Mesh) testQuad);
-
-	// crea_piramide(&Piramide);
-	// //crea_VAO_Vector(&Piramide);
-	// Piramide.crea_VAO_Vector();
-	// Piramide.nome = "Piramide";
-	// Piramide.Model = mat4(1.0);
-	// Piramide.Model = translate(Piramide.Model, vec3(-1.5, 0.0, 0.5));
-
-	// // CENTRO PIRAMIDE
-	// centri.push_back(vec3(-1.5, 1.0, 0.5));
-
-	// Piramide.Model = scale(Piramide.Model, vec3(2.0f, 2.0f, 2.0f));
-	// raggi.push_back(1.5);
-	// Piramide.Model = translate(Piramide.Model, vec3(-0.5, 0.0, -0.5));
-	// Scena.push_back(Piramide);
-
-	// crea_piano_suddiviso(&Piano);
-	// //crea_VAO_Vector(&Piano);
-	// Piano.crea_VAO_Vector();
-
-	// Piano.nome = "Piano";
-	// Piano.Model = mat4(1.0);
-	// //	Piano.Model = translate(Piano.Model, vec3(0.5, -1, 0.5));
-
-	// // CENTRO PIANO
-	// centri.push_back(vec3(0.0, 0.0, 0.0));
-	// Piano.Model = scale(Piano.Model, vec3(100.0f, 1.0f, 100.0f));
-	// raggi.push_back(1.5);
-	// Scena.push_back(Piano);
 }
 
 void drawScene(void)
 {
+	// crea il cielo azzurro
 	glClearColor(52.9/100.0, 80.8/100.0, 92.2/100.0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Passo al Vertex Shader il puntatore alla matrice Projection, che sar� associata alla variabile Uniform mat4 Projection
@@ -109,7 +67,6 @@ void drawScene(void)
 	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
 
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
-
 
 
 	// Costruisco la matrice di Vista che applicata ai vertici in coordinate del mondo li trasforma nel sistema di riferimento della camera.

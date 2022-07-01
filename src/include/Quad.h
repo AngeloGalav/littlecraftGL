@@ -14,10 +14,16 @@
 #include "Mesh.h"
 
 class Quad : public Mesh {
+protected:
+    void initQuad();
+    void initQuadWithSingleColor();
 public:
     vec4 quadColor;
-    void initQuad();
     void createQuad();
+    vec4 position;
+
+    //initTexture???
+
 
     // costruttori del quad
     Quad(vec4 color);

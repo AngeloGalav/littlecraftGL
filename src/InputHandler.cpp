@@ -76,9 +76,9 @@ void mouse(int button, int state, int x, int y)
 	if (button == GLUT_RIGHT_BUTTON)
     {
 		glutSetCursor(GLUT_CURSOR_CROSSHAIR);
-        rotateCamera(x, y);
     }
 
+	rotateCamera(x, y);
 
 	// printf("Oggetto selezionato %d \n", selected_obj);
 }
@@ -91,6 +91,8 @@ void mouse(int button, int state, int x, int y)
  */
 void my_passive_mouse(int xpos, int ypos) // camera rotation function
 {
+
+	rotateCamera(xpos, ypos);
 	
 	// glutSetCursor(GLUT_CURSOR_INHERIT);
 	// float alfa = 0.05; // serve ridimensionare l'offset tra due posizioni successive del mosue
@@ -168,17 +170,17 @@ void rotateCamera(int xpos, int ypos) {
 
 void onMouseEvent(int button, int state, int x, int y)
 {
-   if(state == GLUT_DOWN){
-      if(button == GLUT_RIGHT_BUTTON)
-         glutMotionFunc(onRightMouseEvent);
-      else if(button == GLUT_LEFT_BUTTON)
-         glutMotionFunc(onLeftMouseEvent);
-   }
+//    if(state == GLUT_DOWN){
+//       if(button == GLUT_RIGHT_BUTTON)
+//          glutMotionFunc(onRightMouseEvent);
+//       else if(button == GLUT_LEFT_BUTTON)
+//          glutMotionFunc(onLeftMouseEvent);
+//    }
 }
 
-void onLeftMouseEvent(int x, int y){
-	rotateCamera(x, y);
-}
+// void onLeftMouseEvent(int x, int y){
+// 	rotateCamera(x, y);
+// }
 
 void onRightMouseEvent(int x , int y){
 	// evento per selezionare un cubo(?)

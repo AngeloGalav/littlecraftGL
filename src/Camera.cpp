@@ -7,7 +7,6 @@ Camera::Camera(){
 
 void Camera::moveCameraLeft()
 {
-
 	glm::vec3 direzione_scorrimento = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));   //direzione perpendicolare al piano individuato da direction e upvector
 	ViewSetup.position -= glm::vec4(direzione_scorrimento, .0) * cameraSpeed;
 	ViewSetup.target = ViewSetup.position + ViewSetup.direction * cameraSpeed;;
