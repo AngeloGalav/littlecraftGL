@@ -2,7 +2,6 @@
 #include "include/definitions.h"
 #include "include/ShaderMaker.h"
 #include "include/Lib.h"
-#include "include/geometria.h"
 #include "include/Camera.h"
 #include "include/Raycaster.h"
 #include "include/InputHandler.h"
@@ -28,8 +27,9 @@ int main_window_id;
 
 static unsigned int programId, MatrixProj, MatModel, MatView;
 int selected_obj = -1;
-Mesh Cubo, Piano, Piramide, Centri, Sfera;
 Quad testQuad(vec4(0.0, 1.0f, 0.0, 1.0f));
+Quad testQuad_2(vec4(1.0f, 0.0f, 0.0, 1.0f));
+Quad testQuad_3(vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -50,9 +50,22 @@ void INIT_VAO(void)
 {
 	testQuad.crea_VAO_Vector();
 	testQuad.Model = mat4(1.0);
-	testQuad.Model = translate(testQuad.Model, vec3(6.5, 0.5, 2.5));
 	testQuad.Model = scale(testQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	testQuad.Model = translate(testQuad.Model, vec3(6.5, 0.5, 2.5));
 	Scena.push_back((Mesh) testQuad);
+
+	testQuad_2.crea_VAO_Vector();
+	testQuad_2.Model = mat4(1.0);
+	testQuad_2.Model = scale(testQuad_2.Model, vec3(2.0f, 2.0f, 2.0f));
+	testQuad_2.Model = translate(testQuad_2.Model, vec3(6.5, 0.5, 3.5));
+	Scena.push_back((Mesh) testQuad_2);
+
+	testQuad_3.crea_VAO_Vector();
+	testQuad_3.Model = mat4(1.0);
+	testQuad_3.Model = scale(testQuad_3.Model, vec3(2.0f, 2.0f, 2.0f));
+	testQuad_3.Model = rotate(testQuad_3.Model, radians(90.0f), vec3(0, 1, 0));
+	testQuad_3.Model = translate(testQuad_3.Model, vec3(6.5, 0.5, 3.5));
+	Scena.push_back((Mesh) testQuad_3);
 }
 
 void drawScene(void)

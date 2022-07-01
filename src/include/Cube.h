@@ -6,7 +6,8 @@
 
 class Cube {
 public:
-
+    vec3 position;
+    Quad faces[6]; // facce del cubo 
 
     Cube(vec4 pos);
     Cube();    
