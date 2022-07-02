@@ -30,3 +30,6 @@ void Mesh::crea_VAO_Vector()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_indici);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indici.size() * sizeof(GLuint), indici.data(), GL_STATIC_DRAW);
 }
+
+
+void Mesh::drawMesh(int ModelUniform){}

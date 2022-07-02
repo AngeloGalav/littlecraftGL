@@ -18,13 +18,14 @@ protected:
     void initQuad();
     void initQuadWithSingleColor();
 public:
-    vec4 quadColor;
-    void createQuad();
     vec4 position;
+    vec4 quadColor;
+    
+    void createQuad();
+    virtual void drawMesh(int ModelUniform);
 
     //initTexture???
-
-
+    
     // costruttori del quad
     Quad(vec4 color);
     Quad();

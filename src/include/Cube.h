@@ -10,6 +10,7 @@ public:
     Quad faces[6]; // facce del cubo 
 
     void initCube();
+    void drawMesh();
 
     Cube(vec4 pos);
     Cube();    

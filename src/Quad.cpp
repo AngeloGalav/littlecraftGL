@@ -44,5 +44,7 @@ void Quad::initQuadWithSingleColor(){
 }
 
 
+void Quad::drawMesh(int ModelUniform) {
 
+}
 

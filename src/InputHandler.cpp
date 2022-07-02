@@ -38,18 +38,23 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 	case 's':
 		mainCamera.moveCameraBack();
 		break;
-	case 'h':
+
+	case 'j':
 		rotateCameraKeyboard(-1, 0);
 		break;
-	case 'k':
+
+	case 'l':
 		rotateCameraKeyboard(1, 0);
 		break;
-	case 'u':
+
+	case 'i':
 		rotateCameraKeyboard(0, 1);
 		break;
-	case 'j':
+
+	case 'k':
 		rotateCameraKeyboard(0, -1);
 		break;
+		
 	default:
 		break;
 	}

@@ -25,14 +25,17 @@ Raycaster raycast;
 
 int main_window_id;
 
+// debug time
+int t = -180;
+
 static unsigned int programId, MatrixProj, MatModel, MatView;
 int selected_obj = -1;
-Quad testQuad(vec4(0.0, 1.0f, 0.0, 1.0f));
-Quad testQuad_2(vec4(1.0f, 0.0f, 0.0, 1.0f));
-Quad testQuad_3(vec4(0.0f, 0.0f, 1.0f, 1.0f));
-Quad testQuad_4(vec4(0.0, 1.0f, 1.0f, 1.0f));
-Quad testQuad_5(vec4(1.0f, 1.0f, 0.0, 1.0f));
-Quad testQuad_6(vec4(1.0f, 0.0f, 1.0f, 1.0f));
+Quad greenQuad(vec4(0.0, 1.0f, 0.0, 1.0f));
+Quad redQuad(vec4(1.0f, 0.0f, 0.0, 1.0f));
+Quad blueQuad(vec4(0.0f, 0.0f, 1.0f, 1.0f));
+Quad cyanQuad(vec4(0.0, 1.0f, 1.0f, 1.0f));
+Quad yellowQuad(vec4(1.0f, 1.0f, 0.0, 1.0f));
+Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -51,46 +54,58 @@ void INIT_SHADER(void)
 
 void INIT_VAO(void)
 {
-	testQuad.crea_VAO_Vector();
-	testQuad.Model = mat4(1.0);
-	testQuad.Model = scale(testQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	testQuad.Model = translate(testQuad.Model, vec3(0.0, 0.0, 0.0));
-	Scena.push_back((Mesh) testQuad);
+	greenQuad.crea_VAO_Vector();
+	greenQuad.Model = mat4(1.0);
+	greenQuad.Model = scale(greenQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	Scena.push_back((Mesh) greenQuad);
+	// quadrato ciano
+	cyanQuad.crea_VAO_Vector();
+	cyanQuad.Model = mat4(1.0);
+	cyanQuad.Model = scale(cyanQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	cyanQuad.Model = rotate(cyanQuad.Model, radians(-45.0f), vec3(0, 1, 0));
+	Scena.push_back((Mesh) cyanQuad);
 
-	testQuad_2.crea_VAO_Vector();
-	testQuad_2.Model = mat4(1.0);
-	testQuad_2.Model = scale(testQuad_2.Model, vec3(2.0f, 2.0f, 2.0f));
-	testQuad_2.Model = translate(testQuad_2.Model, vec3(0.0, 0.0, 2.0));
-	Scena.push_back((Mesh) testQuad_2);
+	redQuad.crea_VAO_Vector();
+	redQuad.Model = mat4(1.0);
+	redQuad.Model = scale(redQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	redQuad.Model = translate(redQuad.Model, vec3(0.0, 0.0, 2.0));
+	Scena.push_back((Mesh) redQuad);
 
-	testQuad_3.crea_VAO_Vector();
-	testQuad_3.Model = mat4(1.0);
-	testQuad_3.Model = scale(testQuad_3.Model, vec3(2.0f, 2.0f, 2.0f));
-	testQuad_3.Model = translate(testQuad_3.Model, vec3(0.0, 0.0, 0.0));
-	testQuad_3.Model = rotate(testQuad_3.Model, radians(90.0f), vec3(0, 1, 0));
-	Scena.push_back((Mesh) testQuad_3);
+	// quadrato blu
+	blueQuad.crea_VAO_Vector();
+	blueQuad.Model = mat4(1.0);
+	blueQuad.Model = rotate(blueQuad.Model, radians(5.0f), vec3(0, 1, 0));
+	blueQuad.Model = scale(blueQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	blueQuad.Model = translate(blueQuad.Model, vec3(1.0, 0.0, 0.0));
+	Scena.push_back((Mesh) blueQuad);
 
-	testQuad_4.crea_VAO_Vector();
-	testQuad_4.Model = mat4(1.0);
-	testQuad_4.Model = scale(testQuad_4.Model, vec3(2.0f, 2.0f, 2.0f));
-	testQuad_4.Model = rotate(testQuad_4.Model, radians(-90.0f), vec3(0, 1, 0));
-	testQuad_4.Model = translate(testQuad_4.Model, vec3(1.0, 0.0, 0.0));
-	Scena.push_back((Mesh) testQuad_4);
 
-	// testQuad_5.crea_VAO_Vector();
-	// testQuad_5.Model = mat4(1.0);
-	// testQuad_5.Model = scale(testQuad_5.Model, vec3(2.0f, 2.0f, 2.0f));
-	// testQuad_5.Model = translate(testQuad_5.Model, vec3(0, 1.5, 0.0));
-	// testQuad_5.Model = rotate(testQuad_5.Model, radians(90.0f), vec3(1, 0, 0));
-	// Scena.push_back((Mesh) testQuad_5);
+	yellowQuad.crea_VAO_Vector();
+	yellowQuad.Model = mat4(1.0);
+	yellowQuad.Model = scale(yellowQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	yellowQuad.Model = translate(yellowQuad.Model, vec3(0, 1.5, 0.0));
+	yellowQuad.Model = rotate(yellowQuad.Model, radians(90.0f), vec3(1, 0, 0));
+	Scena.push_back((Mesh) yellowQuad);
 
-	// testQuad_6.crea_VAO_Vector();
-	// testQuad_6.Model = mat4(1.0);
-	// testQuad_6.Model = translate(testQuad_6.Model, vec3(0.0, 0.0, 0.0));
-	// testQuad_6.Model = rotate(testQuad_6.Model, radians(-90.0f), vec3(1, 0, 0));
-	// testQuad_6.Model = scale(testQuad_6.Model, vec3(2.0f, 2.0f, 2.0f));
-	// Scena.push_back((Mesh) testQuad_6);
+	purpleQuad.crea_VAO_Vector();
+	purpleQuad.Model = mat4(1.0);
+	purpleQuad.Model = translate(purpleQuad.Model, vec3(0.0, 0.0, 0.0));
+	purpleQuad.Model = rotate(purpleQuad.Model, radians(-90.0f), vec3(1, 0, 0));
+	purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	Scena.push_back((Mesh) purpleQuad);
 }
+
+
+void update() {
+	if (t >= 180){
+		t = -180;
+	}
+	t += 1;
+	blueQuad.Model = rotate(blueQuad.Model, radians((float)t), vec3(0, 1, 0));
+	cout << "ecco t bruh: " << t << endl;
+}
+
+
 
 void drawScene(void)
 {
@@ -114,6 +129,8 @@ void drawScene(void)
 
 	// glPointSize(20.0);
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
+	
+	// Disegna 
 	for (int k = 0; k < Scena.size(); k++)
 	{
 		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Scena[k].Model));
@@ -124,7 +141,9 @@ void drawScene(void)
 		glBindVertexArray(0);
 	}
 
+	update();
 	glutSwapBuffers();
+
 }
 
 int main(int argc, char *argv[])
