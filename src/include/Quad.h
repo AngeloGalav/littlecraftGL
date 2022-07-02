@@ -20,15 +20,20 @@ protected:
 public:
     vec4 position;
     vec4 quadColor;
+    float angle;
     
     void createQuad();
-    virtual void drawMesh(int ModelUniform);
+    void drawMesh(int ModelUniform);
 
     //initTexture???
     
     // costruttori del quad
     Quad(vec4 color);
     Quad();
+
+
+    //DEBUG
+    void rotate_debug();
 };
 
 #endif

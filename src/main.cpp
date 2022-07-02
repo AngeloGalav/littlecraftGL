@@ -10,7 +10,7 @@
 #include "include/EventHandler.h"
 #include "include/Quad.h"
 
-vector<Mesh> Scena;
+vector<Mesh*> Scena;
 vector<vec3> centri;
 vector<float> raggi;
 
@@ -57,55 +57,41 @@ void INIT_VAO(void)
 	greenQuad.crea_VAO_Vector();
 	greenQuad.Model = mat4(1.0);
 	greenQuad.Model = scale(greenQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	Scena.push_back((Mesh) greenQuad);
-	// quadrato ciano
+	Scena.push_back((Mesh*) &greenQuad);
+
 	cyanQuad.crea_VAO_Vector();
 	cyanQuad.Model = mat4(1.0);
 	cyanQuad.Model = scale(cyanQuad.Model, vec3(2.0f, 2.0f, 2.0f));
 	cyanQuad.Model = rotate(cyanQuad.Model, radians(-45.0f), vec3(0, 1, 0));
-	Scena.push_back((Mesh) cyanQuad);
+	Scena.push_back((Mesh*) &cyanQuad);
 
 	redQuad.crea_VAO_Vector();
 	redQuad.Model = mat4(1.0);
 	redQuad.Model = scale(redQuad.Model, vec3(2.0f, 2.0f, 2.0f));
 	redQuad.Model = translate(redQuad.Model, vec3(0.0, 0.0, 2.0));
-	Scena.push_back((Mesh) redQuad);
+	Scena.push_back((Mesh*) &redQuad);
 
-	// quadrato blu
 	blueQuad.crea_VAO_Vector();
 	blueQuad.Model = mat4(1.0);
 	blueQuad.Model = rotate(blueQuad.Model, radians(5.0f), vec3(0, 1, 0));
 	blueQuad.Model = scale(blueQuad.Model, vec3(2.0f, 2.0f, 2.0f));
 	blueQuad.Model = translate(blueQuad.Model, vec3(1.0, 0.0, 0.0));
-	Scena.push_back((Mesh) blueQuad);
+	Scena.push_back((Mesh*) &blueQuad);
 
+	// yellowQuad.crea_VAO_Vector();
+	// yellowQuad.Model = mat4(1.0);
+	// yellowQuad.Model = scale(yellowQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	// yellowQuad.Model = translate(yellowQuad.Model, vec3(0, 1.5, 0.0));
+	// yellowQuad.Model = rotate(yellowQuad.Model, radians(90.0f), vec3(1, 0, 0));
+	// Scena.push_back((Mesh*) &yellowQuad);
 
-	yellowQuad.crea_VAO_Vector();
-	yellowQuad.Model = mat4(1.0);
-	yellowQuad.Model = scale(yellowQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	yellowQuad.Model = translate(yellowQuad.Model, vec3(0, 1.5, 0.0));
-	yellowQuad.Model = rotate(yellowQuad.Model, radians(90.0f), vec3(1, 0, 0));
-	Scena.push_back((Mesh) yellowQuad);
-
-	purpleQuad.crea_VAO_Vector();
-	purpleQuad.Model = mat4(1.0);
-	purpleQuad.Model = translate(purpleQuad.Model, vec3(0.0, 0.0, 0.0));
-	purpleQuad.Model = rotate(purpleQuad.Model, radians(-90.0f), vec3(1, 0, 0));
-	purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	Scena.push_back((Mesh) purpleQuad);
+	// purpleQuad.crea_VAO_Vector();
+	// purpleQuad.Model = mat4(1.0);
+	// purpleQuad.Model = translate(purpleQuad.Model, vec3(0.0, 0.0, 0.0));
+	// purpleQuad.Model = rotate(purpleQuad.Model, radians(-90.0f), vec3(1, 0, 0));
+	// purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	// Scena.push_back((Mesh*) &purpleQuad);
 }
-
-
-void update() {
-	if (t >= 180){
-		t = -180;
-	}
-	t += 1;
-	blueQuad.Model = rotate(blueQuad.Model, radians((float)t), vec3(0, 1, 0));
-	cout << "ecco t bruh: " << t << endl;
-}
-
-
 
 void drawScene(void)
 {
@@ -130,18 +116,14 @@ void drawScene(void)
 	// glPointSize(20.0);
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 	
-	// Disegna 
+	blueQuad.rotate_debug();
+	
+	// Dide
 	for (int k = 0; k < Scena.size(); k++)
 	{
-		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Scena[k].Model));
-		glBindVertexArray(Scena[k].VAO);
-		glDrawElements(GL_TRIANGLES, (Scena[k].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		glBindVertexArray(0);
+		Scena[k]->drawMesh(MatModel);
 	}
 
-	update();
 	glutSwapBuffers();
 
 }

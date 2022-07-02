@@ -1,4 +1,5 @@
 #include "include/Mesh.h"
+#include <iostream>
 
 Mesh::Mesh(){}
 
@@ -32,4 +33,4 @@ void Mesh::crea_VAO_Vector()
 }
 
 
-void Mesh::drawMesh(int ModelUniform){}
+void Mesh::drawMesh(int ModelUniform){ cout << "debug: wrong call" << endl;}

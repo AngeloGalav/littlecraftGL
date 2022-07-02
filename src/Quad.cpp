@@ -1,14 +1,17 @@
 // TODO: Inserire la creazione del VAO Vector dentro a initQuad. 
 
 #include "include/Quad.h"
+#include <iostream>
 
 Quad::Quad(vec4 color) {
     this->quadColor = color;
     initQuadWithSingleColor();
+	angle = 0;
 }
 
 Quad::Quad() {
     initQuad();
+	angle = 0;
 }
 
 void Quad::initQuad(){
@@ -45,6 +48,15 @@ void Quad::initQuadWithSingleColor(){
 
 
 void Quad::drawMesh(int ModelUniform) {
-
+	glUniformMatrix4fv(ModelUniform, 1, GL_FALSE, value_ptr(Model));
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, (indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glBindVertexArray(0);
 }
 
+void Quad::rotate_debug(){
+	if (angle > 179) angle = -179;
+	angle += 1.0f;
+	Model = rotate(Model, radians(angle), vec3(0, 1, 0));
+}

@@ -24,7 +24,7 @@ public:
 	string nome;
 
     void buildMesh();
-    void drawMesh(int ModelUniform);
+    virtual void drawMesh(int ModelUniform);
     void initVAO();
     void crea_VAO_Vector();
 
