@@ -5,6 +5,7 @@
 
 Quad::Quad(vec4 color) {
     this->quadColor = color;
+	initQuadWithSingleColor();
 	angle = 0;
 }
 

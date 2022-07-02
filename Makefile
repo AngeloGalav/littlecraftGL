@@ -3,7 +3,7 @@ CC = g++
 RMV = rm -f src/*.o
 
 # freetype flags
-FTINCLUDEDIR = -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include 
+FTINCLUDEDIR = -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/stb
 
 DLIBS = usr/lib/
 GLFLAGS = -lpthread -lGLU -lglut -lGL -lGLEW -lX11 -lXrandr -lXi -ldl -lfreetype
