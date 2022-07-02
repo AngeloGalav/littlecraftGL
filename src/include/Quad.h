@@ -9,7 +9,6 @@
 #define QUAD_H
 
 
-
 // todo: inserire codice delle texture qui prima o poi 
 #include "Mesh.h"
 
