@@ -9,8 +9,9 @@
 #include "include/Mesh.h"
 #include "include/EventHandler.h"
 #include "include/Quad.h"
+#include "include/Cube.h"
 
-vector<Mesh*> Scena;
+vector<Cube*> Scena;
 vector<vec3> centri;
 vector<float> raggi;
 
@@ -37,6 +38,8 @@ Quad cyanQuad(vec4(0.0, 1.0f, 1.0f, 1.0f));
 Quad yellowQuad(vec4(1.0f, 1.0f, 0.0, 1.0f));
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
+Cube cubo;
+
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 mat4 Projection, Model, View;
@@ -54,45 +57,8 @@ void INIT_SHADER(void)
 
 void INIT_VAO(void)
 {
-	greenQuad.crea_VAO_Vector();
-	greenQuad.Model = mat4(1.0);
-	greenQuad.Model = scale(greenQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	Scena.push_back((Mesh*) &greenQuad);
-
-	redQuad.crea_VAO_Vector();
-	redQuad.Model = mat4(1.0);
-	redQuad.Model = scale(redQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	redQuad.Model = translate(redQuad.Model, vec3(0.0, 0.0, -2.0f));
-	Scena.push_back((Mesh*) &redQuad);
-
-	cyanQuad.crea_VAO_Vector();
-	cyanQuad.Model = mat4(1.0);
-	cyanQuad.Model = scale(cyanQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	cyanQuad.Model = translate(cyanQuad.Model, vec3(1.0f, 0.0, -1.0f));
-	cyanQuad.Model = rotate(cyanQuad.Model, radians(-90.0f), vec3(0, 1, 0));
-	Scena.push_back((Mesh*) &cyanQuad);
-
-
-	blueQuad.crea_VAO_Vector();
-	blueQuad.Model = mat4(1.0);
-	blueQuad.Model = scale(blueQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	blueQuad.Model = translate(blueQuad.Model, vec3(-1.0f, 0.0, -1.0f));
-	blueQuad.Model = rotate(blueQuad.Model, radians(90.0f), vec3(0, 1, 0));
-	Scena.push_back((Mesh*) &blueQuad);
-
-	yellowQuad.crea_VAO_Vector();
-	yellowQuad.Model = mat4(1.0);
-	yellowQuad.Model = scale(yellowQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	yellowQuad.Model = translate(yellowQuad.Model, vec3(0, 1.0f, -1.0f));
-	yellowQuad.Model = rotate(yellowQuad.Model, radians(90.0f), vec3(1, 0, 0));
-	Scena.push_back((Mesh*) &yellowQuad);
-
-	purpleQuad.crea_VAO_Vector();
-	purpleQuad.Model = mat4(1.0);
-	purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	purpleQuad.Model = translate(purpleQuad.Model, vec3(0.0, -1.0f, -1.0f));
-	purpleQuad.Model = rotate(purpleQuad.Model, radians(-90.0f), vec3(1, 0, 0));
-	Scena.push_back((Mesh*) &purpleQuad);
+	cubo.initCube();
+	Scena.push_back(&cubo);
 }
 
 void drawScene(void)
@@ -108,16 +74,13 @@ void drawScene(void)
 
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
 
-
 	// Costruisco la matrice di Vista che applicata ai vertici in coordinate del mondo li trasforma nel sistema di riferimento della camera.
 	View = lookAt(vec3(mainCamera.ViewSetup.position), vec3(mainCamera.ViewSetup.target), vec3(mainCamera.ViewSetup.upVector));
 
 	// Passo al Vertex Shader il puntatore alla matrice View, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatView
 
-	// glPointSize(20.0);
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
-	
 	
 	// Draw scene elements
 	for (int k = 0; k < Scena.size(); k++){

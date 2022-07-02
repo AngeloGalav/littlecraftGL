@@ -16,8 +16,8 @@
 class Quad : public Mesh {
 protected:
     void initQuad();
-    void initQuadWithSingleColor();
 public:
+    void initQuadWithSingleColor();
     vec4 position;
     vec4 quadColor;
     float angle;
