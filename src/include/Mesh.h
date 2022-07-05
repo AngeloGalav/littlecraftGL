@@ -21,7 +21,7 @@ public:
 	GLuint VBO_C;
 	GLuint VBO_normali;
 	GLuint EBO_indici;
-	GLuint VBO_coord_texture;
+	GLuint VBO_texture;
 	string nome;
 
     void buildMesh();
@@ -29,9 +29,7 @@ public:
     void initVAO();
     void crea_VAO_Vector();
 
-	void crea_VAO_Vector_textures(){
-		
-	}
+	void crea_VAO_Vector_textures();
 
     Mesh();
 };

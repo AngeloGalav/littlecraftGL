@@ -47,12 +47,21 @@ void Quad::initQuadWithSingleColor(){
 }
 
 
+void Quad::initQuadTexture(){
+	initQuad();
+
+	texture_coordinates.push_back(vec2(1.0f, 1.0f));
+	texture_coordinates.push_back(vec2(1.0f, 0.0f));
+	texture_coordinates.push_back(vec2(0.0f, 0.0f));
+	texture_coordinates.push_back(vec2(0.0f, 1.0f));
+
+}
+
 void Quad::drawMesh(int ModelUniform) {
 	glUniformMatrix4fv(ModelUniform, 1, GL_FALSE, value_ptr(Model));
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, (indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glBindVertexArray(0);
 }
 
 void Quad::rotate_debug(){
