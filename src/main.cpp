@@ -33,10 +33,12 @@ Raycaster raycast;
 
 int main_window_id;
 
+bool hasTextureID;
+
 // debug time
 int t = -180;
 
-static unsigned int textureless_programId, MatrixProj, MatModel, MatView, texture_programId;
+static unsigned int programId, MatrixProj, MatModel, MatView, texture_programId;
 int selected_obj = -1;
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 Quad textureQuad;
@@ -61,9 +63,13 @@ void INIT_SHADER(void)
 	char *vertexShader_texture = (char *)"shaders/texture.vert.glsl";
 
 
-	textureless_programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
+	programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
 	texture_programId = ShaderMaker::createProgram(vertexShader_texture, fragmentShader_texture);
-	glUseProgram(textureless_programId);
+	glUseProgram(programId);
+	cout << "Latest error is: " << ErrorCheckValue << endl;
+
+	MatModel = glGetUniformLocation(programId, "Model");
+
 }
 
 void INIT_VAO(void)
@@ -81,22 +87,25 @@ void INIT_VAO(void)
 	textureQuad.Model = translate(textureQuad.Model, vec3(-5.0f, -2.0f, 1.0f));
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
-
 	cubo.initCube();
 	Scena.push_back(&cubo);
 }
 
 void INIT_TEXTURES(){
+	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load and generate the texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// load and generate the texture
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("res/texture_atlas.png", &width, &height, &nrChannels, 0);
+	stbi_set_flip_vertically_on_load(true);  // flippa la texture
+	unsigned char *data = stbi_load("res/test.png", &width, &height, &nrChannels, 0);
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -116,7 +125,6 @@ void drawScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
 	// Passo al Vertex Shader il puntatore alla matrice Projection, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatrixProj
-	glUseProgram(texture_programId);
 
 	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
 
@@ -128,7 +136,7 @@ void drawScene(void)
 	// Passo al Vertex Shader il puntatore alla matrice View, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatView
 
-	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
+	glUseProgram(programId);
 	
 	// Draw scene elements
 	for (int k = 0; k < Scena.size(); k++){
@@ -141,17 +149,15 @@ void drawScene(void)
 	}
 
 
-	glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-	int res = glGetError();
-	cout << "test error: " << res << endl;
+	glUseProgram(texture_programId);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// disegno gli elementi aventi delle texture
-	glUseProgram(texture_programId);
 	for (int k = 0; k < TexturedMeshes.size(); k++){
 		TexturedMeshes[k]->drawMesh(MatModel);
 	} 
 
+	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 
 	glutSwapBuffers();
 
@@ -195,13 +201,13 @@ int main(int argc, char *argv[])
 
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Projection (in vertex shader).
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Projection al Vertex Shader
-	MatrixProj = glGetUniformLocation(textureless_programId, "Projection");
+	MatrixProj = glGetUniformLocation(programId, "Projection");
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Model (in vertex shader)
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Model al Vertex Shader
-	MatModel = glGetUniformLocation(textureless_programId, "Model");
+	MatModel = glGetUniformLocation(programId, "Model");
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 View (in vertex shader)
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice View al Vertex Shader
-	MatView = glGetUniformLocation(textureless_programId, "View");
+	MatView = glGetUniformLocation(programId, "View");
 
 	glutMainLoop();
 }
