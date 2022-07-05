@@ -38,7 +38,9 @@ bool hasTextureID;
 // debug time
 int t = -180;
 
-static unsigned int programId, MatrixProj, MatModel, MatView, texture_programId;
+static unsigned int programId, MatrixProj, MatModel, MatView;
+static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
+
 int selected_obj = -1;
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 Quad textureQuad;
@@ -126,6 +128,7 @@ void drawScene(void)
 	// Passo al Vertex Shader il puntatore alla matrice Projection, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatrixProj
 
+	glUseProgram(programId);
 	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
 
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
@@ -135,8 +138,8 @@ void drawScene(void)
 
 	// Passo al Vertex Shader il puntatore alla matrice View, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatView
+	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 
-	glUseProgram(programId);
 	
 	// Draw scene elements
 	for (int k = 0; k < Scena.size(); k++){
@@ -148,8 +151,11 @@ void drawScene(void)
 		Scena_Extras[k]->drawMesh(MatModel);
 	}
 
-
+	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
 	glUseProgram(texture_programId);
+	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
+	glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(View));
+
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// disegno gli elementi aventi delle texture
@@ -157,7 +163,6 @@ void drawScene(void)
 		TexturedMeshes[k]->drawMesh(MatModel);
 	} 
 
-	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 
 	glutSwapBuffers();
 
@@ -202,12 +207,16 @@ int main(int argc, char *argv[])
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Projection (in vertex shader).
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Projection al Vertex Shader
 	MatrixProj = glGetUniformLocation(programId, "Projection");
+	MatrixProj_texture = glGetUniformLocation(texture_programId, "Projection");
+
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Model (in vertex shader)
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Model al Vertex Shader
 	MatModel = glGetUniformLocation(programId, "Model");
+	MatModel_texture = glGetUniformLocation(texture_programId, "Model");
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 View (in vertex shader)
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice View al Vertex Shader
 	MatView = glGetUniformLocation(programId, "View");
+	MatView_texture = glGetUniformLocation(texture_programId, "View");
 
 	glutMainLoop();
 }
