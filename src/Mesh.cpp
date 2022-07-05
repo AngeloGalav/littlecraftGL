@@ -32,5 +32,9 @@ void Mesh::crea_VAO_Vector()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indici.size() * sizeof(GLuint), indici.data(), GL_STATIC_DRAW);
 }
 
+void Mesh::crea_VAO_Vector_textures(){
+	
+}
+
 
 void Mesh::drawMesh(int ModelUniform){ cout << "debug: wrong call" << endl;}

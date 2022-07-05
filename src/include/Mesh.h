@@ -11,7 +11,8 @@ public:
 	vector<vec4> colori;
 	vector<GLuint> indici;
 	vector<vec3> normali;
-	vector<vec2> texCoords;
+	vector<vec2> texture_coordinates;
+	
 	mat4 Model;
 	int sceltaVS;
 	int sceltaFS;
@@ -27,6 +28,10 @@ public:
     virtual void drawMesh(int ModelUniform);
     void initVAO();
     void crea_VAO_Vector();
+
+	void crea_VAO_Vector_textures(){
+		
+	}
 
     Mesh();
 };

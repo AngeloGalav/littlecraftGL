@@ -24,6 +24,7 @@ void Quad::initQuad(){
 	vertici.push_back(vec3(-1.0, 1.0, 0.0));
 	colori.push_back(vec4(1.0, 0.0, 1.0, 1.0));
 
+	// aggiunge gli indici 
 	indici.push_back(0); indici.push_back(1); indici.push_back(2);
 	indici.push_back(2); indici.push_back(3); indici.push_back(0);
 }

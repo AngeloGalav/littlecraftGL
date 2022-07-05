@@ -17,6 +17,8 @@
 vector<Cube*> Scena;
 vector<Mesh*> Scena_Extras;
 
+vector<Mesh*> TexturedMeshes;
+
 vector<vec3> centri;
 vector<float> raggi;
 
@@ -37,6 +39,8 @@ int t = -180;
 static unsigned int programId, MatrixProj, MatModel, MatView;
 int selected_obj = -1;
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
+Quad greenQuad(vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
 
 int texture_width, texture_height, nrChannels;
 unsigned char *data = stbi_load("res/texture_atlas.png", &texture_width, &texture_height, &nrChannels, 0);
@@ -65,6 +69,13 @@ void INIT_VAO(void)
 	purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
 	purpleQuad.Model = translate(purpleQuad.Model, vec3(-5.0f, 0.0, 1.0f));
 	Scena_Extras.push_back((Mesh*) &purpleQuad);
+
+	greenQuad.crea_VAO_Vector();
+	greenQuad.Model = mat4(1.0);
+	greenQuad.Model = scale(greenQuad.Model, vec3(2.0f, 2.0f, 2.0f));
+	greenQuad.Model = translate(greenQuad.Model, vec3(-5.0f, 0.0, 1.0f));
+	TexturedMeshes.push_back((Mesh*) &greenQuad);
+
 
 	cubo.initCube();
 	Scena.push_back(&cubo);
