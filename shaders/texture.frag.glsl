@@ -10,9 +10,5 @@ uniform sampler2D texture_quad;
 
 void main()
 {
-    if (true){
-        FragColor = texture(texture_quad, TexCoord);
-    } else {
-        FragColor = ourColor;
-    }
+    FragColor = texture(texture_quad, TexCoord);
 }
