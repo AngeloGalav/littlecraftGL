@@ -14,10 +14,10 @@ public:
     vec2 atlas_offset[3]; // ogni cubo ha solo 3 texture in Minecraft
 
     void initCube();
+    void initCubeTextures();
     void moveTo(vec3 position);
     void translateCube(vec3 translate_vector);
     void drawMesh(int Model_Uniform);
-
 
     Cube(vec4 pos);
     Cube();    

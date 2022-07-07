@@ -22,7 +22,23 @@ Cube::Cube(){
     faces[5].initQuadWithSingleColor();
 
 
+
 	position = vec3(0.0, 0.0, 0.0);
+}
+
+void Cube::initCubeTextures(){
+	for (int i=0; i < 4; i++){
+		faces[i].texture_coords_offset = atlas_offset[2];
+	}
+
+	faces[4].texture_coords_offset = atlas_offset[0];
+	faces[5].texture_coords_offset = atlas_offset[1];
+	for (int i = 0; i < 6; i++)
+	{
+		if (true) {
+			faces[i].initQuadTexture();
+		}
+	}
 }
 
 

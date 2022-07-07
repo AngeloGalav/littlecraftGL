@@ -9,7 +9,7 @@
 #include "include/Mesh.h"
 #include "include/EventHandler.h"
 #include "include/TexturedQuad.h"
-#include "include/Cube.h"
+#include "include/Block.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -18,6 +18,8 @@ vector<Cube*> Scena;
 vector<Mesh*> Scena_Extras;
 
 vector<Mesh*> TexturedMeshes;
+vector<Cube*> TexturedCube;
+
 
 vector<vec3> centri;
 vector<float> raggi;
@@ -49,6 +51,7 @@ TexturedQuad textureQuad;
 int texture_width, texture_height, nrChannels;
 
 Cube cubo;
+Block block;
 
 unsigned int texture;
 
@@ -90,6 +93,15 @@ void INIT_VAO(void)
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
 	cubo.initCube();
+
+	// test block
+	block.initCube();
+	block.atlas_offset[0] = vec2(0, 15);
+	block.atlas_offset[1] = vec2(2, 15);
+	block.atlas_offset[2] = vec2(3, 15);
+	block.initCubeTextures();
+	block.translateCube(vec3(3,4, 0));
+
 	Scena.push_back(&cubo);
 }
 
@@ -161,9 +173,7 @@ void drawScene(void)
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){
 		TexturedMeshes[k]->drawMesh(MatModel_texture);
-	} 
-
-
+	}
 	glutSwapBuffers();
 
 }
