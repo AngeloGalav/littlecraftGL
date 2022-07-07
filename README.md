@@ -22,6 +22,7 @@ make && ./glCraft
 
 and that's pretty much it.
 
+
 ## Dependencies
 
 This project uses the following libraries:
@@ -34,3 +35,29 @@ This project uses the following libraries:
 Both can be easily downloaded with `pacman` or `apt-get`.
 
 The project also uses two additional libraries: `json.hpp` and `gltext.h`, which are both included in the project. 
+
+## Milestones
+
+You don't need to read any of this, I'm just using this to keep track of what I have to do.
+
+- [x] Set up compilation enviroment on Linux
+- [x] Refactor base code
+- [x] Fix awful z-buffer bug (which plagued me for months)
+- [x] Added Keyboard-controlled Camera
+- [x] Added Quad 
+- [x] Added Cube
+- [x] Added Textures support
+- [x] Added Cube transformations
+- [ ] Textured Cube
+- [ ] Block management
+- [ ] Plain-cube floor
+- [ ] Noise for procedural generation
+- [ ] Deleting and placing cubes
+- [ ] Multiple chunk management
+- [ ] Water
+- [ ] Fog
+- [ ] Cube-map
+- [ ] Water reflection
+- [ ] Trees?
+- [ ] Gold block, silver-block 
+- [ ] Gouraud Shading on gold and silver blocks
