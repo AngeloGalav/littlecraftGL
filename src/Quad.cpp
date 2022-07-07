@@ -46,17 +46,6 @@ void Quad::initQuadWithSingleColor(){
 	indici.push_back(2); indici.push_back(3); indici.push_back(0);
 }
 
-
-void Quad::initQuadTexture(){
-	initQuad();
-
-	texture_coordinates.push_back(vec2(0.0f, 0.0f));
-	texture_coordinates.push_back(vec2(1.0f, 0.0f));
-	texture_coordinates.push_back(vec2(1.0f, 1.0f));
-	texture_coordinates.push_back(vec2(0.0f, 1.0f));
-
-}
-
 void Quad::drawMesh(int ModelUniform) {
 	glBindVertexArray(VAO);
 	glUniformMatrix4fv(ModelUniform, 1, GL_FALSE, value_ptr(Model));

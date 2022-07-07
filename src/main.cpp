@@ -8,7 +8,7 @@
 #include "include/GestioneTesto.h"
 #include "include/Mesh.h"
 #include "include/EventHandler.h"
-#include "include/Quad.h"
+#include "include/TexturedQuad.h"
 #include "include/Cube.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -43,7 +43,7 @@ static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, Mat
 
 int selected_obj = -1;
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
-Quad textureQuad;
+TexturedQuad textureQuad;
 
 
 int texture_width, texture_height, nrChannels;
@@ -101,13 +101,13 @@ void INIT_TEXTURES(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// load and generate the texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// load and generate the texture
 	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true);  // flippa la texture
-	unsigned char *data = stbi_load("res/test.png", &width, &height, &nrChannels, 0);
+	// stbi_set_flip_vertically_on_load(true);  // flippa la texture
+	unsigned char *data = stbi_load("res/texture_atlas.png", &width, &height, &nrChannels, 0);
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else

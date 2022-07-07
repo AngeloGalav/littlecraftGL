@@ -17,7 +17,6 @@ protected:
     void initQuad();
 public:
     void initQuadWithSingleColor();
-    void initQuadTexture();
     vec4 position;
     vec4 quadColor;
     float angle;
