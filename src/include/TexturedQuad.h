@@ -5,8 +5,10 @@
 
 class TexturedQuad : public Quad {
     public:
-    ivec2 texture_coords_offeset;  
+    vec2 texture_coords_offset;  
     void initQuadTexture();
+
+    TexturedQuad();
 };
 
 #endif

@@ -103,7 +103,7 @@ void INIT_TEXTURES(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// load and generate the texture
 	int width, height, nrChannels;
-	// stbi_set_flip_vertically_on_load(true);  // flippa la texture
+	stbi_set_flip_vertically_on_load(true);  // flippa la texture
 	unsigned char *data = stbi_load("res/texture_atlas.png", &width, &height, &nrChannels, 0);
 	if (data)
 	{
@@ -160,7 +160,7 @@ void drawScene(void)
 
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){
-		TexturedMeshes[k]->drawMesh(MatModel);
+		TexturedMeshes[k]->drawMesh(MatModel_texture);
 	} 
 
 

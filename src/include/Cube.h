@@ -12,8 +12,12 @@ class Cube {
 public:
     vec3 position;
     Quad faces[6]; // facce del cubo 
+    mat4 ModelCube;
+
 
     void initCube();
+    void moveTo(vec3 position);
+    void translateCube(vec3 translate_vector);
     void drawMesh(int Model_Uniform);
 
     Cube(vec4 pos);

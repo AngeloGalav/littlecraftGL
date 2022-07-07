@@ -23,6 +23,8 @@ public:
     
     void createQuad();
     void drawMesh(int ModelUniform);
+    void drawMeshDebug(int ModelUniform, mat4 ok);
+    void translateQuad(vec3 translate_vector);
 
     //initTexture???
     

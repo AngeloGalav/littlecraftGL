@@ -54,8 +54,21 @@ void Quad::drawMesh(int ModelUniform) {
 	glBindVertexArray(0);
 }
 
+void Quad::drawMeshDebug(int ModelUniform, mat4 parentModel) {
+	glBindVertexArray(VAO);
+	glUniformMatrix4fv(ModelUniform, 1, GL_FALSE, value_ptr(parentModel*Model));
+	glDrawElements(GL_TRIANGLES, (indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glBindVertexArray(0);
+}
+
 void Quad::rotate_debug(){
 	if (angle > 179) angle = -179;
 	angle += 1.0f;
 	Model = rotate(Model, radians(angle), vec3(0, 1, 0));
 }
+
+void Quad::translateQuad(vec3 translate_vector){
+	Model = translate(Model, translate_vector);
+}
+
