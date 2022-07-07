@@ -60,4 +60,4 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [ ] Water reflection
 - [ ] Trees?
 - [ ] Gold block, silver-block 
-- [ ] Gouraud Shading on gold and silver blocks
+- [ ] Shading on gold and silver blocks
