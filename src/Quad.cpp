@@ -6,10 +6,13 @@
 Quad::Quad(vec4 color) {
     this->quadColor = color;
 	initQuadWithSingleColor();
+	hasTexture = false;
 	angle = 0;
 }
 
 Quad::Quad() {
+    texture_coords_offset = vec2(1,15);
+	hasTexture = false;
 	angle = 0;
 }
 
@@ -70,5 +73,15 @@ void Quad::rotate_debug(){
 
 void Quad::translateQuad(vec3 translate_vector){
 	Model = translate(Model, translate_vector);
+}
+
+
+void Quad::initQuadTexture(){
+	initQuad();
+	hasTexture = false;
+	texture_coordinates.push_back(vec2((0.0 + texture_coords_offset.x)/16, (0.0 + texture_coords_offset.y)/16));
+	texture_coordinates.push_back(vec2((1.0 + texture_coords_offset.x)/16, (0.0 + texture_coords_offset.y)/16));
+	texture_coordinates.push_back(vec2((1.0 + texture_coords_offset.x)/16, (1.0 + texture_coords_offset.y)/16));
+	texture_coordinates.push_back(vec2((0.0 + texture_coords_offset.x)/16, (1.0 + texture_coords_offset.y)/16));
 }
 

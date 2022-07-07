@@ -25,7 +25,9 @@ public:
     void drawMeshFromParent(int ModelUniform, mat4 parentModel);
     void translateQuad(vec3 translate_vector);
 
+    // texture on the quad
     vec2 texture_coords_offset;  
+    bool hasTexture;
     void initQuadTexture();
     
     // costruttori del quad
