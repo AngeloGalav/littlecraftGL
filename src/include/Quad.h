@@ -17,21 +17,20 @@ protected:
     void initQuad();
 public:
     void initQuadWithSingleColor();
-    vec4 position;
     vec4 quadColor;
     float angle;
     
     void createQuad();
     void drawMesh(int ModelUniform);
-    void drawMeshDebug(int ModelUniform, mat4 ok);
+    void drawMeshFromParent(int ModelUniform, mat4 parentModel);
     void translateQuad(vec3 translate_vector);
 
-    //initTexture???
+    vec2 texture_coords_offset;  
+    void initQuadTexture();
     
     // costruttori del quad
     Quad(vec4 color);
     Quad();
-
 
     //DEBUG
     void rotate_debug();

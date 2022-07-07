@@ -54,7 +54,7 @@ void Quad::drawMesh(int ModelUniform) {
 	glBindVertexArray(0);
 }
 
-void Quad::drawMeshDebug(int ModelUniform, mat4 parentModel) {
+void Quad::drawMeshFromParent(int ModelUniform, mat4 parentModel) {
 	glBindVertexArray(VAO);
 	glUniformMatrix4fv(ModelUniform, 1, GL_FALSE, value_ptr(parentModel*Model));
 	glDrawElements(GL_TRIANGLES, (indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);

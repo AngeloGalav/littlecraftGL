@@ -18,6 +18,7 @@ public:
     void translateCube(vec3 translate_vector);
     void drawMesh(int Model_Uniform);
 
+
     Cube(vec4 pos);
     Cube();    
 };

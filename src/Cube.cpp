@@ -66,11 +66,9 @@ void Cube::initCube(){
 }
 
 void Cube::drawMesh(int Model_Uniform){
-
-
     for (int i = 0; i < 6; i++){
 		faces[i].drawMesh(Model_Uniform);
-        faces[i].drawMeshDebug(Model_Uniform, ModelCube);
+        faces[i].drawMeshFromParent(Model_Uniform, ModelCube);
 	}
 }
 
