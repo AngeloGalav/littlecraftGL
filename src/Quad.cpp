@@ -7,13 +7,11 @@ Quad::Quad(vec4 color) {
     this->quadColor = color;
 	initQuadWithSingleColor();
 	hasTexture = false;
-	angle = 0;
 }
 
 Quad::Quad() {
     texture_coords_offset = vec2(1,15);
 	hasTexture = false;
-	angle = 0;
 }
 
 void Quad::initQuad(){
@@ -63,12 +61,6 @@ void Quad::drawMeshFromParent(int ModelUniform, mat4 parentModel) {
 	glDrawElements(GL_TRIANGLES, (indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glBindVertexArray(0);
-}
-
-void Quad::rotate_debug(){
-	if (angle > 179) angle = -179;
-	angle += 1.0f;
-	Model = rotate(Model, radians(angle), vec3(0, 1, 0));
 }
 
 void Quad::translateQuad(vec3 translate_vector){

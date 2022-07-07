@@ -18,8 +18,7 @@ protected:
 public:
     void initQuadWithSingleColor();
     vec4 quadColor;
-    float angle;
-    
+        
     void createQuad();
     void drawMesh(int ModelUniform);
     void drawMeshFromParent(int ModelUniform, mat4 parentModel);
@@ -33,9 +32,6 @@ public:
     // costruttori del quad
     Quad(vec4 color);
     Quad();
-
-    //DEBUG
-    void rotate_debug();
 };
 
 #endif
