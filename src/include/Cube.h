@@ -4,16 +4,14 @@
 
 #include "Quad.h"
 
-
-/** Derivare da Mesh è molto brutta come cosa, ma che ci vuoi fare. 
- *  
- */
 class Cube {
 public:
     vec3 position;
     Quad faces[6]; // facce del cubo 
     mat4 ModelCube;
 
+    bool hasTexture;
+    vec2 atlas_offset[3]; // ogni cubo ha solo 3 texture in Minecraft
 
     void initCube();
     void moveTo(vec3 position);

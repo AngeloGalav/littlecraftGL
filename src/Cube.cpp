@@ -80,5 +80,5 @@ void Cube::translateCube(vec3 translate_vector){
 }
 
 void Cube::moveTo(vec3 position){
-
+	translateCube(position - this->position);
 }

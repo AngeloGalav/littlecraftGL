@@ -28,6 +28,7 @@ public:
     virtual void drawMesh(int ModelUniform);
     void initVAO();
     void crea_VAO_Vector();
+	void flushData();
 
 	void crea_VAO_Vector_textures();
 

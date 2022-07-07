@@ -67,3 +67,9 @@ void Mesh::crea_VAO_Vector_textures(){
 
 
 void Mesh::drawMesh(int ModelUniform){ cout << "debug: wrong call" << endl;}
+
+void Mesh::flushData(){
+	indici.clear();
+	texture_coordinates.clear();
+	vertici.clear();
+}
