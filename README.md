@@ -30,7 +30,7 @@ This project uses the following libraries:
 - freeGLUT - an implementation of GLUT</li>
 - GLEW</li>
 - glm - the openGL math library</li>
-- [siv::PerlinNoise](https://github.com/Reputeless/PerlinNoise) - A single header lib to generate the perlin noise map
+- [FastNoiseLite](https://github.com/Auburn/FastNoiseLite) - A single header lib to generate the perlin noise map
 
 Both can be easily downloaded with `pacman` or `apt-get`.
 
