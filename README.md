@@ -26,11 +26,11 @@ and that's pretty much it.
 ## Dependencies
 
 This project uses the following libraries:
-<ul>
-<li>freeGLUT - an implementation of GLUT</li>
-<li>GLEW</li>
-<li>glm - the openGL math library</li>
-</ul>
+
+- freeGLUT - an implementation of GLUT</li>
+- GLEW</li>
+- glm - the openGL math library</li>
+- [siv::PerlinNoise](https://github.com/Reputeless/PerlinNoise) - A single header lib to generate the perlin noise map
 
 Both can be easily downloaded with `pacman` or `apt-get`.
 
