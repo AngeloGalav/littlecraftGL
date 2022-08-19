@@ -18,7 +18,7 @@ vector<Cube*> Scena;
 vector<Mesh*> Scena_Extras;
 
 vector<Mesh*> TexturedMeshes;
-vector<Cube*> TexturedCube;
+vector<Block*> TexturedCube;
 
 
 vector<vec3> centri;
@@ -35,8 +35,6 @@ Raycaster raycast;
 
 int main_window_id;
 
-bool hasTextureID;
-
 // debug time
 int t = -180;
 
@@ -46,6 +44,7 @@ static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, Mat
 int selected_obj = -1;
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
 TexturedQuad textureQuad;
+
 
 
 int texture_width, texture_height, nrChannels;
@@ -93,16 +92,17 @@ void INIT_VAO(void)
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
 	cubo.initCube();
+	Scena.push_back(&cubo);
 
 	// test block
-	block.initCube();
 	block.atlas_offset[0] = vec2(0, 15);
 	block.atlas_offset[1] = vec2(2, 15);
 	block.atlas_offset[2] = vec2(3, 15);
+	block.initCube();
 	block.initCubeTextures();
 	block.translateCube(vec3(3,4, 0));
+	TexturedCube.push_back(&block);
 
-	Scena.push_back(&cubo);
 }
 
 void INIT_TEXTURES(){
@@ -153,10 +153,6 @@ void drawScene(void)
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 
 	
-	// Draw scene elements
-	for (int k = 0; k < Scena.size(); k++){
-		Scena[k]->drawMesh(MatModel);
-	}
 
 	// Draw scene elements
 	for (int k = 0; k < Scena_Extras.size(); k++){
@@ -170,10 +166,19 @@ void drawScene(void)
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 
+	// Draw scene elements (cube)
+	for (int k = 0; k < Scena.size(); k++){
+		Scena[k]->drawMesh(MatModel);
+	}
+
+	for (int k = 0; k < TexturedCube.size(); k++){
+		TexturedCube[k]->draw(MatModel_texture);
+	}
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){
 		TexturedMeshes[k]->drawMesh(MatModel_texture);
 	}
+		// disegno gli elementi aventi delle texture
 	glutSwapBuffers();
 
 }
