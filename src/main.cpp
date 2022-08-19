@@ -92,6 +92,10 @@ void INIT_VAO(void)
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
 	// test block
+	cubo.initCube();
+	Scena.push_back(&cubo);
+
+	// Textured block
 	block.atlas_offset[0] = vec2(0, 15);
 	block.atlas_offset[1] = vec2(2, 15);
 	block.atlas_offset[2] = vec2(3, 15);
@@ -147,11 +151,14 @@ void drawScene(void)
 
 	// Passo al Vertex Shader il puntatore alla matrice View, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatView
-	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
-
-	
+	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));	
 
 	// Draw scene elements
+	for (int k = 0; k < Scena.size(); k++){
+		Scena[k]->drawMesh(MatModel);
+	}
+
+	// Draw extra scene elements (meshes...)
 	for (int k = 0; k < Scena_Extras.size(); k++){
 		Scena_Extras[k]->drawMesh(MatModel);
 	}
