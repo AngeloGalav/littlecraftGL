@@ -48,7 +48,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Added Cube
 - [x] Added Textures support
 - [x] Added Cube transformations
-- [ ] Textured Cube
+- [x] Textured Cube
 - [ ] Block management
 - [ ] Plain-cube floor
 - [ ] Noise for procedural generation
