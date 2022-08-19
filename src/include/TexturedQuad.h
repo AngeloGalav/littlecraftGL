@@ -1,6 +1,4 @@
-#ifndef TEXTURE_QUAD_H
-#define TEXTURED_QUAD_H 
-
+#pragma once 
 #include "Quad.h"
 
 class TexturedQuad : public Quad {
@@ -11,4 +9,3 @@ class TexturedQuad : public Quad {
     TexturedQuad();
 };
 
-#endif

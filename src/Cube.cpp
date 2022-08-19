@@ -21,13 +21,12 @@ Cube::Cube(){
     faces[5].quadColor = (vec4(1.0f, 0.0f, 1.0f, 1.0f));
     faces[5].initQuadWithSingleColor();
 
-
-
 	position = vec3(0.0, 0.0, 0.0);
 }
 
 void Cube::initCubeTextures(){
-	for (int i=0; i < 4; i++){
+	// Add texture offsets to all quads of the cube
+	for (int i = 0; i < 4; i++){
 		faces[i].texture_coords_offset = atlas_offset[2];
 	}
 
@@ -35,7 +34,7 @@ void Cube::initCubeTextures(){
 	faces[5].texture_coords_offset = atlas_offset[1];
 	for (int i = 0; i < 6; i++)
 	{
-		if (true) {
+		if (true) { //TODO: change it to the textureBool
 			faces[i].initQuadTexture();
 		}
 	}
@@ -78,7 +77,8 @@ void Cube::initCube(){
 	faces[5].Model = rotate(faces[5].Model, radians(-90.0f), vec3(1, 0, 0));
 
 	ModelCube = mat4(1.0);
-	ModelCube = translate(ModelCube, vec3(4.0, 4.0, 4.0));
+	ModelCube = translate(ModelCube, vec3(4.0, 4.0, 4.0)); //?????
+	// the 4.0 4.0 4.0 translation is placeholder for sure
 }
 
 void Cube::drawMesh(int Model_Uniform){

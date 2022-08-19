@@ -91,15 +91,12 @@ void INIT_VAO(void)
 	textureQuad.Model = translate(textureQuad.Model, vec3(-5.0f, -2.0f, 1.0f));
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
-	cubo.initCube();
-	Scena.push_back(&cubo);
-
 	// test block
 	block.atlas_offset[0] = vec2(0, 15);
 	block.atlas_offset[1] = vec2(2, 15);
 	block.atlas_offset[2] = vec2(3, 15);
+	block.initCubeTextures(); //le textures sono già state inizializ. dal costruttore
 	block.initCube();
-	block.initCubeTextures();
 	block.translateCube(vec3(3,4, 0));
 	TexturedCube.push_back(&block);
 
@@ -166,13 +163,8 @@ void drawScene(void)
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	// Draw scene elements (cube)
-	for (int k = 0; k < Scena.size(); k++){
-		Scena[k]->drawMesh(MatModel);
-	}
-
 	for (int k = 0; k < TexturedCube.size(); k++){
-		TexturedCube[k]->draw(MatModel_texture);
+		TexturedCube[k]->drawMesh(MatModel_texture);
 	}
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){

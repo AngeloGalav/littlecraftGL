@@ -2,12 +2,12 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "Quad.h"
+#include "TexturedQuad.h"
 
 class Cube {
 public:
     vec3 position;
-    Quad faces[6]; // facce del cubo 
+    TexturedQuad faces[6]; // facce del cubo 
     mat4 ModelCube;
 
     bool hasTexture;

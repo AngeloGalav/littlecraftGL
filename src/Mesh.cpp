@@ -32,6 +32,7 @@ void Mesh::crea_VAO_Vector()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indici.size() * sizeof(GLuint), indici.data(), GL_STATIC_DRAW);
 }
 
+// MOLTO IMPORTANTE DA TENERE A MENTE: CI SONO 2 VAO PER LE TEXTURES E SENZA LA TEXTURES
 void Mesh::crea_VAO_Vector_textures(){
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);

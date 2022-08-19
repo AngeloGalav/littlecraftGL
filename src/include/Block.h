@@ -18,7 +18,8 @@ class Block : public Cube {
     public:
     BlockType type;
     vec2 atlas_offset[3]; // ogni cubo ha solo 3 texture in Minecraft
-    void draw(int ModelUniform);
+    void initCube();
+    void initCubeTextures();
     Block();
     Block(vec2 *atlas_offset);
 };
