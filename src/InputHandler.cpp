@@ -2,6 +2,7 @@
 #include "include/Raycaster.h"
 #include "include/Strutture.h"
 #include "include/Cube.h"
+#include "include/Block.h"
 #include "include/Mesh.h"
 
 extern Camera mainCamera;
@@ -11,6 +12,8 @@ extern vector<Mesh> Scena;
 extern vector<vec3> centri;
 extern vector<float> raggi;
 extern Cube cubo;
+extern Block block;
+
 
 bool firstMouse = true;
 float lastX = (float)width / 2;
@@ -58,19 +61,19 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		break;
 	
 	case 'v':
-		cubo.translateCube(vec3(1.0, 1.0, 0.0));
+		block.translateCube(vec3(1.0, 1.0, 0.0));
 		break;
 	
 	case 'b':
-		cubo.translateCube(vec3(-1.0, -1.0, 0.0));
+		block.translateCube(vec3(-1.0, -1.0, 0.0));
 		break;
 	
 	case 'n':
-		cubo.translateCube(vec3(0.0, 0.0, 1.0));
+		block.translateCube(vec3(0.0, 0.0, 1.0));
 		break;
 
 	case 'm':
-		cubo.translateCube(vec3(0.0, 0.0, -1.0));
+		block.translateCube(vec3(0.0, 0.0, -1.0));
 		break;
 	
 	default:
@@ -178,6 +181,6 @@ void onMouseEvent(int button, int state, int x, int y)
 // }
 
 void onRightMouseEvent(int x , int y){
-	// evento per selezionare un cubo(?)
+	// evento per selezionare un block(?)
 	// evento action?
 }
