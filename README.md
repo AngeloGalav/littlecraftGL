@@ -8,7 +8,6 @@ I decided to make a clone of the popular game "Minecraft", in order to challenge
 
 Some of the features of the original are missing due to time and complexity constraints.
 
-
 ## How to compile
 
 This branch represents the <b>Linux version</b> of the code (which is essentially the same aside from some minor tweaks and the compilation method). You can check the Windows version of the code [here](https://github.com/AngeloGalav/littlecraftGL/tree/windows).
@@ -62,3 +61,8 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [ ] Trees?
 - [ ] Gold block, silver-block 
 - [ ] Shading on gold and silver blocks
+
+## Known Issues
+
+- This is probably the slowest version of Minecraft ever created (it runs lower than 1 FPS on my Iris Xe iGPU). This is become it is very unoptimized. Sorry about that, it will be improved in the near future.  
+- It is missing some key features, that will be added sooner or later. 
