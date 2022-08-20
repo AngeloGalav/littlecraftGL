@@ -64,9 +64,8 @@ void Quad::drawMeshFromParent(int ModelUniform, mat4 parentModel) {
 }
 
 void Quad::translateQuad(vec3 translate_vector){
-	Model = translate(Model, translate_vector);
+	Model = translate(Model, ((float)UNIT_SIZE)*translate_vector);
 }
-
 
 void Quad::initQuadTexture(){
 	hasTexture = true;

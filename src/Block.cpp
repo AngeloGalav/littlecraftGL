@@ -44,8 +44,7 @@ void Block::initCube(){
 	faces[5].Model = rotate(faces[5].Model, radians(-90.0f), vec3(1, 0, 0));
 
 	ModelCube = mat4(1.0);
-	ModelCube = translate(ModelCube, vec3(4.0, 4.0, 4.0)); //?????
-	// the 4.0 4.0 4.0 translation is placeholder for sure
+	moveTo(position);
 }
 
 void Block::initCubeTextures(){

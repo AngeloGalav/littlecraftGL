@@ -77,8 +77,7 @@ void Cube::initCube(){
 	faces[5].Model = rotate(faces[5].Model, radians(-90.0f), vec3(1, 0, 0));
 
 	ModelCube = mat4(1.0);
-	ModelCube = translate(ModelCube, vec3(4.0, 4.0, 4.0)); //?????
-	// the 4.0 4.0 4.0 translation is placeholder for sure
+	moveTo(position); // gets initialized to the start position
 }
 
 void Cube::drawMesh(int Model_Uniform){
@@ -89,7 +88,7 @@ void Cube::drawMesh(int Model_Uniform){
 
 
 void Cube::translateCube(vec3 translate_vector){
-	ModelCube = translate(ModelCube, translate_vector);
+	ModelCube = translate(ModelCube, ((float)UNIT_SIZE)*translate_vector);
 }
 
 void Cube::moveTo(vec3 position){

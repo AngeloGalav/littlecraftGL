@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 #include "Lib.h"
+#include "definitions.h"
 
 // todo: delete useless stuff
 
