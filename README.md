@@ -51,8 +51,9 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Textured Cube
 - [ ] Block management
 - [x] Plain-cube floor
-- [ ] Noise for procedural generation
+- [x] Noise for procedural generation
 - [ ] Deleting and placing cubes
+- [ ] Rendering optimizations
 - [ ] Multiple chunk management
 - [ ] Water
 - [ ] Fog

@@ -10,6 +10,7 @@
 #include "include/EventHandler.h"
 #include "include/TexturedQuad.h"
 #include "include/Block.h"
+#include "include/FastNoiseLite.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -47,11 +48,16 @@ TexturedQuad textureQuad;
 
 int texture_width, texture_height, nrChannels;
 
+
 Cube cubo;
 Block block;
 
 // has to be translated into CHUNKs
-Block blocks[16][16];
+Block blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+
+// Create and configure FastNoise object
+FastNoiseLite noise;
+float noiseData[CHUNK_SIZE][CHUNK_SIZE];
 
 unsigned int texture;
 
@@ -77,8 +83,27 @@ void INIT_SHADER(void)
 
 }
 
+void INIT_NOISE(){
+	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+	noise.SetFrequency(0.1);
+
+	// Gather noise data
+	int index = 0;
+
+	for (int y = 0; y < CHUNK_SIZE; y++)
+	{
+		for (int x = 0; x < CHUNK_SIZE; x++)
+		{
+			noiseData[x][y] = noise.GetNoise((float)x, (float)y);
+			noiseData[x][y] = (int) (16 * noiseData[x][y]);
+		}
+	}
+}
+
+
 void INIT_VAO(void)
 {
+
 	purpleQuad.crea_VAO_Vector();
 	purpleQuad.Model = mat4(1.0);
 	purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
@@ -106,13 +131,25 @@ void INIT_VAO(void)
 
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
-			blocks[i][j].atlas_offset[0] = vec2(0, 15);
-			blocks[i][j].atlas_offset[1] = vec2(2, 15);
-			blocks[i][j].atlas_offset[2] = vec2(3, 15);
-			blocks[i][j].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
-			blocks[i][j].initCube();
-			blocks[i][j].moveTo(vec3(i-10,-2,j-10));
-			TexturedCube.push_back(&blocks[i][j]);
+			for (int k = 0; k < CHUNK_SIZE; k++) {
+				if (k == 0) {
+					blocks[i][j][k].atlas_offset[0] = vec2(0, 15);
+					blocks[i][j][k].atlas_offset[1] = vec2(2, 15);
+					blocks[i][j][k].atlas_offset[2] = vec2(3, 15);
+				} else if (k > 0 && k < 4) {
+					blocks[i][j][k].atlas_offset[0] = 
+					blocks[i][j][k].atlas_offset[1] = 
+					blocks[i][j][k].atlas_offset[2] = vec2(2, 15);
+				} else {
+					blocks[i][j][k].atlas_offset[0] = 
+					blocks[i][j][k].atlas_offset[1] = 
+					blocks[i][j][k].atlas_offset[2] = vec2(1, 15);
+				}
+				blocks[i][j][k].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
+				blocks[i][j][k].initCube();
+				blocks[i][j][k].moveTo(vec3(i-10,noiseData[i][j]-2-k,j-10));
+				TexturedCube.push_back(&blocks[i][j][k]);
+			}
 		}
 	}
 
@@ -220,6 +257,7 @@ int main(int argc, char *argv[])
 
 	glewExperimental = GL_TRUE;
 	glewInit();
+	INIT_NOISE();
 	INIT_TEXTURES();
 	INIT_SHADER();
 	INIT_VAO();
