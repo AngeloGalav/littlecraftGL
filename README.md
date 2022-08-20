@@ -8,6 +8,11 @@ I decided to make a clone of the popular game "Minecraft", in order to challenge
 
 Some of the features of the original are missing due to time and complexity constraints.
 
+## Screenshots
+
+![](res/screenshot.png)
+
+
 ## How to compile
 
 This branch represents the <b>Linux version</b> of the code (which is essentially the same aside from some minor tweaks and the compilation method). You can check the Windows version of the code [here](https://github.com/AngeloGalav/littlecraftGL/tree/windows).
