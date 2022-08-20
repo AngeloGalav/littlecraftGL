@@ -96,25 +96,25 @@ void INIT_VAO(void)
 	cubo.initCube();
 	Scena.push_back(&cubo);
 
-	// Textured block
-	block.atlas_offset[0] = vec2(0, 15);
-	block.atlas_offset[1] = vec2(2, 15);
-	block.atlas_offset[2] = vec2(3, 15);
-	block.initCubeTextures(); //le textures sono già state inizializ. dal costruttore
-	block.initCube();
-	TexturedCube.push_back(&block);
+	// // Textured block
+	// block.atlas_offset[0] = vec2(0, 15);
+	// block.atlas_offset[1] = vec2(2, 15);
+	// block.atlas_offset[2] = vec2(3, 15);
+	// block.initCubeTextures(); //le textures sono già state inizializ. dal costruttore
+	// block.initCube();
+	// TexturedCube.push_back(&block);
 
-	// for (int i = 0; i < 2; i++) {
-	// 	for (int j = 0; j < 2; j++) {
-	// 		blocks[i][j].atlas_offset[0] = vec2(0, 15);
-	// 		blocks[i][j].atlas_offset[1] = vec2(2, 15);
-	// 		blocks[i][j].atlas_offset[2] = vec2(3, 15);
-	// 		blocks[i][j].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
-	// 		blocks[i][j].initCube();
-	// 		blocks[i][j].moveTo(vec3(i*4,-2,j*4));
-	// 		TexturedCube.push_back(&blocks[i][j]);
-	// 	}
-	// }
+	for (int i = 0; i < CHUNK_SIZE; i++) {
+		for (int j = 0; j < CHUNK_SIZE; j++) {
+			blocks[i][j].atlas_offset[0] = vec2(0, 15);
+			blocks[i][j].atlas_offset[1] = vec2(2, 15);
+			blocks[i][j].atlas_offset[2] = vec2(3, 15);
+			blocks[i][j].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
+			blocks[i][j].initCube();
+			blocks[i][j].moveTo(vec3(i-10,-2,j-10));
+			TexturedCube.push_back(&blocks[i][j]);
+		}
+	}
 
 	block.moveTo(vec3(1,0,0));
 }
