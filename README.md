@@ -50,7 +50,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Added Cube transformations
 - [x] Textured Cube
 - [ ] Block management
-- [ ] Plain-cube floor
+- [x] Plain-cube floor
 - [ ] Noise for procedural generation
 - [ ] Deleting and placing cubes
 - [ ] Multiple chunk management
