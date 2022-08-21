@@ -36,6 +36,8 @@ Raycaster raycast;
 
 int main_window_id;
 
+GLuint render_mode = GL_FILL;
+
 // debug time
 int t = -180;
 
@@ -131,7 +133,7 @@ void INIT_VAO(void)
 
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
-			for (int k = 0; k < CHUNK_SIZE; k++) {
+			for (int k = 0; k < 1; k++) {
 				if (k == 0) {
 					blocks[i][j][k].atlas_offset[0] = vec2(0, 15);
 					blocks[i][j][k].atlas_offset[1] = vec2(2, 15);
@@ -147,7 +149,7 @@ void INIT_VAO(void)
 				}
 				blocks[i][j][k].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
 				blocks[i][j][k].initCube();
-				blocks[i][j][k].moveTo(vec3(i-10,noiseData[i][j]-2-k,j-10));
+				blocks[i][j][k].moveTo(vec3(i-10,-2-k,j-10));
 				TexturedCube.push_back(&blocks[i][j][k]);
 			}
 		}

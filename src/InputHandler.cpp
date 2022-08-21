@@ -13,7 +13,7 @@ extern vector<vec3> centri;
 extern vector<float> raggi;
 extern Cube cubo;
 extern Block block;
-
+extern GLuint render_mode;
 
 bool firstMouse = true;
 float lastX = (float)width / 2;
@@ -74,6 +74,10 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 
 	case 'm':
 		block.translateCube(vec3(0.0, 0.0, -1.0));
+		break;
+	case 'x':
+		if (render_mode == GL_LINE) render_mode = GL_FILL;
+		else render_mode = GL_LINE;
 		break;
 	
 	default:
