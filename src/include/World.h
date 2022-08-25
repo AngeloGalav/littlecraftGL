@@ -4,9 +4,12 @@
 #include "Chunk.h"
 
 class World {
-    Chunk chunks[16][16];
-
-    // Add perlin noise code here
+    // Chunks that make up the world;
+    Chunk **chunks;
+    // World Singleton
+    World* current_world_instance;
+    void init();
+    ///TODO: Move perlin noise code here
 };
 
 #endif
