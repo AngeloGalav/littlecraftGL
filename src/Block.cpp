@@ -46,19 +46,3 @@ void Block::initCube(){
 	ModelCube = mat4(1.0);
 	moveTo(position);
 }
-
-void Block::initCubeTextures(){
-	// Add texture offsets to all quads of the cube
-	for (int i = 0; i < 4; i++){
-		faces[i].texture_coords_offset = atlas_offset[2];
-	}
-
-	faces[4].texture_coords_offset = atlas_offset[0];
-	faces[5].texture_coords_offset = atlas_offset[1];
-	for (int i = 0; i < 6; i++)
-	{
-		if (true) { //TODO: change it to the textureBool
-			faces[i].initQuadTexture();
-		}
-	}
-}
