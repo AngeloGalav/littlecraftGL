@@ -8,8 +8,10 @@ class World {
     Chunk **chunks;
     // World Singleton
     World* current_world_instance;
-    void init();
+    void initWorld();
     ///TODO: Move perlin noise code here
+
+    World();
 };
 
 #endif

@@ -67,7 +67,7 @@ void Mesh::crea_VAO_Vector_textures(){
 }
 
 
-void Mesh::drawMesh(int ModelUniform){ cout << "debug: wrong call" << endl;}
+void Mesh::drawMesh(int ModelUniform){ cout << "debug_ERROR: wrong call" << endl;}
 
 void Mesh::flushData(){
 	indici.clear();

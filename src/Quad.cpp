@@ -59,7 +59,7 @@ void Quad::drawMeshFromParent(int ModelUniform, mat4 parentModel) {
 	glBindVertexArray(VAO);
 	glUniformMatrix4fv(ModelUniform, 1, GL_FALSE, value_ptr(parentModel*Model));
 	glDrawElements(GL_TRIANGLES, (indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBindVertexArray(0);
 }
 
