@@ -70,24 +70,24 @@ void Chunk::checkNeighbours(int i, int j, int k){
 	if (i > 0) {
 		chunk_blocks[i][j][k].must_be_drawn[Left] =
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][k].position.y)
-		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][1].position.y);
+		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][0].position.y);
 	}
 	if (i < CHUNK_SIZE - 1) {
 		chunk_blocks[i][j][k].must_be_drawn[Right] =
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][k].position.y)
-		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][1].position.y);
+		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][0].position.y);
 	}
 
 	if (j > 0) {
 		chunk_blocks[i][j][k].must_be_drawn[Back] =
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i][j-1][k].position.y)
-		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j-1][1].position.y);
+		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j-1][0].position.y);
 	}
 
 	if (j < CHUNK_SIZE - 1) {
 		chunk_blocks[i][j][k].must_be_drawn[Front] =
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][k].position.y)
-		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][1].position.y);
+		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][0].position.y);
 	}
 
 }
