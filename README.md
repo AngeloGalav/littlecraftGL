@@ -12,6 +12,11 @@ Some of the features of the original are missing due to time and complexity cons
 
 ![](res/screenshot.png)
 
+## How to play
+
+- Use `W,A,S,D` to fly inside the world. Use `I,J,K,L` to rotate the camera.
+- You can use your mouse to rotate the camera for precise movements, although it's a bit wonky since GLUT doesn't provide an easy way to handle mouse movement (es. mouse capture).
+- You can press `x` for a wireframe view of the currently generated world. 
 
 ## How to compile
 
@@ -40,6 +45,7 @@ Both can be easily downloaded with `pacman` or `apt-get`.
 
 The project also uses two additional libraries: `json.hpp` and `gltext.h`, which are both included in the project. 
 
+
 ## Milestones
 
 You don't need to read any of this, I'm just using this to keep track of what I have to do.
@@ -57,7 +63,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Plain-cube floor
 - [x] Noise for procedural generation
 - [ ] Deleting and placing cubes
-- [ ] Rendering optimizations
+- [x] Rendering optimizations
 - [ ] Multiple chunk management
 - [ ] Water
 - [ ] Fog
@@ -69,5 +75,5 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 
 ## Known Issues
 
-- This is probably the slowest version of Minecraft ever created (it runs lower than 1 FPS on my Iris Xe iGPU). This is become it is very unoptimized. Sorry about that, it will be improved in the near future.  
-- It is missing some key features, that will be added sooner or later. 
+ - It is missing some key features, that will be added sooner or later. 
+ - There are some debug blocks (the one colored in red, yellow etc). These are placeholders and will be removed in the near future. 
