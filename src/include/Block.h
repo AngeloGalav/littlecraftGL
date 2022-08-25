@@ -1,5 +1,5 @@
 #ifndef BLOCK_H
-#define BLOCK
+#define BLOCK_H
 
 #include "Cube.h"
 
