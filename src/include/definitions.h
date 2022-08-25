@@ -10,7 +10,7 @@
 #define UNIT_SIZE 4
 #define CHUNK_SIZE 32
 #define CHUNK_SIZE_V (ivec3) {{32, 32, 128}}
-#define CHUNK_HEIGHT 10
+#define CHUNK_HEIGHT 32
 #define WORLD_SIZE 32
 #define DEBUG_MODE false
 
