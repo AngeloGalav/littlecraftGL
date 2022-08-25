@@ -8,9 +8,8 @@
 #include "include/GestioneTesto.h"
 #include "include/Mesh.h"
 #include "include/EventHandler.h"
-#include "include/TexturedQuad.h"
-#include "include/Block.h"
 #include "include/FastNoiseLite.h"
+#include "include/Chunk.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -19,7 +18,7 @@ vector<Cube*> Scena;
 vector<Mesh*> Scena_Extras;
 
 vector<Mesh*> TexturedMeshes;
-vector<Block*> TexturedCube;
+vector<Block*> TexturedCube_blocks;
 
 
 vector<vec3> centri;
@@ -50,7 +49,7 @@ TexturedQuad textureQuad;
 
 int texture_width, texture_height, nrChannels;
 
-
+Chunk chunk;
 Cube cubo;
 Block block;
 
@@ -85,6 +84,7 @@ void INIT_SHADER(void)
 
 }
 
+///TODO: Should move this inside the world class
 void INIT_NOISE(){
 	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 	noise.SetFrequency(0.1);
@@ -102,7 +102,8 @@ void INIT_NOISE(){
 	}
 }
 
-
+///TODO: Should move this inside the World Class...
+// Leaving it here for testing purposes
 void INIT_VAO(void)
 {
 
@@ -123,41 +124,13 @@ void INIT_VAO(void)
 	cubo.initCube();
 	Scena.push_back(&cubo);
 
-	// // Textured block
-	// block.atlas_offset[0] = vec2(0, 15);
-	// block.atlas_offset[1] = vec2(2, 15);
-	// block.atlas_offset[2] = vec2(3, 15);
-	// block.initCubeTextures(); //le textures sono già state inizializ. dal costruttore
-	// block.initCube();
-	// TexturedCube.push_back(&block);
-
-	for (int i = 0; i < CHUNK_SIZE; i++) {
-		for (int j = 0; j < CHUNK_SIZE; j++) {
-			for (int k = 0; k < 1; k++) {
-				if (k == 0) {
-					blocks[i][j][k].atlas_offset[0] = vec2(0, 15);
-					blocks[i][j][k].atlas_offset[1] = vec2(2, 15);
-					blocks[i][j][k].atlas_offset[2] = vec2(3, 15);
-				} else if (k > 0 && k < 4) {
-					blocks[i][j][k].atlas_offset[0] = 
-					blocks[i][j][k].atlas_offset[1] = 
-					blocks[i][j][k].atlas_offset[2] = vec2(2, 15);
-				} else {
-					blocks[i][j][k].atlas_offset[0] = 
-					blocks[i][j][k].atlas_offset[1] = 
-					blocks[i][j][k].atlas_offset[2] = vec2(1, 15);
-				}
-				blocks[i][j][k].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
-				blocks[i][j][k].initCube();
-				blocks[i][j][k].moveTo(vec3(i-10,-2-k,j-10));
-				TexturedCube.push_back(&blocks[i][j][k]);
-			}
-		}
-	}
+	// Initializes chunk values
+	chunk.initChunk();
 
 	block.moveTo(vec3(1,0,0));
 }
 
+///TODO: Should move this inside a texture class
 void INIT_TEXTURES(){
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &texture);
@@ -222,9 +195,8 @@ void drawScene(void)
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	for (int k = 0; k < TexturedCube.size(); k++){
-		TexturedCube[k]->drawMesh(MatModel_texture);
-	}
+	chunk.drawChunk(MatModel_texture);
+
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){
 		TexturedMeshes[k]->drawMesh(MatModel_texture);
