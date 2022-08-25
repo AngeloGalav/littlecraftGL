@@ -2,11 +2,10 @@
 
 > :warning: **This project is still very much under development!**, wait until it will be finished...
 
-
 This is the code for the second project for the Computer Graphics course at the University Of Bologna. The goal was to make an interactable 3D scene in OpenGL.
 I decided to make a clone of the popular game "Minecraft", in order to challenge my knowledge and capabilities.
 
-Some of the features of the original are missing due to time and complexity constraints.
+Some of the features of the original game are missing due to time and complexity constraints.
 
 ## Screenshots
 
@@ -15,7 +14,7 @@ Some of the features of the original are missing due to time and complexity cons
 ## How to play
 
 - Use `W,A,S,D` to fly inside the world. Use `I,J,K,L` to rotate the camera.
-- You can use your mouse to rotate the camera for precise movements, although it's a bit wonky since GLUT doesn't provide an easy way to handle mouse movement (es. mouse capture).
+- You can also use your mouse to rotate the camera for precise movements, although it's a bit wonky since GLUT doesn't provide an easy way to properly handle mouse movement (es. mouse capture).
 - You can press `x` for a wireframe view of the currently generated world. 
 
 ## How to compile
