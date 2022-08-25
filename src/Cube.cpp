@@ -21,23 +21,21 @@ Cube::Cube(){
     faces[5].quadColor = (vec4(1.0f, 0.0f, 1.0f, 1.0f));
     faces[5].initQuadWithSingleColor();
 
+	for (int i = 0; i < 6; i++) must_be_drawn[i] = true;
 	position = vec3(0.0, 0.0, 0.0);
+
 }
 
 void Cube::initCubeTextures(){
-	// Add texture offsets to all quads of the cube
+	// Apply texture offsets to all quads of the cube
 	for (int i = 0; i < 4; i++){
 		faces[i].texture_coords_offset = atlas_offset[2];
 	}
 
 	faces[4].texture_coords_offset = atlas_offset[0];
 	faces[5].texture_coords_offset = atlas_offset[1];
-	for (int i = 0; i < 6; i++)
-	{
-		if (true) { //TODO: change it to the textureBool
-			faces[i].initQuadTexture();
-		}
-	}
+	
+	for (int i = 0; i < 6; i++) faces[i].initQuadTexture();
 }
 
 
@@ -80,17 +78,26 @@ void Cube::initCube(){
 	moveTo(position); // gets initialized to the start position
 }
 
+/** Draws each face of the cube
+ * 
+ */
 void Cube::drawMesh(int Model_Uniform){
     for (int i = 0; i < 6; i++){
-        faces[i].drawMeshFromParent(Model_Uniform, ModelCube);
+        if (must_be_drawn[i]) faces[i].drawMeshFromParent(Model_Uniform, ModelCube);
 	}
 }
 
-
-void Cube::translateCube(vec3 translate_vector){
-	ModelCube = translate(ModelCube, ((float)UNIT_SIZE)*translate_vector);
+/** Translates cube using a vector
+ * 
+ */
+void Cube::translateCube(ivec3 translate_vector){
+	ModelCube = translate(ModelCube, ((float)UNIT_SIZE)*vec3(translate_vector));
 }
 
-void Cube::moveTo(vec3 position){
+/** Moves the cube to a determined position
+ * 
+ */
+void Cube::moveTo(ivec3 position){
 	translateCube(position - this->position);
+	this->position = position;
 }

@@ -6,17 +6,20 @@
 
 class Cube {
 public:
-    vec3 position;
-    TexturedQuad faces[6]; // facce del cubo 
-    mat4 ModelCube;
+    ivec3 position;
+    TexturedQuad faces[6]; // facce del cubo
 
-    bool hasTexture;
-    vec2 atlas_offset[3]; // ogni cubo ha solo 3 texture in Minecraft
+    bool must_be_drawn[6]; // ad ogni faccia è associato un bool, per dire se 
+                           // lo devo disegnare o no, per ottimizzare drasticamente 
+                           // il rendering 
+
+    mat4 ModelCube; // Model Matrix dell'intero cubo
+    vec2 atlas_offset[3]; // texture offset, ogni cubo ha massimo 3 texture in Minecraft
 
     void initCube();
     void initCubeTextures();
-    void moveTo(vec3 position);
-    void translateCube(vec3 translate_vector);
+    void moveTo(ivec3 position);
+    void translateCube(ivec3 translate_vector);
     void drawMesh(int Model_Uniform);
 
     Cube(vec4 pos);
