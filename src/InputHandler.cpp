@@ -60,21 +60,21 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		rotateCameraKeyboard(0, -1);
 		break;
 	
-	case 'v':
-		block.translateCube(vec3(1.0, 1.0, 0.0));
-		break;
+	// case 'v':
+	// 	block.translateCube(vec3(1.0, 1.0, 0.0));
+	// 	break;
 	
-	case 'b':
-		block.translateCube(vec3(-1.0, -1.0, 0.0));
-		break;
+	// case 'b':
+	// 	block.translateCube(vec3(-1.0, -1.0, 0.0));
+	// 	break;
 	
-	case 'n':
-		block.translateCube(vec3(0.0, 0.0, 1.0));
-		break;
+	// case 'n':
+	// 	block.translateCube(vec3(0.0, 0.0, 1.0));
+	// 	break;
 
-	case 'm':
-		block.translateCube(vec3(0.0, 0.0, -1.0));
-		break;
+	// case 'm':
+	// 	block.translateCube(vec3(0.0, 0.0, -1.0));
+	// 	break;
 	case 'x':
 		if (render_mode == GL_LINE) render_mode = GL_FILL;
 		else render_mode = GL_LINE;
