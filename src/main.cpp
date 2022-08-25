@@ -53,7 +53,9 @@ Chunk chunk;
 Cube cubo;
 Block block;
 
-// has to be translated into CHUNKs
+World main_world;
+
+// has to be translated into CHUNKs (needs to be deleted)
 Block blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
 // Create and configure FastNoise object
@@ -124,10 +126,7 @@ void INIT_VAO(void)
 	cubo.initCube();
 	Scena.push_back(&cubo);
 
-	// Initializes chunk values
-	chunk.initChunk();
-
-	block.moveTo(vec3(1,0,0));
+	main_world.initWorld();
 }
 
 ///TODO: Should move this inside a texture class
@@ -195,7 +194,8 @@ void drawScene(void)
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	chunk.drawChunk(MatModel_texture);
+	// renderizza il mondo
+	main_world.renderWorld(MatModel_texture);
 
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){

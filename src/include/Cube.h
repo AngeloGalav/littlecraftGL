@@ -26,6 +26,15 @@ public:
     Cube();    
 };
 
+enum Direction {
+    Front = 0,
+    Right,
+    Back, 
+    Left,
+    Up,
+    Down
+}; 
+
 /** Le facce sono organizzate in questo modo:
  *  0 - front, 1 - right, 2 - back,
  *  3 - left, 4 - up, 5 - down

@@ -15,11 +15,9 @@ enum BlockType {
 
 
 class Block : public Cube {
-    public:
+public:
     BlockType type;
-    vec2 atlas_offset[3]; // ogni cubo ha solo 3 texture in Minecraft
     void initCube();
-    void initCubeTextures();
     Block();
     Block(vec2 *atlas_offset);
 };
