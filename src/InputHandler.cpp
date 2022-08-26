@@ -1,6 +1,5 @@
 #include "include/InputHandler.h"
 #include "include/Raycaster.h"
-#include "include/Strutture.h"
 #include "include/Cube.h"
 #include "include/Block.h"
 #include "include/Mesh.h"
