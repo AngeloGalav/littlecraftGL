@@ -2,12 +2,12 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "TexturedQuad.h"
+#include "Quad.h"
 
 class Cube {
 public:
     ivec3 position;
-    TexturedQuad faces[6]; // facce del cubo
+    Quad faces[6]; // facce del cubo
 
     bool must_be_drawn[6]; // ad ogni faccia è associato un bool, per dire se 
                            // lo devo disegnare o no, per ottimizzare drasticamente 

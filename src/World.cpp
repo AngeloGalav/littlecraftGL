@@ -21,8 +21,6 @@ void World::initWorld(){
     debug_chunk = new Chunk();
     debug_chunk->world_instance = this;
     debug_chunk->initChunk();
-
-    cout << "test:" << debug_chunk->world_instance->noiseData[5][3] << endl;
 }
 
 void World::initNoise(){

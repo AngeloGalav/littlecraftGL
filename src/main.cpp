@@ -5,7 +5,6 @@
 #include "include/Camera.h"
 #include "include/Raycaster.h"
 #include "include/InputHandler.h"
-#include "include/GestioneTesto.h"
 #include "include/Mesh.h"
 #include "include/EventHandler.h"
 #include "include/FastNoiseLite.h"
@@ -45,7 +44,7 @@ static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, Mat
 
 int selected_obj = -1;
 Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
-TexturedQuad textureQuad;
+Quad textureQuad;
 
 int texture_width, texture_height, nrChannels;
 

@@ -11,6 +11,7 @@
 #define CHUNK_SIZE 32
 #define CHUNK_SIZE_V (ivec3) {{32, 32, 128}}
 #define CHUNK_HEIGHT 32
+#define TEX_ATLAS_UNIT_SIZE 16
 #define WORLD_SIZE 32
 #define DEBUG_MODE false
 

@@ -2,12 +2,6 @@
 
 Block::Block() : Cube(){}
 
-Block::Block(vec2 *atlas_offset_){
-    for (int i = 0; i < 3; i++) {
-        atlas_offset[i] = atlas_offset_[i];
-    }
-}
-
 void Block::initCube(){
     faces[0].crea_VAO_Vector_textures();
 	faces[0].Model = mat4(1.0);

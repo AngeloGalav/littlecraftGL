@@ -19,7 +19,6 @@ public:
     BlockType type;
     void initCube();
     Block();
-    Block(vec2 *atlas_offset);
 };
 
 #endif
