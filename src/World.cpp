@@ -81,14 +81,9 @@ void World::updateWorld(){
         int j = !(debug_chunk->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) * -1 +
         !((debug_chunk->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
 
-        cout << "CHANGED CHUNK! to " << i << ", " << j << endl;
-
-        // debug_chunk->chunk_position += ivec2(i, j);
-        debug_chunk->to_move = true; 
+        cout << "CHANGED CHUNK! to " << i << ", " << j << endl; 
 
         debug_chunk->translateChunkInWorld(ivec2(i, j));
-
-        // player_in_current_chunk = true;
     }
 
     if (debug_chunk->map_out_of_bounds) {
@@ -97,14 +92,4 @@ void World::updateWorld(){
 
     debug_chunk->updateChunk();
     cout << "chunk_position: " << debug_chunk->chunk_position.x << ", " << debug_chunk->chunk_position.y << endl; 
-
-    ///TODO: change to player position
-    // ivec2 player_relative_to_chunk = debug_chunk->player_in_chunk_bounds(vec3(0,0,0));
-
-
-    // debug_chunk->chunk_position = ivec3(debug_chunk->chunk_position,debug_chunk->chunk_position,0);
-
-    // // if (player_changed_chunk_pos())
-    // //  = debug_chunk;
-    // if (debug_chunk->dirty) { /*change world structures*/}
 }
