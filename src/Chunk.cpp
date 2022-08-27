@@ -34,8 +34,7 @@ void Chunk::initChunk(){
 				///!!! ATTENZIONE A QUESTA RIGA !! POTREBBE ESSERE LA CAUSA DI UN PROBLEMA FUTURO
 				// CON LA POSIZIONE DEI CHUNK
 				// chunk_blocks[i][j][k].moveTo(vec3(i, k, j));
-				chunk_blocks[i][j][k].moveTo(vec3(i + chunk_position.x*CHUNK_SIZE,
-				 - 2 - k - world_instance->noiseData[i + WORLD_SIZE/2][j + WORLD_SIZE/2], j + chunk_position.y*CHUNK_SIZE));
+				applyChunkPosition(i, j, k);	
 			}
 		}
 	}
@@ -65,13 +64,7 @@ void Chunk::updateChunk(){
 					(i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE) >= WORLD_SIZE*CHUNK_SIZE ||
 					(j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE) >= WORLD_SIZE*CHUNK_SIZE;
 			
-					if (!map_out_of_bounds) // non aggiorniamo qui siccome abbiamo già fatto gli spostamenti giù
-						chunk_blocks[i][j][k].moveTo(vec3
-						(i + CHUNK_SIZE * chunk_position.x,
-						- 2 - k - world_instance->noiseData
-						[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
-						[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE], 
-						j + CHUNK_SIZE * chunk_position.y));
+					if (!map_out_of_bounds) applyChunkPosition(i, j, k);
 				}
 			}
 		}
@@ -93,6 +86,15 @@ void Chunk::updateChunk(){
 		dirty = false;
 	}
 
+}
+
+void Chunk::applyChunkPosition(int i, int j, int k) {
+	chunk_blocks[i][j][k].moveTo(
+	vec3(i + CHUNK_SIZE * chunk_position.x,
+	- 2 - k - world_instance->noiseData
+	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE], 
+	j + CHUNK_SIZE * chunk_position.y));
 }
 
 

@@ -33,10 +33,24 @@ void World::initWorld(){
         currently_displayed_chunks[i]->initChunk();
     }
 
-    debug_chunk = new Chunk();
-    debug_chunk->world_instance = this;
-    debug_chunk->chunk_position = ivec2(0,0);
-    debug_chunk->initChunk();
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+        cout << "init_positions" << i << ": " << currently_displayed_chunks[i]->chunk_position.x 
+        << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
+    }
+
+    // debug_chunk = new Chunk();
+    // debug_chunk->world_instance = this;
+    // debug_chunk->chunk_position = ivec2(0,0);
+    // debug_chunk->initChunk();
+}
+
+void World::handleFacesBetweenChunks(){
+    for (int i = 0; i < DISPLAYED_CHUNKS - 1; i++) {
+        // cout << "positions" << currently_displayed_chunks[i]->chunk_position.x 
+        // << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
+    }
+    
+
 }
 
 void World::initNoise(){
@@ -54,11 +68,11 @@ void World::initNoise(){
 }
 
 void World::renderWorld(int Model_Uniform){
-    // for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
-    //     currently_displayed_chunks[i]->drawChunk(Model_Uniform);
-    // }
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+        currently_displayed_chunks[i]->drawChunk(Model_Uniform);
+    }
 
-    debug_chunk->drawChunk(Model_Uniform);
+    // debug_chunk->drawChunk(Model_Uniform);
 }
 
 void World::updateWorld(){
@@ -67,29 +81,45 @@ void World::updateWorld(){
     vec2 player_position_to_map = vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
     
     player_in_main_chunk = 
-    (debug_chunk->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) 
-    && ((debug_chunk->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x)
-    && (debug_chunk->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) 
-    && ((debug_chunk->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
+    (currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) 
+    && ((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x)
+    && (currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) 
+    && ((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
 
-    cout << "in chunk: " <<  player_in_main_chunk << endl;
+    // cout << "in chunk: " <<  player_in_main_chunk << endl;
 
     if (!player_in_main_chunk) {
         // si salva la direzione in cui il giocatore si è spostato dal chunk
-        int i = !(debug_chunk->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) * -1 +
-        !((debug_chunk->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x);
-        int j = !(debug_chunk->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) * -1 +
-        !((debug_chunk->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
+        int i = !(currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) * -1 +
+        !((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x);
+        int j = !(currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) * -1 +
+        !((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
+
+
+        // debug_chunk->translateChunkInWorld(ivec2(i, j));
+        for (int k = 0; k < DISPLAYED_CHUNKS; k++) {
+            currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i, j));
+        }
 
         cout << "CHANGED CHUNK! to " << i << ", " << j << endl; 
+        cout << "main_chunk_pos: " << currently_displayed_chunks[Center]->chunk_position.x 
+            << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl;
 
-        debug_chunk->translateChunkInWorld(ivec2(i, j));
+        for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+            cout << "positions: " << currently_displayed_chunks[i]->chunk_position.x 
+            << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
+        }
+        
     }
 
-    if (debug_chunk->map_out_of_bounds) {
+    if (currently_displayed_chunks[Center]->map_out_of_bounds) {
         cout << "OUT_OF_BOUNDS ERROR!!" << endl;
     }
 
-    debug_chunk->updateChunk();
-    cout << "chunk_position: " << debug_chunk->chunk_position.x << ", " << debug_chunk->chunk_position.y << endl; 
+    // debug_chunk->updateChunk();
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+        currently_displayed_chunks[i]->updateChunk();
+    }
+
+    // cout << "chunk_position: " << currently_displayed_chunks[Center]->chunk_position.x << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl; 
 }

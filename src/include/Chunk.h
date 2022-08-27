@@ -20,6 +20,7 @@ public:
     World *world_instance;
 
     void updateChunk();
+    void applyChunkPosition(int i, int j, int k);
     void initChunk();
     void drawChunk(int Model_Uniform);
     void checkNeighbours(int i, int j, int k);
