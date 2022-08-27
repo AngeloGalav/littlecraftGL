@@ -1,4 +1,5 @@
 #include "include/Chunk.h"
+#include <iostream>
 
 Chunk::Chunk() {
 	chunk_position = ivec2(0,0);
@@ -7,6 +8,8 @@ Chunk::~Chunk() {}
 
 void Chunk::initChunk(){
 	dirty = false;
+	to_move = false;
+	map_out_of_bounds = false;
 
     for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
@@ -32,7 +35,7 @@ void Chunk::initChunk(){
 				// CON LA POSIZIONE DEI CHUNK
 				// chunk_blocks[i][j][k].moveTo(vec3(i, k, j));
 				chunk_blocks[i][j][k].moveTo(vec3(i + chunk_position.x*CHUNK_SIZE,
-				 - 2 - k - world_instance->noiseData[j][i], j + chunk_position.y*CHUNK_SIZE));
+				 - 2 - k - world_instance->noiseData[i + WORLD_SIZE/2][j + WORLD_SIZE/2], j + chunk_position.y*CHUNK_SIZE));
 			}
 		}
 	}
@@ -50,6 +53,45 @@ void Chunk::initChunk(){
 
 void Chunk::updateChunk(){
 
+	if (to_move && !map_out_of_bounds) {
+		for (int i = 0; i < CHUNK_SIZE; i++) {
+			for (int j = 0; j < CHUNK_SIZE; j++) {
+				for (int k = 0; k < CHUNK_HEIGHT; k++) {
+					
+					///TODO: YOU MUST REMOVE THE FINAL SIZE !!!
+					map_out_of_bounds = 
+					(i + chunk_position.x + WORLD_SIZE/2) <= -1 || 
+					(j + chunk_position.y + WORLD_SIZE/2) <= -1 || 
+					(i + chunk_position.y + WORLD_SIZE/2) >= WORLD_SIZE*CHUNK_SIZE ||
+					(j + chunk_position.y + WORLD_SIZE/2) >= WORLD_SIZE*CHUNK_SIZE;
+			
+					if (!map_out_of_bounds)
+						chunk_blocks[i][j][k].moveTo(vec3(i,
+						- 2 - k - world_instance->noiseData
+						[i + chunk_position.x + WORLD_SIZE/2] 
+						[j + chunk_position.y + WORLD_SIZE/2], 
+						j));
+				}
+			}
+		}
+
+		for (int i = 0; i < CHUNK_SIZE; i++) {
+			for (int j = 0; j < CHUNK_SIZE; j++) {
+				for (int k = 0; k < CHUNK_HEIGHT; k++) {
+					checkNeighbours(i,j,k);
+				}
+			}
+		}
+
+		to_move = false;
+	}
+
+	if (dirty) {
+		// code for dirty chunk management here
+
+		dirty = false;
+	}
+
 }
 
 
@@ -66,7 +108,10 @@ void Chunk::drawChunk(int Model_Uniform){
 /** Checks for neighbouring cubes, and avoids drawing faces that 
  *  arent visible based on that.  
  */
-void Chunk::checkNeighbours(int i, int j, int k){	
+void Chunk::checkNeighbours(int i, int j, int k){
+
+	for (int d = 0; d < 6; d++)	chunk_blocks[i][j][k].must_be_drawn[d] = 6;
+
 	// la faccia di sopra viene disegnata solo se è il primo strato visibile (di base)
 	chunk_blocks[i][j][k].must_be_drawn[Up] = (k == 0);
 	chunk_blocks[i][j][k].must_be_drawn[Down] = false;
@@ -109,5 +154,15 @@ void Chunk::translateChunk(ivec3 vector){
 				chunk_blocks[i][j][k].translateCube(vector);
 			}
 		}
+	}
+}
+
+/** Moves chunk to a new position in the world. 
+ * 	So, it is equivalent to a translation in world coordinates
+ */
+void Chunk::translateChunkInWorld(ivec2 vector){
+	if (!map_out_of_bounds) {
+		translateChunk(ivec3(vector.x, 0, vector.y)); ///TODO: multiply by WORLD_SIZE
+		chunk_position += ivec2(vector.x, vector.y);
 	}
 }

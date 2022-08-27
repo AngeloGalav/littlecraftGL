@@ -13,7 +13,7 @@
 #define CHUNK_HEIGHT 32
 #define TEX_ATLAS_UNIT_SIZE 16
 // number of chunk in the world
-#define WORLD_SIZE 32
+#define WORLD_SIZE 128
 #define DEBUG_MODE false
 
 #endif

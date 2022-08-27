@@ -198,15 +198,13 @@ void drawScene(void)
 	// renderizza il mondo
 	main_world.renderWorld(MatModel_texture);
 
+	cout << "position: " << mainCamera.ViewSetup.position.x << ", " << mainCamera.ViewSetup.position.z << endl;
+
 	// disegno gli elementi aventi delle texture
 	for (int k = 0; k < TexturedMeshes.size(); k++){
 		TexturedMeshes[k]->drawMesh(MatModel_texture);
 	}
 
-
-	cout << "camera pos: " << mainCamera.ViewSetup.position.x << ", " << mainCamera.ViewSetup.position.y << ", " << mainCamera.ViewSetup.position.z << endl;
-
-		// disegno gli elementi aventi delle texture
 	glutSwapBuffers();
 
 }
