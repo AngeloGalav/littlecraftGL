@@ -14,6 +14,7 @@
 #define TEX_ATLAS_UNIT_SIZE 16
 // number of chunk in the world
 #define WORLD_SIZE 128
+#define DISPLAYED_CHUNKS 9
 #define DEBUG_MODE false
 
 #endif

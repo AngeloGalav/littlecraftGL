@@ -60,17 +60,18 @@ void Chunk::updateChunk(){
 					
 					///TODO: YOU MUST REMOVE THE FINAL SIZE !!!
 					map_out_of_bounds = 
-					(i + chunk_position.x + WORLD_SIZE/2) <= -1 || 
-					(j + chunk_position.y + WORLD_SIZE/2) <= -1 || 
-					(i + chunk_position.y + WORLD_SIZE/2) >= WORLD_SIZE*CHUNK_SIZE ||
-					(j + chunk_position.y + WORLD_SIZE/2) >= WORLD_SIZE*CHUNK_SIZE;
+					(i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE) <= -1 || 
+					(j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE) <= -1 || 
+					(i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE) >= WORLD_SIZE*CHUNK_SIZE ||
+					(j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE) >= WORLD_SIZE*CHUNK_SIZE;
 			
-					if (!map_out_of_bounds)
-						chunk_blocks[i][j][k].moveTo(vec3(i,
+					if (!map_out_of_bounds) // non aggiorniamo qui siccome abbiamo già fatto gli spostamenti giù
+						chunk_blocks[i][j][k].moveTo(vec3
+						(i + CHUNK_SIZE * chunk_position.x,
 						- 2 - k - world_instance->noiseData
-						[i + chunk_position.x + WORLD_SIZE/2] 
-						[j + chunk_position.y + WORLD_SIZE/2], 
-						j));
+						[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+						[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE], 
+						j + CHUNK_SIZE * chunk_position.y));
 				}
 			}
 		}
@@ -110,7 +111,7 @@ void Chunk::drawChunk(int Model_Uniform){
  */
 void Chunk::checkNeighbours(int i, int j, int k){
 
-	for (int d = 0; d < 6; d++)	chunk_blocks[i][j][k].must_be_drawn[d] = 6;
+	for (int d = 0; d < 6; d++)	chunk_blocks[i][j][k].must_be_drawn[d] = false;
 
 	// la faccia di sopra viene disegnata solo se è il primo strato visibile (di base)
 	chunk_blocks[i][j][k].must_be_drawn[Up] = (k == 0);
@@ -141,10 +142,6 @@ void Chunk::checkNeighbours(int i, int j, int k){
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][0].position.y);
 	}
-
-	///TODO: ricordati di eliminare le facce laterali del chunk dopo che hai creato il codice della 
-	// generazione del mondo infinita
-
 }
 
 void Chunk::translateChunk(ivec3 vector){
@@ -162,7 +159,7 @@ void Chunk::translateChunk(ivec3 vector){
  */
 void Chunk::translateChunkInWorld(ivec2 vector){
 	if (!map_out_of_bounds) {
-		translateChunk(ivec3(vector.x, 0, vector.y)); ///TODO: multiply by WORLD_SIZE
 		chunk_position += ivec2(vector.x, vector.y);
+		to_move = true;	
 	}
 }
