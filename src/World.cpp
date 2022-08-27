@@ -7,7 +7,7 @@ extern Camera mainCamera;
 
 World::World(){
 
-    player_in_current_chunk = false;
+    player_in_main_chunk = false;
 
     for (int i = 0; i < WORLD_SIZE; i++) {
         for (int j = 0; j < WORLD_SIZE; j++) {
@@ -16,19 +16,23 @@ World::World(){
     }
 }
 
-World::~World() {}
+World::~World() {
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++) 
+        delete currently_displayed_chunks[i];
+    
+    delete debug_chunk;
+}
 
 void World::initWorld(){
     initNoise();
-    // for (int i = 0; i < WORLD_SIZE; i++) {
-    //     for (int j = 0; j < WORLD_SIZE; j++) {
-    //         chunks[chunk_index(i,j)].world_instance = this;
-    //         // centra la mappa al centro
-    //         chunks[chunk_index(i,j)].translateChunk(ivec3((int)WORLD_SIZE/2, -2, (int)WORLD_SIZE/2));
-    //     }
-    // }
 
-    // debug_chunk = &chunks[chunk_index((int)WORLD_SIZE/2, (int)WORLD_SIZE/2)];
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+        currently_displayed_chunks[i] = new Chunk();
+        currently_displayed_chunks[i]->world_instance = this;
+        currently_displayed_chunks[i]->chunk_position = curr_chunks_index[i];
+        currently_displayed_chunks[i]->initChunk();
+    }
+
     debug_chunk = new Chunk();
     debug_chunk->world_instance = this;
     debug_chunk->chunk_position = ivec2(0,0);
@@ -50,6 +54,10 @@ void World::initNoise(){
 }
 
 void World::renderWorld(int Model_Uniform){
+    // for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+    //     currently_displayed_chunks[i]->drawChunk(Model_Uniform);
+    // }
+
     debug_chunk->drawChunk(Model_Uniform);
 }
 
@@ -57,20 +65,21 @@ void World::updateWorld(){
 
     // posizione del giocatore relativa alla mappa
     vec2 player_position_to_map = vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
-    player_in_current_chunk = 
-    (debug_chunk->chunk_position.x * UNIT_SIZE <= player_position_to_map.x) 
-    && ((debug_chunk->chunk_position.x + CHUNK_SIZE) * UNIT_SIZE >= player_position_to_map.x)
-    && (debug_chunk->chunk_position.y * UNIT_SIZE <= player_position_to_map.y) 
-    && ((debug_chunk->chunk_position.y + CHUNK_SIZE) * UNIT_SIZE >= player_position_to_map.y);
+    
+    player_in_main_chunk = 
+    (debug_chunk->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) 
+    && ((debug_chunk->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x)
+    && (debug_chunk->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) 
+    && ((debug_chunk->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
 
-    cout << "in chunk: " <<  player_in_current_chunk << endl;
+    cout << "in chunk: " <<  player_in_main_chunk << endl;
 
-    if (!player_in_current_chunk) {
+    if (!player_in_main_chunk) {
         // si salva la direzione in cui il giocatore si è spostato dal chunk
-        int i = !(debug_chunk->chunk_position.x * UNIT_SIZE <= player_position_to_map.x) * -1 +
-        !((debug_chunk->chunk_position.x + CHUNK_SIZE) * UNIT_SIZE >= player_position_to_map.x);
-        int j = !(debug_chunk->chunk_position.y * UNIT_SIZE <= player_position_to_map.y) * -1 +
-        !((debug_chunk->chunk_position.y + CHUNK_SIZE) * UNIT_SIZE >= player_position_to_map.y) *1;
+        int i = !(debug_chunk->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) * -1 +
+        !((debug_chunk->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x);
+        int j = !(debug_chunk->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) * -1 +
+        !((debug_chunk->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
 
         cout << "CHANGED CHUNK! to " << i << ", " << j << endl;
 
@@ -78,7 +87,6 @@ void World::updateWorld(){
         debug_chunk->to_move = true; 
 
         debug_chunk->translateChunkInWorld(ivec2(i, j));
-        
 
         // player_in_current_chunk = true;
     }
