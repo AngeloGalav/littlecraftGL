@@ -121,9 +121,9 @@ void INIT_VAO(void)
 	textureQuad.Model = translate(textureQuad.Model, vec3(-5.0f, -2.0f, 1.0f));
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
-	// test block
-	cubo.initCube();
-	Scena.push_back(&cubo);
+	// // test block
+	// cubo.initCube();
+	// Scena.push_back(&cubo);
 
 	main_world.initWorld();
 }
@@ -158,6 +158,8 @@ void INIT_TEXTURES(){
 
 void drawScene(void)
 {
+	main_world.updateWorld();
+
 	// crea il cielo azzurro
 	glClearColor(52.9/100.0, 80.8/100.0, 92.2/100.0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
@@ -200,6 +202,10 @@ void drawScene(void)
 	for (int k = 0; k < TexturedMeshes.size(); k++){
 		TexturedMeshes[k]->drawMesh(MatModel_texture);
 	}
+
+
+	cout << "camera pos: " << mainCamera.ViewSetup.position.x << ", " << mainCamera.ViewSetup.position.y << ", " << mainCamera.ViewSetup.position.z << endl;
+
 		// disegno gli elementi aventi delle texture
 	glutSwapBuffers();
 

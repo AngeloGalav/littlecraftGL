@@ -1,6 +1,7 @@
 #include "include/Block.h"
 
 Block::Block() : Cube(){}
+Block::~Block() {}
 
 void Block::initCube(){
     faces[0].crea_VAO_Vector_textures();

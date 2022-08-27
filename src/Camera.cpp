@@ -2,7 +2,7 @@
 
 Camera::Camera(){
     cameraSpeed = 0.5;
-    INIT_CAMERA_PROJECTION();
+    initCamera();
 }
 
 void Camera::moveCameraLeft()
@@ -31,11 +31,11 @@ void Camera::moveCameraBack() {
 	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
 }
 
-void Camera::INIT_CAMERA_PROJECTION(void)
+void Camera::initCamera(void)
 {
 	//Imposto la telecamera
 	ViewSetup = {};
-	ViewSetup.position = glm::vec4(0.0, 0.5, 25.0, 0.0);
+	ViewSetup.position = glm::vec4(0.0, 0.0, 0.0, 0.0);
 	ViewSetup.target = glm::vec4(0.0, 0.0, 0.0, 0.0);
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	ViewSetup.upVector = glm::vec4(0.0, 1.0, 0.0, 0.0);

@@ -25,7 +25,7 @@ public:
     void moveCameraRight();
     void moveCameraForward();
     void moveCameraBack();
-    void INIT_CAMERA_PROJECTION();
+    void initCamera();
     
     //constructor
     Camera();

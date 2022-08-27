@@ -19,6 +19,7 @@ public:
     BlockType type;
     void initCube();
     Block();
+    ~Block();
 };
 
 #endif

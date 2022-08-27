@@ -1,8 +1,13 @@
 #include "include/Chunk.h"
 
-Chunk::Chunk() {}
+Chunk::Chunk() {
+	chunk_position = ivec2(0,0);
+}
+Chunk::~Chunk() {}
 
 void Chunk::initChunk(){
+	dirty = false;
+
     for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
 			for (int k = 0; k < CHUNK_HEIGHT; k++) {
@@ -26,7 +31,8 @@ void Chunk::initChunk(){
 				///!!! ATTENZIONE A QUESTA RIGA !! POTREBBE ESSERE LA CAUSA DI UN PROBLEMA FUTURO
 				// CON LA POSIZIONE DEI CHUNK
 				// chunk_blocks[i][j][k].moveTo(vec3(i, k, j));
-				chunk_blocks[i][j][k].moveTo(vec3(i-10, - 2 - k - world_instance->noiseData[i][j], j-10));
+				chunk_blocks[i][j][k].moveTo(vec3(i + chunk_position.x*CHUNK_SIZE,
+				 - 2 - k - world_instance->noiseData[j][i], j + chunk_position.y*CHUNK_SIZE));
 			}
 		}
 	}
@@ -72,6 +78,7 @@ void Chunk::checkNeighbours(int i, int j, int k){
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][0].position.y);
 	}
+
 	if (i < CHUNK_SIZE - 1) {
 		chunk_blocks[i][j][k].must_be_drawn[Right] =
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][k].position.y)
@@ -89,6 +96,9 @@ void Chunk::checkNeighbours(int i, int j, int k){
 		(chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][0].position.y);
 	}
+
+	///TODO: ricordati di eliminare le facce laterali del chunk dopo che hai creato il codice della 
+	// generazione del mondo infinita
 
 }
 
