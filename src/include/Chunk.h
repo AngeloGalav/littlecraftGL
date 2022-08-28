@@ -27,6 +27,7 @@ public:
     void translateChunk(ivec3 vector);
     void translateChunkInWorld(ivec2 vector);
     ivec2 player_in_chunk_bounds(vec3 player_position);
+    void checkNeighbouringChunk(Chunk* neighbour, bool checkHorizontal);
 
     Chunk();
     ~Chunk();

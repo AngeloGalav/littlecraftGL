@@ -123,25 +123,25 @@ void Chunk::checkNeighbours(int i, int j, int k){
 	// (questo siccome semplicemente non abbiamo caverne, sennò la cosa diventava più complessa) 
 	if (i > 0) {
 		chunk_blocks[i][j][k].must_be_drawn[Left] =
-		(chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][k].position.y)
+		1// (chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i-1][j][0].position.y);
 	}
 
 	if (i < CHUNK_SIZE - 1) {
 		chunk_blocks[i][j][k].must_be_drawn[Right] =
-		(chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][k].position.y)
+		1// (chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i+1][j][0].position.y);
 	}
 
 	if (j > 0) {
 		chunk_blocks[i][j][k].must_be_drawn[Back] =
-		(chunk_blocks[i][j][k].position.y > chunk_blocks[i][j-1][k].position.y)
+		1// (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j-1][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j-1][0].position.y);
 	}
 
 	if (j < CHUNK_SIZE - 1) {
 		chunk_blocks[i][j][k].must_be_drawn[Front] =
-		(chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][k].position.y)
+		1// (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][k].position.y)
 		&& (chunk_blocks[i][j][k].position.y > chunk_blocks[i][j+1][0].position.y);
 	}
 }
@@ -164,4 +164,37 @@ void Chunk::translateChunkInWorld(ivec2 vector){
 		chunk_position += ivec2(vector.x, vector.y);
 		to_move = true;	
 	}
+}
+
+void Chunk::checkNeighbouringChunk(Chunk* neighbour, bool checkHorizontal){
+	
+	if (checkHorizontal) {
+		for (int y = 0; y < CHUNK_SIZE; y++) {
+			for (int z = 0; z < CHUNK_HEIGHT; z++) {
+				chunk_blocks[CHUNK_SIZE - 1][y][z].must_be_drawn[Right] =
+				1// 1(chunk_blocks[CHUNK_SIZE - 1][y][z].position.y > neighbour->chunk_blocks[0][y][z].position.y)
+				&& (chunk_blocks[CHUNK_SIZE - 1][y][z].position.y > neighbour->chunk_blocks[0][y][0].position.y);
+
+				neighbour->chunk_blocks[0][y][z].must_be_drawn[Left] =
+				1//(neighbour->chunk_blocks[0][y][z].position.y > chunk_blocks[CHUNK_SIZE - 1][y][z].position.y)
+				&& (neighbour->chunk_blocks[0][y][z].position.y > chunk_blocks[CHUNK_SIZE - 1][y][0].position.y);
+			}
+		}
+	} else {
+		for (int x = 0; x < CHUNK_SIZE; x++) {
+			for (int z = 0; z < CHUNK_HEIGHT; z++) {
+				chunk_blocks[x][CHUNK_SIZE - 1][z].must_be_drawn[Front] =
+				1//(chunk_blocks[x][CHUNK_SIZE - 1][z].position.y > neighbour->chunk_blocks[x][0][z].position.y)
+				&& (chunk_blocks[x][CHUNK_SIZE - 1][z].position.y > neighbour->chunk_blocks[x][0][0].position.y);
+
+				neighbour->chunk_blocks[x][0][z].must_be_drawn[Back] =
+				1//(neighbour->chunk_blocks[x][0][z].position.y > chunk_blocks[x][CHUNK_SIZE - 1][z].position.y)
+				&& (neighbour->chunk_blocks[x][0][z].position.y > chunk_blocks[x][CHUNK_SIZE - 1][0].position.y);
+
+				cout << "fuck bugs man, neightboe: " << neighbour->chunk_blocks[x][0][z].must_be_drawn[Back] << 
+				", main: " << chunk_blocks[x][CHUNK_SIZE - 1][z].must_be_drawn[Front] << endl;
+			}
+		}
+	}
+
 }

@@ -19,8 +19,6 @@ World::World(){
 World::~World() {
     for (int i = 0; i < DISPLAYED_CHUNKS; i++) 
         delete currently_displayed_chunks[i];
-    
-    delete debug_chunk;
 }
 
 void World::initWorld(){
@@ -38,19 +36,24 @@ void World::initWorld(){
         << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
     }
 
-    // debug_chunk = new Chunk();
-    // debug_chunk->world_instance = this;
-    // debug_chunk->chunk_position = ivec2(0,0);
-    // debug_chunk->initChunk();
+    handleFacesBetweenChunks();
 }
 
-void World::handleFacesBetweenChunks(){
-    for (int i = 0; i < DISPLAYED_CHUNKS - 1; i++) {
-        // cout << "positions" << currently_displayed_chunks[i]->chunk_position.x 
-        // << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
-    }
-    
 
+
+void World::handleFacesBetweenChunks(){
+    int row_length = sqrt(DISPLAYED_CHUNKS);
+    for (int i = 0; i < DISPLAYED_CHUNKS - 1; i++) {
+        if ((i + 1) % row_length != 0 && (DISPLAYED_CHUNKS - row_length) > i) {
+            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + 1], true);
+            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + row_length], false);
+        } else if ((DISPLAYED_CHUNKS - row_length) > i && (i + 1) % row_length == 0) {
+            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + row_length], false);
+        } else if ((DISPLAYED_CHUNKS - row_length) <= i && (i + 1) % row_length != 0) {
+            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + 1], true);
+        }
+
+    }
 }
 
 void World::initNoise(){
@@ -72,14 +75,14 @@ void World::renderWorld(int Model_Uniform){
         currently_displayed_chunks[i]->drawChunk(Model_Uniform);
     }
 
-    // debug_chunk->drawChunk(Model_Uniform);
+    // currently_displayed_chunks[Center]->drawChunk(Model_Uniform);
 }
 
 void World::updateWorld(){
 
     // posizione del giocatore relativa alla mappa
     vec2 player_position_to_map = vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
-    
+    // solves
     player_in_main_chunk = 
     (currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) 
     && ((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x)
@@ -109,17 +112,18 @@ void World::updateWorld(){
             cout << "positions: " << currently_displayed_chunks[i]->chunk_position.x 
             << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
         }
-        
+
+        // update chunk
+        for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+            currently_displayed_chunks[i]->updateChunk();
+        }
+
+        handleFacesBetweenChunks();        
     }
 
-    if (currently_displayed_chunks[Center]->map_out_of_bounds) {
-        cout << "OUT_OF_BOUNDS ERROR!!" << endl;
-    }
-
-    // debug_chunk->updateChunk();
-    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
-        currently_displayed_chunks[i]->updateChunk();
-    }
+    // if (currently_displayed_chunks[Center]->map_out_of_bounds) {
+    //     cout << "OUT_OF_BOUNDS ERROR!!" << endl;
+    // }
 
     // cout << "chunk_position: " << currently_displayed_chunks[Center]->chunk_position.x << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl; 
 }
