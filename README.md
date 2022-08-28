@@ -63,7 +63,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Noise for procedural generation
 - [ ] Deleting and placing cubes
 - [x] Rendering optimizations
-- [ ] Multiple chunk management
+- [x] Multiple chunk management
 - [ ] Water
 - [ ] Fog
 - [ ] Cube-map
