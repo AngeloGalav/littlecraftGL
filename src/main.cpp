@@ -32,6 +32,8 @@ int h_up = height;
 Camera mainCamera;
 Raycaster raycast;
 
+Cube look_cube(vec4(1.0f, 0, 0, 0));
+
 int main_window_id;
 
 GLuint render_mode = GL_FILL;
@@ -85,23 +87,6 @@ void INIT_SHADER(void)
 
 }
 
-///TODO: Should move this inside the world class
-void INIT_NOISE(){
-	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-	noise.SetFrequency(0.1);
-
-	// Gather noise data
-	int index = 0;
-
-	for (int y = 0; y < CHUNK_SIZE; y++)
-	{
-		for (int x = 0; x < CHUNK_SIZE; x++)
-		{
-			noiseData[x][y] = noise.GetNoise((float)x, (float)y);
-			noiseData[x][y] = (int) (16 * noiseData[x][y]);
-		}
-	}
-}
 
 ///TODO: Should move this inside the World Class...
 // Leaving it here for testing purposes
@@ -122,10 +107,11 @@ void INIT_VAO(void)
 	TexturedMeshes.push_back((Mesh*) &textureQuad);
 
 	// // test block
-	// cubo.initCube();
-	// Scena.push_back(&cubo);
+	cubo.initCube();
+	Scena.push_back(&cubo);
 
 	main_world.initWorld();
+	look_cube.translateCube(vec3(-5.0f, 0.0f, 1.0f));
 }
 
 ///TODO: Should move this inside a texture class
@@ -188,6 +174,9 @@ void drawScene(void)
 		Scena_Extras[k]->drawMesh(MatModel);
 	}
 
+	look_cube.drawMesh(MatModel);
+
+
 	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
 	glUseProgram(texture_programId);
 	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
@@ -234,7 +223,6 @@ int main(int argc, char *argv[])
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-	INIT_NOISE();
 	INIT_TEXTURES();
 	INIT_SHADER();
 	INIT_VAO();
