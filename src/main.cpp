@@ -16,10 +16,6 @@
 vector<Cube*> Scena;
 vector<Mesh*> Scena_Extras;
 
-vector<Mesh*> TexturedMeshes;
-vector<Block*> TexturedCube_blocks;
-
-
 vector<vec3> centri;
 vector<float> raggi;
 
@@ -32,7 +28,7 @@ int h_up = height;
 Camera mainCamera;
 Raycaster raycast;
 
-Cube look_cube(vec4(1.0f, 0, 0, 0));
+Cube look_cube(vec4(1.0f, 0, 0, 0.5f));
 
 int main_window_id;
 
@@ -45,23 +41,10 @@ static unsigned int programId, MatrixProj, MatModel, MatView;
 static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
 
 int selected_obj = -1;
-Quad purpleQuad(vec4(1.0f, 0.0f, 1.0f, 1.0f));
-Quad textureQuad;
 
 int texture_width, texture_height, nrChannels;
 
-Chunk chunk;
-Cube cubo;
-Block block;
-
 World main_world;
-
-// has to be translated into CHUNKs (needs to be deleted)
-Block blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
-
-// Create and configure FastNoise object
-FastNoiseLite noise;
-float noiseData[CHUNK_SIZE][CHUNK_SIZE];
 
 unsigned int texture;
 
@@ -84,7 +67,6 @@ void INIT_SHADER(void)
 	cout << "Latest error is: " << ErrorCheckValue << endl;
 
 	MatModel = glGetUniformLocation(programId, "Model");
-
 }
 
 
@@ -92,26 +74,10 @@ void INIT_SHADER(void)
 // Leaving it here for testing purposes
 void INIT_VAO(void)
 {
-
-	purpleQuad.crea_VAO_Vector();
-	purpleQuad.Model = mat4(1.0);
-	purpleQuad.Model = scale(purpleQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	purpleQuad.Model = translate(purpleQuad.Model, vec3(-5.0f, 0.0, 1.0f));
-	Scena_Extras.push_back((Mesh*) &purpleQuad);
-
-	textureQuad.initQuadTexture();
-	textureQuad.crea_VAO_Vector_textures();
-	textureQuad.Model = mat4(1.0);
-	textureQuad.Model = scale(textureQuad.Model, vec3(2.0f, 2.0f, 2.0f));
-	textureQuad.Model = translate(textureQuad.Model, vec3(-5.0f, -2.0f, 1.0f));
-	TexturedMeshes.push_back((Mesh*) &textureQuad);
-
-	// // test block
-	cubo.initCube();
-	Scena.push_back(&cubo);
-
 	main_world.initWorld();
-	look_cube.translateCube(vec3(-5.0f, 0.0f, 1.0f));
+
+	look_cube.initCube();	
+	look_cube.moveTo(ivec3(1,1,1));
 }
 
 ///TODO: Should move this inside a texture class
@@ -176,7 +142,6 @@ void drawScene(void)
 
 	look_cube.drawMesh(MatModel);
 
-
 	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
 	glUseProgram(texture_programId);
 	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
@@ -187,15 +152,7 @@ void drawScene(void)
 	// renderizza il mondo
 	main_world.renderWorld(MatModel_texture);
 
-	// cout << "position: " << mainCamera.ViewSetup.position.x << ", " << mainCamera.ViewSetup.position.z << endl;
-
-	// disegno gli elementi aventi delle texture
-	for (int k = 0; k < TexturedMeshes.size(); k++){
-		TexturedMeshes[k]->drawMesh(MatModel_texture);
-	}
-
 	glutSwapBuffers();
-
 }
 
 int main(int argc, char *argv[])
@@ -207,7 +164,6 @@ int main(int argc, char *argv[])
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
 	// Inizializzo finestra per il rendering della scena 3d con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
-
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(100, 100);
 	main_window_id = glutCreateWindow("littleCraft");
@@ -220,7 +176,6 @@ int main(int argc, char *argv[])
 	glutTimerFunc(10, update, 0);
 
 	// Inizializzo finestra per il rendering delle informazioni con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
-
 	glewExperimental = GL_TRUE;
 	glewInit();
 	INIT_TEXTURES();
@@ -232,7 +187,6 @@ int main(int argc, char *argv[])
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
 	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Projection (in vertex shader).
 	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Projection al Vertex Shader
