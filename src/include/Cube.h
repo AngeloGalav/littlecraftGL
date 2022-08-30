@@ -22,7 +22,7 @@ public:
     void translateCube(ivec3 translate_vector);
     void drawMesh(int Model_Uniform);
 
-    Cube(vec4 pos);
+    Cube(vec4 color);
     Cube();    
 };
 

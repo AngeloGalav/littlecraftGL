@@ -6,7 +6,6 @@
 extern Camera mainCamera;
 
 World::World(){
-
     player_in_main_chunk = false;
 
     for (int i = 0; i < WORLD_SIZE; i++) {
@@ -74,8 +73,6 @@ void World::renderWorld(int Model_Uniform){
     for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
         currently_displayed_chunks[i]->drawChunk(Model_Uniform);
     }
-
-    // currently_displayed_chunks[Center]->drawChunk(Model_Uniform);
 }
 
 void World::updateWorld(){

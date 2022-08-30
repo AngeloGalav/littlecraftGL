@@ -23,7 +23,16 @@ Cube::Cube(){
 
 	for (int i = 0; i < 6; i++) must_be_drawn[i] = true;
 	position = vec3(0.0, 0.0, 0.0);
+}
 
+Cube::Cube(vec4 color){
+	for (int i = 0; i < 6; i++) {
+		faces[i].quadColor = color;
+		faces[i].initQuadWithSingleColor();
+	}
+	
+	for (int i = 0; i < 6; i++) must_be_drawn[i] = true;
+	position = vec3(0.0, 0.0, 0.0);
 }
 
 void Cube::initCubeTextures(){

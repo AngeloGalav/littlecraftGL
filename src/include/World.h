@@ -23,6 +23,8 @@ public:
     // has the same function as displayed chunk, but displays only one at a time
     Chunk *debug_chunk;
 
+    Cube* look_cube;
+
     bool player_in_main_chunk;
 
     void renderWorld(int Model_Uniform);
