@@ -21,6 +21,7 @@ Cube::Cube(){
     faces[5].quadColor = (vec4(1.0f, 0.0f, 1.0f, 1.0f));
     faces[5].initQuadWithSingleColor();
 
+	isAir = false;
 	for (int i = 0; i < 6; i++) must_be_drawn[i] = true;
 	position = vec3(0.0, 0.0, 0.0);
 }
@@ -30,6 +31,8 @@ Cube::Cube(vec4 color){
 		faces[i].quadColor = color;
 		faces[i].initQuadWithSingleColor();
 	}
+
+	isAir = false;
 	
 	for (int i = 0; i < 6; i++) must_be_drawn[i] = true;
 	position = vec3(0.0, 0.0, 0.0);

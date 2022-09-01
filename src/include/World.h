@@ -3,7 +3,18 @@
 
 #include "FastNoiseLite.h"
 #include "Camera.h"
+#include "Raycaster.h"
 #include "Chunk.h"
+
+struct Giz {
+    Cube* look_cube;
+    bool can_draw_lc;
+    bool remove_mode;
+    int look_cube_chunk;
+    ivec3 lc_prev_position;
+    ivec2 lc_chunk_position;
+};
+
 
 // Forward declaration
 class Chunk;
@@ -23,13 +34,18 @@ public:
     // has the same function as displayed chunk, but displays only one at a time
     Chunk *debug_chunk;
 
-    Cube* look_cube;
+    Giz Gizmos;
+    Cube look_cube;
+
+    Raycaster raycast;
 
     bool player_in_main_chunk;
 
     void renderWorld(int Model_Uniform);
     void initWorld();
     void initNoise();
+    void UpdateGizmos();
+    void drawGizmos(int MatModel);
     void updateWorld();
     void handleFacesBetweenChunks();  
     

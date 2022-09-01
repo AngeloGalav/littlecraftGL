@@ -4,6 +4,7 @@
 Chunk::Chunk() {
 	chunk_position = ivec2(0,0);
 }
+
 Chunk::~Chunk() {}
 
 void Chunk::initChunk(){
@@ -30,6 +31,7 @@ void Chunk::initChunk(){
 				}
 				chunk_blocks[i][j][k].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
 				chunk_blocks[i][j][k].initCube();
+				for (int d = 0; d < 6; d++)	chunk_blocks[i][j][k].must_be_drawn[d] = false;
 
 				applyChunkPosition(i, j, k);	
 			}
@@ -108,8 +110,6 @@ void Chunk::drawChunk(int Model_Uniform){
  */
 void Chunk::checkNeighbours(int i, int j, int k){
 
-	for (int d = 0; d < 6; d++)	chunk_blocks[i][j][k].must_be_drawn[d] = false;
-
 	// la faccia di sopra viene disegnata solo se è il primo strato visibile (di base)
 	chunk_blocks[i][j][k].must_be_drawn[Up] = (k == 0);
 	chunk_blocks[i][j][k].must_be_drawn[Down] = false;
@@ -187,6 +187,64 @@ void Chunk::checkNeighbouringChunk(Chunk* neighbour, bool checkHorizontal){
 				(neighbour->chunk_blocks[x][0][z].position.y > chunk_blocks[x][CHUNK_SIZE - 1][0].position.y);
 			}
 		}
+	}
+
+}
+
+/** Adds a specific block in defined position
+ * 
+ */
+void Chunk::addBlockToChunk(ivec3 position, Block block_added){
+
+	Block* new_block = new Block();
+	
+	for (int i = 0; i < 3; i++)
+		new_block->atlas_offset[i] = block_added.atlas_offset[i];
+
+	int i = position.x;
+	int j = position.y; 
+
+	int k = - 2 - position.z - world_instance->noiseData
+	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+}
+
+/** Removes a block in specified position
+ * 
+ */
+void Chunk::removeBlockFromChunk(ivec3 position){
+
+	int i = position.x;
+	int j = position.y; 
+
+	int k = - 2 - position.z - world_instance->noiseData
+	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+	chunk_blocks[position.x][position.y][k].isAir = true;
+	
+	if (i > 0) {
+		chunk_blocks[i-1][j][k].must_be_drawn[Left] = true;
+	}
+
+	if (i < CHUNK_SIZE - 1) {
+		chunk_blocks[i+1][j][k].must_be_drawn[Right] = true;
+	}
+
+	if (j > 0) {
+		chunk_blocks[i][j-1][k].must_be_drawn[Back] = true;
+	}
+
+	if (j < CHUNK_SIZE - 1) {
+		chunk_blocks[i][j+1][k].must_be_drawn[Front] = true;
+	}
+
+	if (k > 0) {
+		chunk_blocks[i][j][k-1].must_be_drawn[Down] = true;
+	}
+
+	if (k < CHUNK_HEIGHT - 1) {
+		chunk_blocks[i][j][k+1].must_be_drawn[Up] = true;
 	}
 
 }

@@ -23,13 +23,13 @@ int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
 
 Raycaster raycast;
-
 int main_window_id;
 
 GLuint render_mode = GL_FILL;
 
 // debug time
 int t = -180;
+bool can_draw_look_cube = true;
 
 static unsigned int programId, MatrixProj, MatModel, MatView;
 static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
@@ -39,7 +39,10 @@ int selected_obj = -1;
 int texture_width, texture_height, nrChannels;
 
 World main_world;
-Cube look_cube(vec4(1.0f, 0, 0, 0.5f));
+Cube look_cube(vec4(0, 1.0f, 0, 0.5f));
+GLint lc_mode_uniform;
+
+
 Camera mainCamera;
 
 unsigned int texture;
@@ -74,6 +77,7 @@ void INIT_VAO(void)
 
 	look_cube.initCube();	
 	look_cube.moveTo(ivec3(1,1,1));
+	lc_mode_uniform = glGetUniformLocation(programId, "remove_mode");
 }
 
 ///TODO: Should move this inside a texture class
@@ -114,6 +118,8 @@ void drawScene(void)
 
 	glUseProgram(programId);
 	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
+	
+	glUniform1i(lc_mode_uniform, main_world.Gizmos.remove_mode);
 
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
 
@@ -124,23 +130,18 @@ void drawScene(void)
 	// all'interno del Vertex shader. Uso l'identificatio MatView
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));	
 
-	// Draw scene elements
-	for (int k = 0; k < Scena.size(); k++){
-		Scena[k]->drawMesh(MatModel);
-	}
-
-	// Draw extra scene elements (meshes...)
-	for (int k = 0; k < Scena_Extras.size(); k++){
-		Scena_Extras[k]->drawMesh(MatModel);
-	}
-
 	// sets the position of the cube based on the direction of the camera
 	vec3 lk_position = raycast.get_ray_from_camera(mainCamera);
 	look_cube.moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
 	mainCamera.ViewSetup.position.y/UNIT_SIZE, mainCamera.ViewSetup.position.z/UNIT_SIZE) 
-	+ vec3(5 * lk_position.x, 5 * lk_position.y, 5 * lk_position.z));
+	+ vec3(DISTANCE_FROM_CAMERA * lk_position.x, DISTANCE_FROM_CAMERA * lk_position.y, DISTANCE_FROM_CAMERA * lk_position.z));
 
-	look_cube.drawMesh(MatModel);
+	if (main_world.Gizmos.can_draw_lc)
+		look_cube.drawMesh(MatModel);
+
+	cout << "look cube pos: " << look_cube.position.x << ", " << look_cube.position.y << ", "<< look_cube.position.z << endl;
+
+	
 
 	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
 	glUseProgram(texture_programId);

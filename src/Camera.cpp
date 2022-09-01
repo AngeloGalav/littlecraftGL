@@ -35,7 +35,7 @@ void Camera::initCamera(void)
 {
 	//Imposto la telecamera
 	ViewSetup = {};
-	ViewSetup.position = glm::vec4(0.0, 0.0, 0.0, 0.0);
+	ViewSetup.position = glm::vec4(1, 0, 0.0, 0.0);
 	ViewSetup.target = glm::vec4(0.0, 0.0, 0.0, 0.0);
 	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
 	ViewSetup.upVector = glm::vec4(0.0, 1.0, 0.0, 0.0);

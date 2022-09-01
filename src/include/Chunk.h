@@ -16,12 +16,15 @@ public:
     Block chunk_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_HEIGHT];
     ivec2 chunk_position; // position of the chunk between 0 and WORLD_SIZE-1
     bool state_changed;
+    vector<Block*> added_blocks;
 
     World *world_instance;
 
     void updateChunk();
     void applyChunkPosition(int i, int j, int k);
     void initChunk();
+    void addBlockToChunk(ivec3 position, Block block_added);
+    void removeBlockFromChunk(ivec3 position);
     void drawChunk(int Model_Uniform);
     void checkNeighbours(int i, int j, int k);
     void translateChunk(ivec3 vector);

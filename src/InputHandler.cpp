@@ -3,8 +3,10 @@
 #include "include/Cube.h"
 #include "include/Block.h"
 #include "include/Mesh.h"
+#include "include/World.h"
 
 extern Camera mainCamera;
+extern World main_world;
 extern Raycaster raycast;
 extern int selected_obj;
 extern vector<Mesh> Scena;
@@ -59,21 +61,14 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		rotateCameraKeyboard(0, -1);
 		break;
 	
-	// case 'v':
-	// 	block.translateCube(vec3(1.0, 1.0, 0.0));
-	// 	break;
+	case 'q':
+		// remove cube
+		break;
 	
-	// case 'b':
-	// 	block.translateCube(vec3(-1.0, -1.0, 0.0));
-	// 	break;
-	
-	// case 'n':
-	// 	block.translateCube(vec3(0.0, 0.0, 1.0));
-	// 	break;
+	case 'e':
+		// addCube();
+		break;
 
-	// case 'm':
-	// 	block.translateCube(vec3(0.0, 0.0, -1.0));
-	// 	break;
 	case 'x':
 		if (render_mode == GL_LINE) render_mode = GL_FILL;
 		else render_mode = GL_LINE;
@@ -177,13 +172,4 @@ void onMouseEvent(int button, int state, int x, int y)
 //       else if(button == GLUT_LEFT_BUTTON)
 //          glutMotionFunc(onLeftMouseEvent);
 //    }
-}
-
-// void onLeftMouseEvent(int x, int y){
-// 	rotateCamera(x, y);
-// }
-
-void onRightMouseEvent(int x , int y){
-	// evento per selezionare un block(?)
-	// evento action?
 }

@@ -15,6 +15,7 @@
 // number of chunk in the world
 #define WORLD_SIZE 128
 #define DISPLAYED_CHUNKS 9
+#define DISTANCE_FROM_CAMERA 5
 #define DEBUG_MODE false
 
 #endif
