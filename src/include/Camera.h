@@ -19,7 +19,8 @@ public:
     struct {
         float fovY, aspect, near_plane, far_plane;
     } PerspectiveSetup;
-    float cameraSpeed;
+
+    float playerSpeed;
 
     void moveCameraLeft();
     void moveCameraRight();
