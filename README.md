@@ -75,4 +75,4 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 ## Known Issues
 
  - It is missing some key features, that will be added sooner or later. 
- - There are some debug blocks (the one colored in red, yellow etc). These are placeholders and will be removed in the near future. 
+ - The code is very rough, and could use some refactoring. This is due to some GLUT quirks and the fact that some workarounds have been applied to solve some problems encountered during development. Also, I was extremely strict on time. 
