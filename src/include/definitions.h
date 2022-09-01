@@ -1,7 +1,6 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define WIDTH_2  200;
@@ -16,6 +15,7 @@
 #define WORLD_SIZE 128
 #define DISPLAYED_CHUNKS 9
 #define DISTANCE_FROM_CAMERA 5
+#define LOOKCUBE_COLOR vec4(0, 1.0f, 0, 0.5f)
 #define DEBUG_MODE false
 
 #endif

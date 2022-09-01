@@ -1,19 +1,12 @@
 #include "include/InputHandler.h"
 #include "include/Raycaster.h"
 #include "include/Cube.h"
-#include "include/Block.h"
 #include "include/Mesh.h"
 #include "include/World.h"
 
 extern Camera mainCamera;
 extern World main_world;
 extern Raycaster raycast;
-extern int selected_obj;
-extern vector<Mesh> Scena;
-extern vector<vec3> centri;
-extern vector<float> raggi;
-extern Cube cubo;
-extern Block block;
 extern GLuint render_mode;
 
 bool firstMouse = true;
@@ -62,7 +55,7 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		break;
 	
 	case 'q':
-		// remove cube
+		// main_world.removeBlock();
 		break;
 	
 	case 'e':
@@ -87,7 +80,6 @@ void mouse(int button, int state, int x, int y)
 	vec3 ray_wor = raycast.get_ray_from_mouse(xmouse, ymouse);
 
 	float closest_intersection = 0.0f;
-    selected_obj = -1;
 
 	if (button == GLUT_RIGHT_BUTTON)
     {
@@ -98,9 +90,7 @@ void mouse(int button, int state, int x, int y)
 }
 
 
-/**
- * @brief Cambia la visuale in base alla posizione del mouse, senza che si faccia click. 
- * TODO: (da modificare con un algoritmo migliore)
+/** Cambia la visuale in base alla posizione del mouse, senza che si faccia click. 
  * 
  */
 void my_passive_mouse(int xpos, int ypos) // camera rotation function

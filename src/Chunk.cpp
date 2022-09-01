@@ -29,8 +29,8 @@ void Chunk::initChunk(){
 					chunk_blocks[i][j][k].atlas_offset[1] = 
 					chunk_blocks[i][j][k].atlas_offset[2] = vec2(1, 15);
 				}
-				chunk_blocks[i][j][k].initCubeTextures(); //le textures sono già state inizializ. dal costruttore
-				chunk_blocks[i][j][k].initCube();
+
+				chunk_blocks[i][j][k].initTexturedCube(); //le textures sono già state inizializ. dal costruttore
 				for (int d = 0; d < 6; d++)	chunk_blocks[i][j][k].must_be_drawn[d] = false;
 
 				applyChunkPosition(i, j, k);	
@@ -194,57 +194,112 @@ void Chunk::checkNeighbouringChunk(Chunk* neighbour, bool checkHorizontal){
 /** Adds a specific block in defined position
  * 
  */
-void Chunk::addBlockToChunk(ivec3 position, Block block_added){
+void Chunk::addBlockToChunk(ivec3 position, Cube block_added){
 
-	Block* new_block = new Block();
+	Cube* new_block = new Cube();
 	
 	for (int i = 0; i < 3; i++)
 		new_block->atlas_offset[i] = block_added.atlas_offset[i];
+	
+	new_block->initTextures();
+	new_block->initCube();
 
-	int i = position.x;
-	int j = position.y; 
+	int i = position.x - chunk_position.x*CHUNK_SIZE;
+	int j = position.z - chunk_position.y*CHUNK_SIZE; 
 
-	int k = - 2 - position.z - world_instance->noiseData
+	int k = - 2 - position.y - world_instance->noiseData
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+	if (0 < k && k < CHUNK_HEIGHT) {
+		cout << "cant add blocks to terrain..." << endl;
+	} else {
+
+	}
 }
 
 /** Removes a block in specified position
  * 
  */
-void Chunk::removeBlockFromChunk(ivec3 position){
+void Chunk::removeBlockFromChunk(ivec3 position) {
+	int i = position.x - chunk_position.x*CHUNK_SIZE;
+	int j = position.z - chunk_position.y*CHUNK_SIZE; 
 
-	int i = position.x;
-	int j = position.y; 
-
-	int k = - 2 - position.z - world_instance->noiseData
+	int k = - 2 - position.y - world_instance->noiseData
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
-	chunk_blocks[position.x][position.y][k].isAir = true;
+	// caso in cui sto eliminando un cubo del terreno
+	if (0 < k && k < CHUNK_HEIGHT) {
+		chunk_blocks[i][j][k].isAir = true;
+		
+		if (i > 0) {
+			chunk_blocks[i-1][j][k].must_be_drawn[Left] = true;
+		}
+
+		if (i < CHUNK_SIZE - 1) {
+			chunk_blocks[i+1][j][k].must_be_drawn[Right] = true;
+		}
+
+		if (j > 0) {
+			chunk_blocks[i][j-1][k].must_be_drawn[Back] = true;
+		}
+
+		if (j < CHUNK_SIZE - 1) {
+			chunk_blocks[i][j+1][k].must_be_drawn[Front] = true;
+		}
+
+		if (k > 0) {
+			chunk_blocks[i][j][k-1].must_be_drawn[Down] = true;
+		}
+
+		if (k < CHUNK_HEIGHT - 1) {
+			chunk_blocks[i][j][k+1].must_be_drawn[Up] = true;
+		}
+	} else { // caso in cui sto eliminando un cubo aggiunto deall'utente
+		for (int x = 0; x < added_blocks.size(); x++) {
+			if (added_blocks[x]->position == position) {
+				added_blocks.erase(added_blocks.begin() + x);
+			}
+		}
+	}
+
+}
+
+/** Updates the Gizmos based on the chunk information
+ * 
+ */
+void Chunk::updateGizmoProperties(int* mode, int* lc_visible, ivec3 position) {
+	// int i = position.x - chunk_position.x*CHUNK_SIZE;
+	// int j = position.z - chunk_position.y*CHUNK_SIZE; 
+
+	// int k = - 2 - position.y - world_instance->noiseData
+	// [i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+	// [j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+	// chunk_blocks[i][j][k].isAir = true;
 	
-	if (i > 0) {
-		chunk_blocks[i-1][j][k].must_be_drawn[Left] = true;
-	}
+	// if (i > 0) {
+	// 	chunk_blocks[i-1][j][k].must_be_drawn[Left] = true;
+	// }
 
-	if (i < CHUNK_SIZE - 1) {
-		chunk_blocks[i+1][j][k].must_be_drawn[Right] = true;
-	}
+	// if (i < CHUNK_SIZE - 1) {
+	// 	chunk_blocks[i+1][j][k].must_be_drawn[Right] = true;
+	// }
 
-	if (j > 0) {
-		chunk_blocks[i][j-1][k].must_be_drawn[Back] = true;
-	}
+	// if (j > 0) {
+	// 	chunk_blocks[i][j-1][k].must_be_drawn[Back] = true;
+	// }
 
-	if (j < CHUNK_SIZE - 1) {
-		chunk_blocks[i][j+1][k].must_be_drawn[Front] = true;
-	}
+	// if (j < CHUNK_SIZE - 1) {
+	// 	chunk_blocks[i][j+1][k].must_be_drawn[Front] = true;
+	// }
 
-	if (k > 0) {
-		chunk_blocks[i][j][k-1].must_be_drawn[Down] = true;
-	}
+	// if (k > 0) {
+	// 	chunk_blocks[i][j][k-1].must_be_drawn[Down] = true;
+	// }
 
-	if (k < CHUNK_HEIGHT - 1) {
-		chunk_blocks[i][j][k+1].must_be_drawn[Up] = true;
-	}
-
+	// if (k < CHUNK_HEIGHT - 1) {
+	// 	chunk_blocks[i][j][k+1].must_be_drawn[Up] = true;
+	// }
 }

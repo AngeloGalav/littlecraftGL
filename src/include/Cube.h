@@ -19,7 +19,8 @@ public:
     bool isAir;
 
     void initCube();
-    void initCubeTextures();
+    void initTexturedCube();
+    void initTextures();
     void moveTo(ivec3 position);
     void translateCube(ivec3 translate_vector);
     void drawMesh(int Model_Uniform);

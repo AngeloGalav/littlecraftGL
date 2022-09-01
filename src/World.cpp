@@ -4,7 +4,6 @@
 #define chunk_index(x,y) (x + CHUNK_SIZE*y)
 
 extern Camera mainCamera;
-extern Cube look_cube;
 
 World::World(){
     player_in_main_chunk = false;
@@ -16,6 +15,10 @@ World::World(){
     }
 
     Gizmos.look_cube = new Cube(vec4(0, 1.0f, 0, 0.5f));
+
+    block_to_add.atlas_offset[0] = 
+    block_to_add.atlas_offset[1] = 
+    block_to_add.atlas_offset[2] = vec2(4, 15);
 }
 
 World::~World() {
@@ -33,6 +36,12 @@ void World::initWorld(){
         currently_displayed_chunks[i]->initChunk();
     }
 
+    for (int i = 0; i < WORLD_SIZE; i++) {
+        for (int j = 0; j < WORLD_SIZE; j++) {
+            modified_chunks[i][j] = NULL;
+        }    
+    }
+
     Gizmos.can_draw_lc = true;
     Gizmos.remove_mode = false;
 
@@ -40,7 +49,7 @@ void World::initWorld(){
 
     Gizmos.look_cube->initCube();
     Gizmos.lc_chunk_position = ivec2(0, 0);
-    Gizmos.lc_prev_position = look_cube.position;
+    Gizmos.lc_prev_position = Gizmos.look_cube->position;
 }
 
 
@@ -60,16 +69,17 @@ void World::handleFacesBetweenChunks(){
     }
 }
 
-void World::UpdateGizmos(){
+void World::updateGizmos(){
+    // sets the position of the cube based on the direction of the camera
    	vec3 lk_position = raycast.get_ray_from_camera(mainCamera);
-	look_cube.moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
+	Gizmos.look_cube->moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
 	mainCamera.ViewSetup.position.y/UNIT_SIZE, mainCamera.ViewSetup.position.z/UNIT_SIZE) 
 	+ vec3(DISTANCE_FROM_CAMERA * lk_position.x, DISTANCE_FROM_CAMERA * lk_position.y, DISTANCE_FROM_CAMERA * lk_position.z));
 }
 
 void World::drawGizmos(int MatModel){
     if (Gizmos.can_draw_lc)
-		look_cube.drawMesh(MatModel);
+		Gizmos.look_cube->drawMesh(MatModel);
 }
 
 void World::initNoise(){
@@ -97,16 +107,27 @@ void World::updateWorld(){
     // posizione del giocatore relativa alla mappa
     vec2 player_position_to_map = vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
 
-    if (look_cube.position.x == Gizmos.lc_prev_position.x &&  look_cube.position.y == Gizmos.lc_prev_position.y 
-    && look_cube.position.z == Gizmos.lc_prev_position.z) {
-        int i = !(currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE <= look_cube.position.x) * -1 +
-        !((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE >= look_cube.position.x);
+    // c'è stato un cambio di posizione del cubo
+    if (Gizmos.look_cube->position.x != Gizmos.lc_prev_position.x || Gizmos.look_cube->position.y != Gizmos.lc_prev_position.y 
+    || Gizmos.look_cube->position.z != Gizmos.lc_prev_position.z) {
+        int i_lc = !(currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE <= Gizmos.look_cube->position.x) * -1 +
+        !((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE >= Gizmos.look_cube->position.x);
 
-        int j = !(currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE <= look_cube.position.z) * -1 +
-        !((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE >= look_cube.position.z);
+        int j_lc = !(currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE <= Gizmos.look_cube->position.z) * -1 +
+        !((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE >= Gizmos.look_cube->position.z);
 
-        Gizmos.lc_chunk_position += ivec2(i, j);
+        // updates the chunk of the cube
+        Gizmos.lc_chunk = currently_displayed_chunks[(i_lc + 1) + (j_lc + 1) * 3];
+
+        cout << "chunk inc: " << i_lc << ", " << j_lc << endl;
+
+        Gizmos.lc_prev_position = Gizmos.look_cube->position;
+
+        // cout << "Gizmos.look_cube chunkpos: " << Gizmos.lc_chunk_position.x << ", " << Gizmos.lc_chunk_position.y << endl;
     }
+
+    // cout << "Gizmos.look_cube pos: " << Gizmos.look_cube->position.x << ", " << Gizmos.look_cube->position.y 
+    // << ", " << Gizmos.look_cube->position.z << endl;
     
     // solves
     player_in_main_chunk = 
@@ -124,15 +145,19 @@ void World::updateWorld(){
         int j = !(currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) * -1 +
         !((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
 
-
-        // debug_chunk->translateChunkInWorld(ivec2(i, j));
+        // moves chunk to match noise map
         for (int k = 0; k < DISPLAYED_CHUNKS; k++) {
             currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i, j));
         }
 
-        cout << "CHANGED CHUNK! to " << i << ", " << j << endl; 
-        cout << "main_chunk_pos: " << currently_displayed_chunks[Center]->chunk_position.x 
-            << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl;
+        // cout << "CHANGED CHUNK! to " << i << ", " << j << endl; 
+        // cout << "main_chunk_pos: " << currently_displayed_chunks[Center]->chunk_position.x 
+        //     << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl;
+
+        // for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+        //     cout << "position "  << i << ": " << currently_displayed_chunks[i]->chunk_position.x
+        //     << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
+        // }
 
         // update chunk
         for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
@@ -141,4 +166,12 @@ void World::updateWorld(){
 
         handleFacesBetweenChunks();        
     }
+}
+
+void World::addBlock(){
+    // Gizmos.lc_chunk->addBlockToChunk(Gizmos.look_cube->position, );
+}
+
+void World::removeBlock(){
+    Gizmos.lc_chunk->removeBlockFromChunk(Gizmos.look_cube->position);
 }

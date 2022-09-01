@@ -6,18 +6,17 @@
 #include "Raycaster.h"
 #include "Chunk.h"
 
+// Forward declaration
+class Chunk;
+
 struct Giz {
     Cube* look_cube;
     bool can_draw_lc;
     bool remove_mode;
-    int look_cube_chunk;
     ivec3 lc_prev_position;
     ivec2 lc_chunk_position;
+    Chunk* lc_chunk;
 };
-
-
-// Forward declaration
-class Chunk;
 
 class World {
 public:
@@ -32,7 +31,7 @@ public:
     int noiseData[WORLD_SIZE*CHUNK_SIZE][WORLD_SIZE*CHUNK_SIZE];
 
     // has the same function as displayed chunk, but displays only one at a time
-    Chunk *debug_chunk;
+    Cube block_to_add;
 
     Giz Gizmos;
     Cube look_cube;
@@ -44,10 +43,12 @@ public:
     void renderWorld(int Model_Uniform);
     void initWorld();
     void initNoise();
-    void UpdateGizmos();
+    void updateGizmos();
     void drawGizmos(int MatModel);
     void updateWorld();
     void handleFacesBetweenChunks();  
+    void addBlock();
+    void removeBlock();
     
     World();
     ~World();

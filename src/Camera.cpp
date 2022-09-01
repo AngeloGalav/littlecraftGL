@@ -12,10 +12,6 @@ void Camera::moveCameraLeft()
 	glm::vec3 direzione_scorrimento = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));   //direzione perpendicolare al piano individuato da direction e upvector
 	ViewSetup.position -= glm::vec4(direzione_scorrimento, 0.0) * playerSpeed;
 	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
-
-	cout << "pos: " << ViewSetup.position.x << ", " << ViewSetup.position.y << ", " << ViewSetup.position.z << endl;
-	cout << "dir_s: " << ViewSetup.direction.x << ", " << ViewSetup.direction.y << ", " << ViewSetup.direction.z << endl;
-
 }
 
 void Camera::moveCameraRight()

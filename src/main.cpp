@@ -13,12 +13,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-vector<Cube*> Scena;
-vector<Mesh*> Scena_Extras;
-
-vector<vec3> centri;
-vector<float> raggi;
-
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
 
@@ -27,19 +21,13 @@ int main_window_id;
 
 GLuint render_mode = GL_FILL;
 
-// debug time
-int t = -180;
-bool can_draw_look_cube = true;
-
 static unsigned int programId, MatrixProj, MatModel, MatView;
 static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
-
-int selected_obj = -1;
 
 int texture_width, texture_height, nrChannels;
 
 World main_world;
-Cube look_cube(vec4(0, 1.0f, 0, 0.5f));
+Cube look_cube(LOOKCUBE_COLOR);
 GLint lc_mode_uniform;
 
 
@@ -130,19 +118,9 @@ void drawScene(void)
 	// all'interno del Vertex shader. Uso l'identificatio MatView
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));	
 
-	// sets the position of the cube based on the direction of the camera
-	vec3 lk_position = raycast.get_ray_from_camera(mainCamera);
-	look_cube.moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
-	mainCamera.ViewSetup.position.y/UNIT_SIZE, mainCamera.ViewSetup.position.z/UNIT_SIZE) 
-	+ vec3(DISTANCE_FROM_CAMERA * lk_position.x, DISTANCE_FROM_CAMERA * lk_position.y, DISTANCE_FROM_CAMERA * lk_position.z));
-
-	if (main_world.Gizmos.can_draw_lc)
-		look_cube.drawMesh(MatModel);
-
-	cout << "look cube pos: " << look_cube.position.x << ", " << look_cube.position.y << ", "<< look_cube.position.z << endl;
-
+	main_world.updateGizmos();
+	main_world.drawGizmos(MatModel);
 	
-
 	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
 	glUseProgram(texture_programId);
 	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
@@ -181,11 +159,12 @@ int main(int argc, char *argv[])
 	// Inizializzo finestra per il rendering delle informazioni con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
 	glewExperimental = GL_TRUE;
 	glewInit();
+	mainCamera = Camera();
+	mainCamera.initCamera();
 	INIT_TEXTURES();
 	INIT_SHADER();
 	INIT_VAO();
 
-	mainCamera = Camera();
 	glEnable(GL_BLEND);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_DEPTH_TEST);
