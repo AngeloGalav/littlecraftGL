@@ -22,13 +22,7 @@ vector<float> raggi;
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
 
-int w_up = width;
-int h_up = height;
-
-Camera mainCamera;
 Raycaster raycast;
-
-Cube look_cube(vec4(1.0f, 0, 0, 0.5f));
 
 int main_window_id;
 
@@ -45,6 +39,8 @@ int selected_obj = -1;
 int texture_width, texture_height, nrChannels;
 
 World main_world;
+Cube look_cube(vec4(1.0f, 0, 0, 0.5f));
+Camera mainCamera;
 
 unsigned int texture;
 
@@ -110,8 +106,6 @@ void INIT_TEXTURES(){
 
 void drawScene(void)
 {
-	main_world.updateWorld();
-
 	// crea il cielo azzurro
 	glClearColor(52.9/100.0, 80.8/100.0, 92.2/100.0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
@@ -140,6 +134,12 @@ void drawScene(void)
 		Scena_Extras[k]->drawMesh(MatModel);
 	}
 
+	// sets the position of the cube based on the direction of the camera
+	vec3 lk_position = raycast.get_ray_from_camera(mainCamera);
+	look_cube.moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
+	mainCamera.ViewSetup.position.y/UNIT_SIZE, mainCamera.ViewSetup.position.z/UNIT_SIZE) 
+	+ vec3(5 * lk_position.x, 5 * lk_position.y, 5 * lk_position.z));
+
 	look_cube.drawMesh(MatModel);
 
 	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
@@ -153,6 +153,8 @@ void drawScene(void)
 	main_world.renderWorld(MatModel_texture);
 
 	glutSwapBuffers();
+
+	main_world.updateWorld();
 }
 
 int main(int argc, char *argv[])

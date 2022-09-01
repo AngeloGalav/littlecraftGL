@@ -32,6 +32,10 @@ vec3 Raycaster::get_ray_from_mouse(float mouse_x, float mouse_y) {
 	return ray_wor;
 }
 
+vec3 Raycaster::get_ray_from_camera(Camera camera){
+	return vec3(camera.ViewSetup.direction.x, camera.ViewSetup.direction.y, camera.ViewSetup.direction.z);
+}
+
 /*controlla se un raggio interseca una sfera. In caso negativo, restituisce false. Rigetta
 le intersezioni dietro l'origine del raggio, e pone  intersection_distance all'intersezione p i� vicina.
 */

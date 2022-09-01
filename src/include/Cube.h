@@ -16,6 +16,8 @@ public:
     mat4 ModelCube; // Model Matrix dell'intero cubo
     vec2 atlas_offset[3]; // texture offset, ogni cubo ha massimo 3 texture in Minecraft
 
+    bool isAir;
+
     void initCube();
     void initCubeTextures();
     void moveTo(ivec3 position);

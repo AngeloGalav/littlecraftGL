@@ -4,6 +4,7 @@
 #define chunk_index(x,y) (x + CHUNK_SIZE*y)
 
 extern Camera mainCamera;
+extern Cube look_cube;
 
 World::World(){
     player_in_main_chunk = false;
@@ -117,10 +118,4 @@ void World::updateWorld(){
 
         handleFacesBetweenChunks();        
     }
-
-    // if (currently_displayed_chunks[Center]->map_out_of_bounds) {
-    //     cout << "OUT_OF_BOUNDS ERROR!!" << endl;
-    // }
-
-    // cout << "chunk_position: " << currently_displayed_chunks[Center]->chunk_position.x << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl; 
 }
