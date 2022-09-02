@@ -12,6 +12,7 @@ private:
 public:
     bool dirty; // if this is true, the chunk mesh must be regenerated at the next frame
     bool to_move;
+    bool modified;
     bool map_out_of_bounds;
     Cube chunk_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_HEIGHT];
     ivec2 chunk_position; // position of the chunk between 0 and WORLD_SIZE-1

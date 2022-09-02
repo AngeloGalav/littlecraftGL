@@ -55,11 +55,11 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		break;
 	
 	case 'q':
-		// main_world.removeBlock();
+		main_world.removeBlock();
 		break;
 	
 	case 'e':
-		// addCube();
+		main_world.addBlock();
 		break;
 
 	case 'x':

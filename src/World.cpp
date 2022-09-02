@@ -42,6 +42,10 @@ void World::initWorld(){
         }    
     }
 
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+        has_modified_chunk[i] = false;
+    }
+
     Gizmos.can_draw_lc = true;
     Gizmos.remove_mode = false;
 
@@ -119,24 +123,15 @@ void World::updateWorld(){
         // updates the chunk of the cube
         Gizmos.lc_chunk = currently_displayed_chunks[(i_lc + 1) + (j_lc + 1) * 3];
 
-        cout << "chunk inc: " << i_lc << ", " << j_lc << endl;
-
         Gizmos.lc_prev_position = Gizmos.look_cube->position;
-
-        // cout << "Gizmos.look_cube chunkpos: " << Gizmos.lc_chunk_position.x << ", " << Gizmos.lc_chunk_position.y << endl;
     }
 
-    // cout << "Gizmos.look_cube pos: " << Gizmos.look_cube->position.x << ", " << Gizmos.look_cube->position.y 
-    // << ", " << Gizmos.look_cube->position.z << endl;
-    
     // solves
     player_in_main_chunk = 
     (currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) 
     && ((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x)
     && (currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) 
     && ((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
-
-    // cout << "in chunk: " <<  player_in_main_chunk << endl;
 
     if (!player_in_main_chunk) {
         // si salva la direzione in cui il giocatore si è spostato dal chunk
@@ -147,21 +142,29 @@ void World::updateWorld(){
 
         // moves chunk to match noise map
         for (int k = 0; k < DISPLAYED_CHUNKS; k++) {
+            // int x = currently_displayed_chunks[k]->chunk_position.x + WORLD_SIZE/2 + i;
+            // int y = currently_displayed_chunks[k]->chunk_position.y + WORLD_SIZE/2 + j; 
+            // ivec2 old_pos = currently_displayed_chunks[k]->chunk_position;
+            
+
+            // if (modified_chunks[x][y] == NULL) {
+            //     if (has_modified_chunk[k]) {
+            //         currently_displayed_chunks[k] = new Chunk();
+            //     } 
+            //     currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i, j));
+            // } else {
+            //     cout << "segfault causato da modified_chunks" << endl;
+            //     currently_displayed_chunks[k] = modified_chunks[x][y];
+            //     has_modified_chunk[k] = true;
+            // }
+
             currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i, j));
         }
 
-        // cout << "CHANGED CHUNK! to " << i << ", " << j << endl; 
-        // cout << "main_chunk_pos: " << currently_displayed_chunks[Center]->chunk_position.x 
-        //     << ", " << currently_displayed_chunks[Center]->chunk_position.y << endl;
-
-        // for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
-        //     cout << "position "  << i << ": " << currently_displayed_chunks[i]->chunk_position.x
-        //     << ", " << currently_displayed_chunks[i]->chunk_position.y << endl;
-        // }
-
         // update chunk
         for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
-            currently_displayed_chunks[i]->updateChunk();
+            // if (!currently_displayed_chunks[i]->modified)
+                currently_displayed_chunks[i]->updateChunk();
         }
 
         handleFacesBetweenChunks();        
@@ -169,9 +172,19 @@ void World::updateWorld(){
 }
 
 void World::addBlock(){
-    // Gizmos.lc_chunk->addBlockToChunk(Gizmos.look_cube->position, );
+    Gizmos.lc_chunk->addBlockToChunk(Gizmos.look_cube->position, block_to_add);
 }
 
 void World::removeBlock(){
     Gizmos.lc_chunk->removeBlockFromChunk(Gizmos.look_cube->position);
+
+    // Modifies the chunk only if had actual modifications in it
+    // if (Gizmos.lc_chunk->dirty) {
+    //     // cout << "segfault causato da dirty" << endl;
+    //     modified_chunks
+    //     [Gizmos.lc_chunk->chunk_position.x + WORLD_SIZE/2]
+    //     [Gizmos.lc_chunk->chunk_position.y + WORLD_SIZE/2] = Gizmos.lc_chunk;
+
+    //     Gizmos.lc_chunk->dirty = false;
+    // }
 }

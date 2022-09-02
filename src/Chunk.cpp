@@ -5,11 +5,16 @@ Chunk::Chunk() {
 	chunk_position = ivec2(0,0);
 }
 
-Chunk::~Chunk() {}
+Chunk::~Chunk() {
+	for (int i = 0; i < added_blocks.size(); i++) {
+		delete added_blocks[i];
+	}
+}
 
 void Chunk::initChunk(){
 	dirty = false;
 	to_move = false;
+	modified = false;
 	map_out_of_bounds = false;
 
     for (int i = 0; i < CHUNK_SIZE; i++) {
@@ -72,17 +77,12 @@ void Chunk::updateChunk(){
 			for (int j = 0; j < CHUNK_SIZE; j++) {
 				for (int k = 0; k < CHUNK_HEIGHT; k++) {
 					checkNeighbours(i,j,k);
+					chunk_blocks[i][j][k].isAir = false;
 				}
 			}
 		}
 		to_move = false;
 	}
-
-	if (dirty) {
-		// code for dirty chunk management herw
-		dirty = false;
-	}
-
 }
 
 void Chunk::applyChunkPosition(int i, int j, int k) {
@@ -99,9 +99,14 @@ void Chunk::drawChunk(int Model_Uniform){
     for (int i = 0; i < CHUNK_SIZE; i++) {
 		for (int j = 0; j < CHUNK_SIZE; j++) {
 			for (int k = 0; k < CHUNK_HEIGHT; k++) {
-				chunk_blocks[i][j][k].drawMesh(Model_Uniform);
+				if (!chunk_blocks[i][j][k].isAir)
+					chunk_blocks[i][j][k].drawMesh(Model_Uniform);
 			}
 		}
+	}
+
+	for (int i = 0; i < added_blocks.size(); i++) {
+		added_blocks[i]->drawMesh(Model_Uniform);
 	}
 }
 
@@ -201,8 +206,7 @@ void Chunk::addBlockToChunk(ivec3 position, Cube block_added){
 	for (int i = 0; i < 3; i++)
 		new_block->atlas_offset[i] = block_added.atlas_offset[i];
 	
-	new_block->initTextures();
-	new_block->initCube();
+	new_block->initTexturedCube();
 
 	int i = position.x - chunk_position.x*CHUNK_SIZE;
 	int j = position.z - chunk_position.y*CHUNK_SIZE; 
@@ -211,10 +215,20 @@ void Chunk::addBlockToChunk(ivec3 position, Cube block_added){
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
-	if (0 < k && k < CHUNK_HEIGHT) {
-		cout << "cant add blocks to terrain..." << endl;
-	} else {
+	cout << "trying to add cube" << endl;
 
+	if (0 <= k && k < CHUNK_HEIGHT && !chunk_blocks[i][j][k].isAir) {
+		cout << "cant add blocks to terrain..." << endl;
+		delete new_block;
+	} else {
+		new_block->moveTo(position);
+
+		cout << "new_block position: " << new_block->position.x << ", "
+		<< new_block->position.z << endl;
+		cout << "wanted position: " << position.x << ", "
+		<< position.z << endl;
+	
+		added_blocks.push_back(new_block);
 	}
 }
 
@@ -230,25 +244,12 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
 	// caso in cui sto eliminando un cubo del terreno
-	if (0 < k && k < CHUNK_HEIGHT) {
-		chunk_blocks[i][j][k].isAir = true;
+	if (0 <= k && k < CHUNK_HEIGHT && !chunk_blocks[i][j][k].isAir) {
+		cout << "There was an attempt to remove this cube" << endl;
 		
-		if (i > 0) {
-			chunk_blocks[i-1][j][k].must_be_drawn[Left] = true;
-		}
-
-		if (i < CHUNK_SIZE - 1) {
-			chunk_blocks[i+1][j][k].must_be_drawn[Right] = true;
-		}
-
-		if (j > 0) {
-			chunk_blocks[i][j-1][k].must_be_drawn[Back] = true;
-		}
-
-		if (j < CHUNK_SIZE - 1) {
-			chunk_blocks[i][j+1][k].must_be_drawn[Front] = true;
-		}
-
+		chunk_blocks[i][j][k].isAir = true;
+		dirty = true;
+		
 		if (k > 0) {
 			chunk_blocks[i][j][k-1].must_be_drawn[Down] = true;
 		}
@@ -256,50 +257,46 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 		if (k < CHUNK_HEIGHT - 1) {
 			chunk_blocks[i][j][k+1].must_be_drawn[Up] = true;
 		}
-	} else { // caso in cui sto eliminando un cubo aggiunto deall'utente
+
+		if (i > 0) {
+			k = - 2 - position.y - world_instance->noiseData
+			[i - 1 + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+			[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+			chunk_blocks[i-1][j][k].must_be_drawn[Right] = true;
+		}
+
+		if (i < CHUNK_SIZE - 1) {
+			k = - 2 - position.y - world_instance->noiseData
+			[i + 1 + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+			[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+			chunk_blocks[i+1][j][k].must_be_drawn[Left] = true;
+		}
+
+		if (j > 0) {
+			k = - 2 - position.y - world_instance->noiseData
+			[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+			[j - 1 + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+			chunk_blocks[i][j-1][k].must_be_drawn[Front] = true;
+		}
+
+		if (j < CHUNK_SIZE - 1) {
+			k = - 2 - position.y - world_instance->noiseData
+			[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
+			[j + 1 + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
+
+			chunk_blocks[i][j+1][k].must_be_drawn[Back] = true;
+		}
+	} else if (added_blocks.size() > 0){ // caso in cui sto eliminando un cubo aggiunto deall'utente
 		for (int x = 0; x < added_blocks.size(); x++) {
 			if (added_blocks[x]->position == position) {
+				dirty = true;
 				added_blocks.erase(added_blocks.begin() + x);
-			}
+			} 
 		}
 	}
 
-}
-
-/** Updates the Gizmos based on the chunk information
- * 
- */
-void Chunk::updateGizmoProperties(int* mode, int* lc_visible, ivec3 position) {
-	// int i = position.x - chunk_position.x*CHUNK_SIZE;
-	// int j = position.z - chunk_position.y*CHUNK_SIZE; 
-
-	// int k = - 2 - position.y - world_instance->noiseData
-	// [i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
-	// [j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
-
-	// chunk_blocks[i][j][k].isAir = true;
-	
-	// if (i > 0) {
-	// 	chunk_blocks[i-1][j][k].must_be_drawn[Left] = true;
-	// }
-
-	// if (i < CHUNK_SIZE - 1) {
-	// 	chunk_blocks[i+1][j][k].must_be_drawn[Right] = true;
-	// }
-
-	// if (j > 0) {
-	// 	chunk_blocks[i][j-1][k].must_be_drawn[Back] = true;
-	// }
-
-	// if (j < CHUNK_SIZE - 1) {
-	// 	chunk_blocks[i][j+1][k].must_be_drawn[Front] = true;
-	// }
-
-	// if (k > 0) {
-	// 	chunk_blocks[i][j][k-1].must_be_drawn[Down] = true;
-	// }
-
-	// if (k < CHUNK_HEIGHT - 1) {
-	// 	chunk_blocks[i][j][k+1].must_be_drawn[Up] = true;
-	// }
+	modified |= dirty;
 }

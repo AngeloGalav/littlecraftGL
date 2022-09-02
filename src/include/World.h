@@ -25,16 +25,16 @@ public:
 
     // vanilla chunk gets translated and it's height modified. 
     Chunk *currently_displayed_chunks[DISPLAYED_CHUNKS];
+    bool has_modified_chunk[DISPLAYED_CHUNKS];
     
     // World Singleton
     FastNoiseLite noise;
     int noiseData[WORLD_SIZE*CHUNK_SIZE][WORLD_SIZE*CHUNK_SIZE];
 
-    // has the same function as displayed chunk, but displays only one at a time
+    // The block to add
     Cube block_to_add;
 
     Giz Gizmos;
-    Cube look_cube;
 
     Raycaster raycast;
 

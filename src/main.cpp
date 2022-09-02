@@ -51,7 +51,6 @@ void INIT_SHADER(void)
 	programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
 	texture_programId = ShaderMaker::createProgram(vertexShader_texture, fragmentShader_texture);
 	glUseProgram(programId);
-	cout << "Latest error is: " << ErrorCheckValue << endl;
 
 	MatModel = glGetUniformLocation(programId, "Model");
 }
