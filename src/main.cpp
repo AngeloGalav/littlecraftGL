@@ -3,20 +3,16 @@
 #include "include/ShaderMaker.h"
 #include "include/Lib.h"
 #include "include/Camera.h"
-#include "include/Raycaster.h"
 #include "include/InputHandler.h"
 #include "include/Mesh.h"
 #include "include/EventHandler.h"
 #include "include/FastNoiseLite.h"
 #include "include/Chunk.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+#include "include/Texture.h"
 
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
 
-Raycaster raycast;
 int main_window_id;
 
 GLuint render_mode = GL_FILL;
@@ -24,20 +20,18 @@ GLuint render_mode = GL_FILL;
 static unsigned int programId, MatrixProj, MatModel, MatView;
 static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
 
-int texture_width, texture_height, nrChannels;
-
 World main_world;
-Cube look_cube(LOOKCUBE_COLOR);
 
 Camera mainCamera;
-
-unsigned int texture;
+Texture textureMaker;
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 mat4 Projection, Model, View;
 
-void INIT_SHADER(void)
-{
+void init(void){
+	mainCamera = Camera();
+	mainCamera.initCamera();
+
 	char *vertexShader = (char *) "shaders/plain.vert.glsl";
 	char *fragmentShader = (char *) "shaders/plain.frag.glsl";
 	char *fragmentShader_texture = (char *) "shaders/texture.frag.glsl";
@@ -48,40 +42,12 @@ void INIT_SHADER(void)
 	glUseProgram(programId);
 
 	MatModel = glGetUniformLocation(programId, "Model");
-}
 
-void INIT_VAO(void)
-{
+	// inizializza la texture usando il programId dello shader
+	textureMaker.initTexture(&texture_programId);
+
 	main_world.initWorld();
 }
-
-///TODO: Should move this inside a texture class
-void INIT_TEXTURES(){
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	// load and generate the texture
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true);  // flippa la texture
-	unsigned char *data = stbi_load("res/texture_atlas.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-
-	glUniform1i(glGetUniformLocation(texture_programId, "texture_quad"), 0);
-}
-
 
 void drawScene(void)
 {
@@ -111,7 +77,7 @@ void drawScene(void)
 	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
 	glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(View));
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	textureMaker.useTexture();
 
 	// renderizza il mondo
 	main_world.renderWorld(MatModel_texture);
@@ -144,11 +110,8 @@ int main(int argc, char *argv[])
 	// Inizializzo finestra per il rendering delle informazioni con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
 	glewExperimental = GL_TRUE;
 	glewInit();
-	mainCamera = Camera();
-	mainCamera.initCamera();
-	INIT_TEXTURES();
-	INIT_SHADER();
-	INIT_VAO();
+
+	init();
 
 	glEnable(GL_BLEND);
 	glEnable(GL_ALPHA_TEST);

@@ -18,5 +18,7 @@ void main()
     FragColor = texture(texture_quad, TexCoord);
     
     float fog = smoothstep(fog_near, fog_far, length(view_pos));
+
+    // interpola in base al valore di fog i due colori 
     FragColor = mix(FragColor, fog_color, fog);
 }

@@ -215,19 +215,11 @@ void Chunk::addBlockToChunk(ivec3 position, Cube block_added){
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
-	cout << "trying to add cube" << endl;
-
 	if (0 <= k && k < CHUNK_HEIGHT && !chunk_blocks[i][j][k].isAir) {
 		cout << "cant add blocks to terrain..." << endl;
 		delete new_block;
 	} else {
 		new_block->moveTo(position);
-
-		cout << "new_block position: " << new_block->position.x << ", "
-		<< new_block->position.z << endl;
-		cout << "wanted position: " << position.x << ", "
-		<< position.z << endl;
-	
 		added_blocks.push_back(new_block);
 	}
 }

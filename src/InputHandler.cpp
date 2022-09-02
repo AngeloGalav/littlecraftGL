@@ -6,7 +6,6 @@
 
 extern Camera mainCamera;
 extern World main_world;
-extern Raycaster raycast;
 extern GLuint render_mode;
 
 bool firstMouse = true;
@@ -77,9 +76,6 @@ void mouse(int button, int state, int x, int y)
 {
 	float xmouse = x;
 	float ymouse = y;
-	vec3 ray_wor = raycast.get_ray_from_mouse(xmouse, ymouse);
-
-	float closest_intersection = 0.0f;
 
 	if (button == GLUT_RIGHT_BUTTON)
     {

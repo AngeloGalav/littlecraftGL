@@ -32,6 +32,9 @@ vec3 Raycaster::get_ray_from_mouse(float mouse_x, float mouse_y) {
 	return ray_wor;
 }
 
+/** Ritorna la direzione della camera praticamente. 
+ * 
+ */
 vec3 Raycaster::get_ray_from_camera(Camera camera){
 	return vec3(camera.ViewSetup.direction.x, camera.ViewSetup.direction.y, camera.ViewSetup.direction.z);
 }

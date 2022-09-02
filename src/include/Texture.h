@@ -4,17 +4,10 @@
 
 class Texture {
 public:
-    // stuff here
-    char** pixels;
-    GLuint texture_id;
     int texture_width, texture_height, nrChannels;
-
-    void initTexture();
-    void loadTextureImg();
-
-    void bindTexture();
-    void destroyTexture();
-
+    unsigned int texture;
+    void initTexture(unsigned int *texture_programId);
+    void useTexture();
 
     Texture();
 };

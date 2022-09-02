@@ -14,7 +14,7 @@ World::World(){
         }
     }
 
-    Gizmos.look_cube = new Cube(vec4(0, 1.0f, 0, 0.5f));
+    Gizmos.look_cube = new Cube(LOOKCUBE_COLOR);
 
     block_to_add.atlas_offset[0] = 
     block_to_add.atlas_offset[1] = 
