@@ -7,6 +7,7 @@ Some of the features of the original game are missing due to time and complexity
 
 ## Screenshots
 
+![](res/old_screenshot.png)
 ![](res/screenshot.png)
 
 ## How to play
