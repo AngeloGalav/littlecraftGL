@@ -58,6 +58,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Added Textures support
 - [x] Added Cube transformations
 - [x] Textured Cube
+- [x] Window Resize support
 - [ ] Block selection
 - [x] Plain-cube floor
 - [x] Noise for procedural generation

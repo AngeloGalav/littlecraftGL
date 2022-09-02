@@ -281,12 +281,24 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 
 			chunk_blocks[i][j+1][k].must_be_drawn[Back] = true;
 		}
-	} else if (added_blocks.size() > 0){ // caso in cui sto eliminando un cubo aggiunto deall'utente
+	} else if (added_blocks.size() > 0) { // caso in cui sto eliminando un cubo aggiunto deall'utente
 		for (int x = 0; x < added_blocks.size(); x++) {
 			if (added_blocks[x]->position == position) {
 				dirty = true;
+				cout << "trying to remove block at position: " << added_blocks[x]->position.x << ", "
+				<< added_blocks[x]->position.y << ", " << added_blocks[x]->position.z << endl;
+
+				cout << "wanted removal position is: " << position.x << ", "
+				<< position.y << ", " << position.z << endl;
 				added_blocks.erase(added_blocks.begin() + x);
-			} 
+
+				cout << "@ chunk pos: " << chunk_position.x << ", "
+				<< chunk_position.y << endl;
+
+				cout << "now size is: " << added_blocks.size() << endl;
+			} else {
+				// cout << "cant remove this" << endl;
+			}
 		}
 	}
 

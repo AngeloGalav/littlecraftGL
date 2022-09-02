@@ -82,6 +82,7 @@ void World::updateGizmos(){
 }
 
 void World::drawGizmos(int MatModel){
+    glUniform1i(rm_mode_shader_location, 0);
     if (Gizmos.can_draw_lc)
 		Gizmos.look_cube->drawMesh(MatModel);
 }
@@ -107,7 +108,8 @@ void World::renderWorld(int Model_Uniform){
 }
 
 void World::updateWorld(){
-
+    // mini feedback visivo quando si tolgono/piazzano cubi
+    
     // posizione del giocatore relativa alla mappa
     vec2 player_position_to_map = vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
 

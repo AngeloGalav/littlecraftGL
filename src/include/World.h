@@ -34,6 +34,7 @@ public:
     Cube block_to_add;
 
     Giz Gizmos;
+    unsigned int rm_mode_shader_location;
     
     bool player_in_main_chunk;
 

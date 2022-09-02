@@ -19,6 +19,7 @@ GLuint render_mode = GL_FILL;
 
 static unsigned int programId, MatrixProj, MatModel, MatView;
 static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
+GLuint remove_mode_shader_location;
 
 World main_world;
 
@@ -40,8 +41,6 @@ void init(void){
 	programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
 	texture_programId = ShaderMaker::createProgram(vertexShader_texture, fragmentShader_texture);
 	glUseProgram(programId);
-
-	MatModel = glGetUniformLocation(programId, "Model");
 
 	// inizializza la texture usando il programId dello shader
 	textureMaker.initTexture(&texture_programId);
