@@ -8,11 +8,15 @@ uniform mat4 Projection;
 uniform mat4 View;
 out vec4 ourColor; // output a color to the fragment shader
 out vec2 TexCoord;
+out vec3 view_pos;
 
 void main()
 {
     gl_Position = Projection*View*Model*vec4(aPos, 1.0);
     ourColor = aColor; // set ourColor to the input color we got from the vertex data
     TexCoord = vec2(textureCoords.x, textureCoords.y); // inviamo al fragment le coordinate della texture 
+    
+    // usato per la nebbia
+    view_pos = ((View * Model) * vec4(aPos, 1.0)).xyz;
 }  
 

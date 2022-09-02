@@ -28,8 +28,6 @@ int texture_width, texture_height, nrChannels;
 
 World main_world;
 Cube look_cube(LOOKCUBE_COLOR);
-GLint lc_mode_uniform;
-
 
 Camera mainCamera;
 
@@ -40,13 +38,10 @@ mat4 Projection, Model, View;
 
 void INIT_SHADER(void)
 {
-	GLenum ErrorCheckValue = glGetError();
-
-	char *vertexShader = (char *)"shaders/vertexShader_C.glsl";
-	char *fragmentShader = (char *)"shaders/fragmentShader_C.glsl";
-	char *fragmentShader_texture = (char *)"shaders/texture.frag.glsl";
-	char *vertexShader_texture = (char *)"shaders/texture.vert.glsl";
-
+	char *vertexShader = (char *) "shaders/plain.vert.glsl";
+	char *fragmentShader = (char *) "shaders/plain.frag.glsl";
+	char *fragmentShader_texture = (char *) "shaders/texture.frag.glsl";
+	char *vertexShader_texture = (char *) "shaders/texture.vert.glsl";
 
 	programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
 	texture_programId = ShaderMaker::createProgram(vertexShader_texture, fragmentShader_texture);
@@ -55,16 +50,9 @@ void INIT_SHADER(void)
 	MatModel = glGetUniformLocation(programId, "Model");
 }
 
-
-///TODO: Should move this inside the World Class...
-// Leaving it here for testing purposes
 void INIT_VAO(void)
 {
 	main_world.initWorld();
-
-	look_cube.initCube();	
-	look_cube.moveTo(ivec3(1,1,1));
-	lc_mode_uniform = glGetUniformLocation(programId, "remove_mode");
 }
 
 ///TODO: Should move this inside a texture class
@@ -106,8 +94,6 @@ void drawScene(void)
 	glUseProgram(programId);
 	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
 	
-	glUniform1i(lc_mode_uniform, main_world.Gizmos.remove_mode);
-
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
 
 	// Costruisco la matrice di Vista che applicata ai vertici in coordinate del mondo li trasforma nel sistema di riferimento della camera.

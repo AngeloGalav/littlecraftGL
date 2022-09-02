@@ -7,8 +7,9 @@ public:
     // stuff here
     char** pixels;
     GLuint texture_id;
+    int texture_width, texture_height, nrChannels;
 
-    void textureSetup();
+    void initTexture();
     void loadTextureImg();
 
     void bindTexture();
