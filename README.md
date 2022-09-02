@@ -66,7 +66,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [x] Rendering optimizations
 - [x] Multiple chunk management
 - [ ] Water
-- [ ] Fog
+- [x] Fog
 - [ ] Cube-map
 - [ ] Water reflection
 - [ ] Trees?
