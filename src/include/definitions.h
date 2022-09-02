@@ -16,6 +16,7 @@
 #define DISPLAYED_CHUNKS 9
 #define DISTANCE_FROM_CAMERA 5
 #define LOOKCUBE_COLOR vec4(0, 1.0f, 0, 0.5f)
+#define WORLD_HEIGHT_OFFSET -2
 #define DEBUG_MODE false
 
 #endif

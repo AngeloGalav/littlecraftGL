@@ -75,7 +75,7 @@ void World::handleFacesBetweenChunks(){
 
 void World::updateGizmos(){
     // sets the position of the cube based on the direction of the camera
-   	vec3 lk_position = raycast.get_ray_from_camera(mainCamera);
+   	vec3 lk_position = mainCamera.get_ray_from_camera();
 	Gizmos.look_cube->moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
 	mainCamera.ViewSetup.position.y/UNIT_SIZE, mainCamera.ViewSetup.position.z/UNIT_SIZE) 
 	+ vec3(DISTANCE_FROM_CAMERA * lk_position.x, DISTANCE_FROM_CAMERA * lk_position.y, DISTANCE_FROM_CAMERA * lk_position.z));

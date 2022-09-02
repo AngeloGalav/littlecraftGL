@@ -3,7 +3,6 @@
 
 #include "FastNoiseLite.h"
 #include "Camera.h"
-#include "Raycaster.h"
 #include "Chunk.h"
 
 // Forward declaration
@@ -35,9 +34,7 @@ public:
     Cube block_to_add;
 
     Giz Gizmos;
-
-    Raycaster raycast;
-
+    
     bool player_in_main_chunk;
 
     void renderWorld(int Model_Uniform);

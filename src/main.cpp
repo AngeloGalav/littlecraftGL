@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
 	// Inizializzo finestra per il rendering della scena 3d con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
-	glutInitWindowSize(width, height);
+	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glutInitWindowPosition(100, 100);
 	main_window_id = glutCreateWindow("littleCraft");
 	glutDisplayFunc(drawScene);

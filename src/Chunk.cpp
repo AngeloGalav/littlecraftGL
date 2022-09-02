@@ -88,7 +88,7 @@ void Chunk::updateChunk(){
 void Chunk::applyChunkPosition(int i, int j, int k) {
 	chunk_blocks[i][j][k].moveTo(
 	vec3(i + CHUNK_SIZE * chunk_position.x,
-	- 2 - k - world_instance->noiseData
+	WORLD_HEIGHT_OFFSET - k - world_instance->noiseData
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE], 
 	j + CHUNK_SIZE * chunk_position.y));
@@ -211,7 +211,7 @@ void Chunk::addBlockToChunk(ivec3 position, Cube block_added){
 	int i = position.x - chunk_position.x*CHUNK_SIZE;
 	int j = position.z - chunk_position.y*CHUNK_SIZE; 
 
-	int k = - 2 - position.y - world_instance->noiseData
+	int k = WORLD_HEIGHT_OFFSET - position.y - world_instance->noiseData
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
@@ -231,7 +231,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 	int i = position.x - chunk_position.x*CHUNK_SIZE;
 	int j = position.z - chunk_position.y*CHUNK_SIZE; 
 
-	int k = - 2 - position.y - world_instance->noiseData
+	int k = WORLD_HEIGHT_OFFSET - position.y - world_instance->noiseData
 	[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 	[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
@@ -251,7 +251,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 		}
 
 		if (i > 0) {
-			k = - 2 - position.y - world_instance->noiseData
+			k = WORLD_HEIGHT_OFFSET - position.y - world_instance->noiseData
 			[i - 1 + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 			[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
@@ -259,7 +259,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 		}
 
 		if (i < CHUNK_SIZE - 1) {
-			k = - 2 - position.y - world_instance->noiseData
+			k = WORLD_HEIGHT_OFFSET - position.y - world_instance->noiseData
 			[i + 1 + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 			[j + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
@@ -267,7 +267,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 		}
 
 		if (j > 0) {
-			k = - 2 - position.y - world_instance->noiseData
+			k = WORLD_HEIGHT_OFFSET - position.y - world_instance->noiseData
 			[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 			[j - 1 + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 
@@ -275,7 +275,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 		}
 
 		if (j < CHUNK_SIZE - 1) {
-			k = - 2 - position.y - world_instance->noiseData
+			k = WORLD_HEIGHT_OFFSET - position.y - world_instance->noiseData
 			[i + (chunk_position.x + WORLD_SIZE/2) * CHUNK_SIZE] 
 			[j + 1 + (chunk_position.y + WORLD_SIZE/2) * CHUNK_SIZE];
 

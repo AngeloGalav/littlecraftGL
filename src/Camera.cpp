@@ -53,3 +53,10 @@ void Camera::initCamera(void)
 	// all'avvio dell'app
 	rotateCamera(0,0);
 }
+
+/** General purpose function/wrapper to easily get the camera direction 
+ * 
+ */
+vec3 Camera::get_ray_from_camera(){
+	return vec3(ViewSetup.direction.x, ViewSetup.direction.y, ViewSetup.direction.z);
+}
