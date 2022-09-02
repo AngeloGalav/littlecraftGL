@@ -16,6 +16,7 @@ Some of the features of the original game are missing due to time and complexity
 - Use `W,A,S,D` to fly inside the world. Use `I,J,K,L` to rotate the camera.
 - You can also use your mouse to rotate the camera for precise movements, although it's a bit wonky since GLUT doesn't provide an easy way to properly handle mouse movement (es. mouse capture).
 - You can press `x` for a wireframe view of the currently generated world. 
+- Press `q` to remove blocks, and `e` to place a wooden plank. 
 
 ## How to compile
 
@@ -61,7 +62,7 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 - [ ] Block management
 - [x] Plain-cube floor
 - [x] Noise for procedural generation
-- [ ] Deleting and placing cubes
+- [x] Deleting and placing cubes
 - [x] Rendering optimizations
 - [x] Multiple chunk management
 - [ ] Water
@@ -76,3 +77,4 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 
  - It is missing some key features, that will be added sooner or later. 
  - The code is very rough, and could use some refactoring. This is due to some GLUT quirks and the fact that some workarounds have been applied to solve some problems encountered during development. Also, I was extremely strict on time. 
+ - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the blocks that you've deleted. 
