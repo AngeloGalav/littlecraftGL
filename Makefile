@@ -6,7 +6,7 @@ RMV = rm -f src/*.o
 FTINCLUDEDIR = -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/stb
 
 DLIBS = usr/lib/
-GLFLAGS = -lpthread -lGLU -lglut -lGL -lGLEW -lX11 -lXrandr -lXi -ldl -lfreetype
+GLFLAGS = -lpthread -lGLU -lglut -lGL -lGLEW -lX11 -lXrandr -lXi -ldl
 CFLAGS = $(GLFLAGS) $(FTINCLUDEDIR) -I$(GL_INCLUDE_DIR) -Wall -O0
 
 # executable name (can be modified here)
