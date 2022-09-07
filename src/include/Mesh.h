@@ -5,7 +5,7 @@
 
 class Mesh {
 public:
-    vector<vec3> vertices;
+    vector<ivec3> vertices;
 	vector<vec4> colors;
 	vector<GLuint> indices;
 	vector<vec2> texture_coordinates;

@@ -14,7 +14,7 @@ public:
                            // il rendering 
 
     mat4 ModelCube; // Model Matrix dell'intero cubo
-    vec2 atlas_offset[3]; // texture offset, ogni cubo ha massimo 3 texture in Minecraft
+    ivec2 atlas_offset[3]; // texture offset, ogni cubo ha massimo 3 texture in Minecraft
 
     bool isAir;
 
