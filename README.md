@@ -75,4 +75,4 @@ You don't need to read any of this, I'm just using this to keep track of what I 
 
  - It is missing some key features, that will be added sooner or later. 
  - The code is very rough, and could use some refactoring. This is due to some GLUT quirks and the fact that some workarounds have been applied to solve some problems encountered during development. Also, I was extremely strict on time. 
- - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the blocks that you've deleted. 
+ - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the effect. 
