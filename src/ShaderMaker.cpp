@@ -68,13 +68,11 @@ GLuint ShaderMaker::createProgram(char* vertexfilename, char *fragmentfilename)
 	//Compiliamo il FRAGMENT SHader
 	glCompileShader(fragmentShaderId);
 
-	 
 	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(fragmentShaderId, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
-
 
 	ErrorCheckValue = glGetError();
 	cout << ErrorCheckValue;
@@ -83,8 +81,7 @@ GLuint ShaderMaker::createProgram(char* vertexfilename, char *fragmentfilename)
 	{
 		fprintf(
 			stderr,
-			"ERROR: Could not create the shaders: %s \n",
-			gluErrorString(ErrorCheckValue)
+			"ERROR: Could not create the shaders: %s \n"
 		);
 
 		exit(-1);

@@ -1,9 +1,10 @@
 #ifndef LIB_H
 #define LIB_H
 
-#include <map> 
-#include <GL/glew.h>
-#include <GL/freeglut.h>
+#include <map>
+// #include <GL/glew.h>
+#include "glad.h"
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>

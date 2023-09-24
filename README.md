@@ -35,8 +35,8 @@ and that's pretty much it.
 
 This project uses the following libraries:
 
-- freeGLUT - an implementation of GLUT</li>
-- GLEW</li>
+- GLFW</li>
+- glad</li>
 - glm - the openGL math library</li>
 - [FastNoiseLite](https://github.com/Auburn/FastNoiseLite) - A single header lib to generate the Perlin noise map
 
@@ -46,7 +46,7 @@ The project also uses two additional libraries: `json.hpp` and `gltext.h`, which
 
 ## New Milestones
 - [x] Change build system to CMake
-- [ ] Change underlying GL library to `glfw`
+- [x] Change underlying GL library to `glfw`
 
 ## Milestones
 

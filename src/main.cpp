@@ -48,9 +48,9 @@ void init(void){
 	main_world.initWorld();
 }
 
-void drawScene(void)
+void drawScene(GLFWwindow* window)
 {
-	// crea il cielo azzurro
+
 	glClearColor(52.9/100.0, 80.8/100.0, 92.2/100.0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
 	// Passo al Vertex Shader il puntatore alla matrice Projection, che sar� associata alla variabile Uniform mat4 Projection
@@ -81,39 +81,40 @@ void drawScene(void)
 	// renderizza il mondo
 	main_world.renderWorld(MatModel_texture);
 
-	glutSwapBuffers();
-
+	glfwSwapBuffers(window);
+	glfwPollEvents();
 	main_world.updateWorld();
 }
 
 int main(int argc, char *argv[])
 {
-	glutInit(&argc, argv);
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); //this tells us that we are using version 3.3 of glfw
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "littleCraft", NULL, NULL);
+	if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
 
-	glutInitContextVersion(4, 0);
-	glutInitContextProfile(GLUT_CORE_PROFILE);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  //calls the function whenever the framebuffer size (window size) is changed
+	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window, cursor_position_callback);
 
-	// Inizializzo finestra per il rendering della scena 3d con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
-	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	glutInitWindowPosition(100, 100);
-	main_window_id = glutCreateWindow("littleCraft");
-	glutDisplayFunc(drawScene);
-	glutReshapeFunc(resize);
-	glutMouseFunc(mouse);
-	glutPassiveMotionFunc(my_passive_mouse);
-
-	glutKeyboardFunc(keyboardPressedEvent);
-	glutTimerFunc(10, update, 0);
-
-	// Inizializzo finestra per il rendering delle informazioni con tutti i suoi eventi le sue inizializzazioni e le sue impostazioni
-	glewExperimental = GL_TRUE;
-	glewInit();
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
 
 	init();
 
 	glEnable(GL_BLEND);
-	glEnable(GL_ALPHA_TEST);
+	// glEnable(GL_ALPHA_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -131,5 +132,10 @@ int main(int argc, char *argv[])
 	MatView = glGetUniformLocation(programId, "View");
 	MatView_texture = glGetUniformLocation(texture_programId, "View");
 
-	glutMainLoop();
+	while(!glfwWindowShouldClose(window))
+	{
+		drawScene(window);
+	}
+
+    glfwTerminate(); //deallocates all resources
 }

@@ -6,5 +6,8 @@
 
 void update(int a);
 void resize(int w, int h);
+//when windows is resized, call this function
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
 
 #endif

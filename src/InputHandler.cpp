@@ -17,78 +17,47 @@ float pitch_ = 0.0f;
 
 float keyboard_rotation_speed = 5.0f;
 
-void keyboardPressedEvent(unsigned char key, int x, int y)
+/** Key callback function.
+ *
+ */
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	switch (key)
-	{
-	case 'a':
+	// wasd
+    if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
 		mainCamera.moveCameraLeft();
-		break;
-	case 'd':
-		mainCamera.moveCameraRight();
-		break;
-
-	case 'w':
+	if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
+        mainCamera.moveCameraRight();
+	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
 		mainCamera.moveCameraForward();
-		break;
-
-	case 's':
+    if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
 		mainCamera.moveCameraBack();
-		break;
 
-	case 'j':
-		rotateCameraKeyboard(-1, 0);
-		break;
+	// keyboard camera rotation
+	if (key == GLFW_KEY_J && (action == GLFW_PRESS || action == GLFW_REPEAT))
+        rotateCameraKeyboard(-1, 0);
+	if (key == GLFW_KEY_L && (action == GLFW_PRESS || action == GLFW_REPEAT))
+        rotateCameraKeyboard(1, 0);
+    if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT))
+        rotateCameraKeyboard(0, 1);
+	if (key == GLFW_KEY_K && (action == GLFW_PRESS || action == GLFW_REPEAT))
+        rotateCameraKeyboard(0, -1);
 
-	case 'l':
-		rotateCameraKeyboard(1, 0);
-		break;
-
-	case 'i':
-		rotateCameraKeyboard(0, 1);
-		break;
-
-	case 'k':
-		rotateCameraKeyboard(0, -1);
-		break;
-	
-	case 'q':
+	// action buttons
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
 		main_world.removeBlock();
-		break;
-	
-	case 'e':
+	if (key == GLFW_KEY_E && action == GLFW_PRESS)
 		main_world.addBlock();
-		break;
 
-	case 'x':
+	if (key == GLFW_KEY_X && action == GLFW_PRESS){
 		if (render_mode == GL_LINE) render_mode = GL_FILL;
 		else render_mode = GL_LINE;
-		break;
-	
-	default:
-		break;
 	}
 }
-
-
-void mouse(int button, int state, int x, int y)
-{
-	float xmouse = x;
-	float ymouse = y;
-
-	if (button == GLUT_RIGHT_BUTTON)
-    {
-		glutSetCursor(GLUT_CURSOR_CROSSHAIR);
-    }
-
-	rotateCamera(x, y);
-}
-
 
 /** Cambia la visuale in base alla posizione del mouse, senza che si faccia click. 
  * 
  */
-void my_passive_mouse(int xpos, int ypos) // camera rotation function
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	rotateCamera(xpos, ypos);
 }
@@ -145,16 +114,4 @@ void rotateCamera(int xpos, int ypos) {
 	front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
 	mainCamera.ViewSetup.direction = vec4(normalize(front), 0.0);
 	mainCamera.ViewSetup.target = mainCamera.ViewSetup.position + mainCamera.ViewSetup.direction;
-}
-
-
-
-void onMouseEvent(int button, int state, int x, int y)
-{
-//    if(state == GLUT_DOWN){
-//       if(button == GLUT_RIGHT_BUTTON)
-//          glutMotionFunc(onRightMouseEvent);
-//       else if(button == GLUT_LEFT_BUTTON)
-//          glutMotionFunc(onLeftMouseEvent);
-//    }
 }

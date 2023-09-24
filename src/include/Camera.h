@@ -28,7 +28,7 @@ public:
     void moveCameraBack();
     void initCamera();
     vec3 get_ray_from_camera();
-    
+
     //constructor
     Camera();
 };
