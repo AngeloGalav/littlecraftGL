@@ -98,7 +98,7 @@ void World::initNoise(){
 		for (int x = 0; x < WORLD_SIZE*CHUNK_SIZE; x++)
 			noiseData[x][y] = (int) 16 * noise.GetNoise((float)x, (float)y);
     
-    cout << "Loaded noise" << endl;
+    cout << "\nLoaded noise" << endl;
 }
 
 void World::renderWorld(int Model_Uniform){

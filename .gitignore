@@ -1,4 +1,4 @@
 .vscode/
 glCraft
-*.o
+build
 todo.md
