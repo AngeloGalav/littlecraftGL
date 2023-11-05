@@ -9,27 +9,26 @@
 #include "include/FastNoiseLite.h"
 #include "include/Chunk.h"
 #include "include/Texture.h"
+#include "include/GuiWrap.h"
 // Dear ImGui
-#include <dearimgui/imgui.h>
-#include <dearimgui/imgui_stdlib.h>
-#include <dearimgui/imgui_impl_glfw.h>
-#include <dearimgui/imgui_impl_opengl3.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
 
-int main_window_id;
-
-GLuint render_mode = GL_FILL;
-
 static unsigned int programId, MatrixProj, MatModel, MatView;
 static unsigned int texture_programId, MatrixProj_texture, MatModel_texture, MatView_texture;
-GLuint remove_mode_shader_location;
 
 World main_world;
 
 Camera mainCamera;
 Texture textureMaker;
+bool show_demo_window = true;
+
+clock_t current_ticks, delta_ticks;
+clock_t fps = 0;
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 mat4 Projection, Model, View;
@@ -55,7 +54,7 @@ void init(void){
 
 void drawScene(GLFWwindow* window)
 {
-
+	current_ticks = clock();
 	glClearColor(52.9/100.0, 80.8/100.0, 92.2/100.0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
 	// Passo al Vertex Shader il puntatore alla matrice Projection, che sar� associata alla variabile Uniform mat4 Projection
@@ -63,7 +62,7 @@ void drawScene(GLFWwindow* window)
 
 	glUseProgram(programId);
 	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
-	
+
 	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
 
 	// Costruisco la matrice di Vista che applicata ai vertici in coordinate del mondo li trasforma nel sistema di riferimento della camera.
@@ -71,11 +70,11 @@ void drawScene(GLFWwindow* window)
 
 	// Passo al Vertex Shader il puntatore alla matrice View, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatView
-	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));	
+	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 
 	main_world.updateGizmos();
 	main_world.drawGizmos(MatModel);
-	
+
 	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
 	glUseProgram(texture_programId);
 	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
@@ -86,6 +85,13 @@ void drawScene(GLFWwindow* window)
 	// renderizza il mondo
 	main_world.renderWorld(MatModel_texture);
 
+	// fps counter
+	delta_ticks = clock() - current_ticks;
+    if(delta_ticks > 0) fps = CLOCKS_PER_SEC / delta_ticks;
+
+	imGuiLoop(&show_demo_window, (int) fps);
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 	main_world.updateWorld();
@@ -132,10 +138,15 @@ int main(int argc, char *argv[])
 	MatView = glGetUniformLocation(programId, "View");
 	MatView_texture = glGetUniformLocation(texture_programId, "View");
 
+	imGuiInit(window);
+
 	while(!glfwWindowShouldClose(window))
 	{
 		drawScene(window);
 	}
 
-    glfwTerminate(); //deallocates all resources
+	imGuiShutdown();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
 }

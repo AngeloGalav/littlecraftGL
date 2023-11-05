@@ -3,7 +3,7 @@
 #include "include/Quad.h"
 #include <iostream>
 
-extern GLuint render_mode; 
+GLuint render_mode; 
 
 
 Quad::Quad(vec4 color) {

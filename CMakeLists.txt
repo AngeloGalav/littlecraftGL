@@ -18,6 +18,7 @@ add_executable(littlecraftGL ${SRC_FILES})
 target_include_directories(littlecraftGL
  PUBLIC
  ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+ ${CMAKE_CURRENT_SOURCE_DIR}/src/imgui
  ${OPENGL_INCLUDE_DIR})
 
 target_link_libraries(littlecraftGL
