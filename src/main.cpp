@@ -9,6 +9,11 @@
 #include "include/FastNoiseLite.h"
 #include "include/Chunk.h"
 #include "include/Texture.h"
+// Dear ImGui
+#include <dearimgui/imgui.h>
+#include <dearimgui/imgui_stdlib.h>
+#include <dearimgui/imgui_impl_glfw.h>
+#include <dearimgui/imgui_impl_opengl3.h>
 
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
@@ -114,21 +119,16 @@ int main(int argc, char *argv[])
 	init();
 
 	glEnable(GL_BLEND);
-	// glEnable(GL_ALPHA_TEST);
+
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Projection (in vertex shader).
-	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Projection al Vertex Shader
 	MatrixProj = glGetUniformLocation(programId, "Projection");
 	MatrixProj_texture = glGetUniformLocation(texture_programId, "Projection");
 
-	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 Model (in vertex shader)
-	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice Model al Vertex Shader
 	MatModel = glGetUniformLocation(programId, "Model");
 	MatModel_texture = glGetUniformLocation(texture_programId, "Model");
-	// Chiedo che mi venga restituito l'identificativo della variabile uniform mat4 View (in vertex shader)
-	// QUesto identificativo sar� poi utilizzato per il trasferimento della matrice View al Vertex Shader
+
 	MatView = glGetUniformLocation(programId, "View");
 	MatView_texture = glGetUniformLocation(texture_programId, "View");
 
