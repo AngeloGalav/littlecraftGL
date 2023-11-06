@@ -1,10 +1,7 @@
 # littlecraftGL
 
-This is the code for the second project for the Computer Graphics course at the University Of Bologna. The goal was to make an interactable 3D scene in OpenGL.
-I decided to make a clone of the popular game "Minecraft", in order to challenge my knowledge and capabilities.
-As of now, this project functions as a way to improve my C++ skills and knowledge, as well as OpenGL.
-
-Some of the features of the original game are missing due to time and complexity constraints.
+Voxel engine made in OpenGL and C++, using GLFW and GLAD.
+It has recently become my pet project.
 
 ## Screenshots
 
@@ -35,49 +32,23 @@ and that's pretty much it.
 
 This project uses the following libraries:
 
-- GLFW</li>
-- glad</li>
-- glm - the openGL math library</li>
+- GLFW
+- glad
+- glm - the openGL math library
 - [FastNoiseLite](https://github.com/Auburn/FastNoiseLite) - A single header lib to generate the Perlin noise map
 
 Both can be easily downloaded with `pacman` or `apt-get`.
 
 The project also uses two additional libraries: `json.hpp` and `gltext.h`, which are both included in the project.
 
-## New Milestones
-- [x] Change build system to CMake
-- [x] Change underlying GL library to `glfw`
-
-## Milestones
-
-You don't need to read any of this, I'm just using this to keep track of what I have to do.
-
-- [x] Set up compilation environment on Linux
-- [x] Refactor base code
-- [x] Fix awful z-buffer bug (which plagued me for months)
-- [x] Added Keyboard-controlled Camera
-- [x] Added Quad
-- [x] Added Cube
-- [x] Added Textures support
-- [x] Added Cube transformations
-- [x] Textured Cube
-- [x] Window Resize support
-- [ ] Block selection
-- [x] Plain-cube floor
-- [x] Noise for procedural generation
-- [x] Deleting and placing cubes
-- [x] Rendering optimizations
-- [x] Multiple chunk management
-- [ ] Water
-- [x] Fog
-- [ ] Cube-map
-- [ ] Water reflection
-- [ ] Trees?
-- [ ] Gold block, silver-block
-- [ ] Shading on gold and silver blocks
-
 ## Known Issues
-
  - It is missing some key features, that will be added sooner or later.
  - The code is very rough, and could use some refactoring. This is due to some GLUT quirks and the fact that some workarounds have been applied to solve some problems encountered during development. Also, I was extremely strict on time.
  - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the effect.
+
+## Origin
+Originally, this was essentially my second project for the Computer Graphics course at the University Of Bologna. The goal was to make an interactable 3D scene in OpenGL. At the time, I decided to make a clone of the popular game "Minecraft", in order to challenge my knowledge and capabilities.
+
+You can take a look at the original version of this project, made using GLUT, [in this fork](https://github.com/AngeloGalav/littlecraftGL/tree/glut-consegna).
+
+As of now, this project functions as a way to improve my C++ skills and knowledge, as well as a way to explore the fascinating world of Voxel engines.
