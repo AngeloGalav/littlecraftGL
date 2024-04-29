@@ -297,7 +297,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 
 				cout << "now size is: " << added_blocks.size() << endl;
 			} else {
-				// cout << "cant remove this" << endl;
+				cout << "cant remove this" << endl;
 			}
 		}
 	}

@@ -1,11 +1,12 @@
 #include "include/World.h"
+
 #include <iostream>
 
-#define chunk_index(x,y) (x + CHUNK_SIZE*y)
+#define chunk_index(x, y) (x + CHUNK_SIZE * y)
 
 extern Camera mainCamera;
 
-World::World(){
+World::World() {
     player_in_main_chunk = false;
 
     for (int i = 0; i < WORLD_SIZE; i++) {
@@ -16,17 +17,16 @@ World::World(){
 
     Gizmos.look_cube = new Cube(LOOKCUBE_COLOR);
 
-    block_to_add.atlas_offset[0] = 
-    block_to_add.atlas_offset[1] = 
-    block_to_add.atlas_offset[2] = vec2(4, 15);
+    block_to_add.atlas_offset[0] = block_to_add.atlas_offset[1] =
+        block_to_add.atlas_offset[2] = vec2(4, 15);
 }
 
 World::~World() {
-    for (int i = 0; i < DISPLAYED_CHUNKS; i++) 
+    for (int i = 0; i < DISPLAYED_CHUNKS; i++)
         delete currently_displayed_chunks[i];
 }
 
-void World::initWorld(){
+void World::initWorld() {
     initNoise();
 
     for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
@@ -39,7 +39,7 @@ void World::initWorld(){
     for (int i = 0; i < WORLD_SIZE; i++) {
         for (int j = 0; j < WORLD_SIZE; j++) {
             modified_chunks[i][j] = NULL;
-        }    
+        }
     }
 
     for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
@@ -51,109 +51,150 @@ void World::initWorld(){
 
     handleFacesBetweenChunks();
 
+    Gizmos.look_cube->setScaleFactor(vec3(2, 2, 2));
     Gizmos.look_cube->initCube();
     Gizmos.lc_chunk_position = ivec2(0, 0);
     Gizmos.lc_prev_position = Gizmos.look_cube->position;
 }
 
-
-
-void World::handleFacesBetweenChunks(){
+void World::handleFacesBetweenChunks() {
     int row_length = sqrt(DISPLAYED_CHUNKS);
     for (int i = 0; i < DISPLAYED_CHUNKS - 1; i++) {
         if ((i + 1) % row_length != 0 && (DISPLAYED_CHUNKS - row_length) > i) {
-            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + 1], true);
-            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + row_length], false);
-        } else if ((DISPLAYED_CHUNKS - row_length) > i && (i + 1) % row_length == 0) {
-            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + row_length], false);
-        } else if ((DISPLAYED_CHUNKS - row_length) <= i && (i + 1) % row_length != 0) {
-            currently_displayed_chunks[i]->checkNeighbouringChunk(currently_displayed_chunks[i + 1], true);
+            currently_displayed_chunks[i]->checkNeighbouringChunk(
+                currently_displayed_chunks[i + 1], true);
+            currently_displayed_chunks[i]->checkNeighbouringChunk(
+                currently_displayed_chunks[i + row_length], false);
+        } else if ((DISPLAYED_CHUNKS - row_length) > i &&
+                   (i + 1) % row_length == 0) {
+            currently_displayed_chunks[i]->checkNeighbouringChunk(
+                currently_displayed_chunks[i + row_length], false);
+        } else if ((DISPLAYED_CHUNKS - row_length) <= i &&
+                   (i + 1) % row_length != 0) {
+            currently_displayed_chunks[i]->checkNeighbouringChunk(
+                currently_displayed_chunks[i + 1], true);
         }
-
     }
 }
 
-void World::updateGizmos(){
+void World::updateGizmos() {
     // sets the position of the cube based on the direction of the camera
-   	vec3 lk_position = mainCamera.get_ray_from_camera();
-	Gizmos.look_cube->moveTo(vec3(mainCamera.ViewSetup.position.x/UNIT_SIZE, 
-	mainCamera.ViewSetup.position.y/UNIT_SIZE, mainCamera.ViewSetup.position.z/UNIT_SIZE) 
-	+ vec3(DISTANCE_FROM_CAMERA * lk_position.x, DISTANCE_FROM_CAMERA * lk_position.y, DISTANCE_FROM_CAMERA * lk_position.z));
+    vec3 lk_position = mainCamera.get_ray_from_camera();
+    Gizmos.look_cube->moveTo(
+        vec3(floor(mainCamera.ViewSetup.position.x / UNIT_SIZE),
+             floor(mainCamera.ViewSetup.position.y / UNIT_SIZE),
+             floor(mainCamera.ViewSetup.position.z / UNIT_SIZE)) +
+        vec3(floor(DISTANCE_FROM_CAMERA * lk_position.x),
+             floor(DISTANCE_FROM_CAMERA * lk_position.y),
+             floor(DISTANCE_FROM_CAMERA * lk_position.z)));
 }
 
-void World::drawGizmos(int MatModel){
+void World::drawGizmos(int MatModel) {
     glUniform1i(rm_mode_shader_location, 0);
-    if (Gizmos.can_draw_lc)
-		Gizmos.look_cube->drawMesh(MatModel);
+    if (Gizmos.can_draw_lc) Gizmos.look_cube->drawMesh(MatModel);
 }
 
-void World::initNoise(){
-	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-	noise.SetFrequency(0.1);
+void World::initNoise() {
+    noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+    noise.SetFrequency(0.1);
 
-	// Gather noise data
-	int index = 0;
+    // Gather noise data
+    int index = 0;
 
-	for (int y = 0; y < WORLD_SIZE*CHUNK_SIZE; y++)
-		for (int x = 0; x < WORLD_SIZE*CHUNK_SIZE; x++)
-			noiseData[x][y] = (int) 16 * noise.GetNoise((float)x, (float)y);
-    
+    for (int y = 0; y < WORLD_SIZE * CHUNK_SIZE; y++)
+        for (int x = 0; x < WORLD_SIZE * CHUNK_SIZE; x++)
+            noiseData[x][y] = (int)16 * noise.GetNoise((float)x, (float)y);
+
     cout << "\nLoaded noise" << endl;
 }
 
-void World::renderWorld(int Model_Uniform){
+void World::renderWorld(int Model_Uniform) {
     for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
         currently_displayed_chunks[i]->drawChunk(Model_Uniform);
     }
 }
 
-void World::updateWorld(){
+void World::updateWorld() {
     // mini feedback visivo quando si tolgono/piazzano cubi
-    
+
     // posizione del giocatore relativa alla mappa
-    vec2 player_position_to_map = vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
+    vec2 player_position_to_map =
+        vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
 
     // c'è stato un cambio di posizione del cubo
-    if (Gizmos.look_cube->position.x != Gizmos.lc_prev_position.x || Gizmos.look_cube->position.y != Gizmos.lc_prev_position.y 
-    || Gizmos.look_cube->position.z != Gizmos.lc_prev_position.z) {
-        int i_lc = !(currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE <= Gizmos.look_cube->position.x) * -1 +
-        !((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE >= Gizmos.look_cube->position.x);
+    if (Gizmos.look_cube->position.x != Gizmos.lc_prev_position.x ||
+        Gizmos.look_cube->position.y != Gizmos.lc_prev_position.y ||
+        Gizmos.look_cube->position.z != Gizmos.lc_prev_position.z) {
+        int i_lc =
+            !(currently_displayed_chunks[Center]->chunk_position.x *
+                  CHUNK_SIZE <=
+              Gizmos.look_cube->position.x) *
+                -1 +
+            !((currently_displayed_chunks[Center]->chunk_position.x + 1) *
+                  CHUNK_SIZE >=
+              Gizmos.look_cube->position.x);
 
-        int j_lc = !(currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE <= Gizmos.look_cube->position.z) * -1 +
-        !((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE >= Gizmos.look_cube->position.z);
+        int j_lc =
+            !(currently_displayed_chunks[Center]->chunk_position.y *
+                  CHUNK_SIZE <=
+              Gizmos.look_cube->position.z) *
+                -1 +
+            !((currently_displayed_chunks[Center]->chunk_position.y + 1) *
+                  CHUNK_SIZE >=
+              Gizmos.look_cube->position.z);
 
         // updates the chunk of the cube
-        Gizmos.lc_chunk = currently_displayed_chunks[(i_lc + 1) + (j_lc + 1) * 3];
+        Gizmos.lc_chunk =
+            currently_displayed_chunks[(i_lc + 1) + (j_lc + 1) * 3];
 
         Gizmos.lc_prev_position = Gizmos.look_cube->position;
     }
 
     // solves
-    player_in_main_chunk = 
-    (currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) 
-    && ((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x)
-    && (currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) 
-    && ((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
+    player_in_main_chunk =
+        (currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE *
+             UNIT_SIZE <=
+         player_position_to_map.x) &&
+        ((currently_displayed_chunks[Center]->chunk_position.x + 1) *
+             CHUNK_SIZE * UNIT_SIZE >=
+         player_position_to_map.x) &&
+        (currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE *
+             UNIT_SIZE <=
+         player_position_to_map.y) &&
+        ((currently_displayed_chunks[Center]->chunk_position.y + 1) *
+             CHUNK_SIZE * UNIT_SIZE >=
+         player_position_to_map.y);
 
     if (!player_in_main_chunk) {
         // si salva la direzione in cui il giocatore si è spostato dal chunk
-        int i = !(currently_displayed_chunks[Center]->chunk_position.x * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.x) * -1 +
-        !((currently_displayed_chunks[Center]->chunk_position.x + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.x);
-        int j = !(currently_displayed_chunks[Center]->chunk_position.y * CHUNK_SIZE * UNIT_SIZE <= player_position_to_map.y) * -1 +
-        !((currently_displayed_chunks[Center]->chunk_position.y + 1) * CHUNK_SIZE * UNIT_SIZE >= player_position_to_map.y);
+        int i = !(currently_displayed_chunks[Center]->chunk_position.x *
+                      CHUNK_SIZE * UNIT_SIZE <=
+                  player_position_to_map.x) *
+                    -1 +
+                !((currently_displayed_chunks[Center]->chunk_position.x + 1) *
+                      CHUNK_SIZE * UNIT_SIZE >=
+                  player_position_to_map.x);
+        int j = !(currently_displayed_chunks[Center]->chunk_position.y *
+                      CHUNK_SIZE * UNIT_SIZE <=
+                  player_position_to_map.y) *
+                    -1 +
+                !((currently_displayed_chunks[Center]->chunk_position.y + 1) *
+                      CHUNK_SIZE * UNIT_SIZE >=
+                  player_position_to_map.y);
 
         // moves chunk to match noise map
         for (int k = 0; k < DISPLAYED_CHUNKS; k++) {
-            // int x = currently_displayed_chunks[k]->chunk_position.x + WORLD_SIZE/2 + i;
-            // int y = currently_displayed_chunks[k]->chunk_position.y + WORLD_SIZE/2 + j; 
-            // ivec2 old_pos = currently_displayed_chunks[k]->chunk_position;
-            
+            // int x = currently_displayed_chunks[k]->chunk_position.x +
+            // WORLD_SIZE/2 + i; int y =
+            // currently_displayed_chunks[k]->chunk_position.y + WORLD_SIZE/2 +
+            // j; ivec2 old_pos = currently_displayed_chunks[k]->chunk_position;
 
             // if (modified_chunks[x][y] == NULL) {
             //     if (has_modified_chunk[k]) {
             //         currently_displayed_chunks[k] = new Chunk();
-            //     } 
-            //     currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i, j));
+            //     }
+            //     currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i,
+            //     j));
             // } else {
             //     cout << "segfault causato da modified_chunks" << endl;
             //     currently_displayed_chunks[k] = modified_chunks[x][y];
@@ -166,18 +207,18 @@ void World::updateWorld(){
         // update chunk
         for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
             // if (!currently_displayed_chunks[i]->modified)
-                currently_displayed_chunks[i]->updateChunk();
+            currently_displayed_chunks[i]->updateChunk();
         }
 
-        handleFacesBetweenChunks();        
+        handleFacesBetweenChunks();
     }
 }
 
-void World::addBlock(){
+void World::addBlock() {
     Gizmos.lc_chunk->addBlockToChunk(Gizmos.look_cube->position, block_to_add);
 }
 
-void World::removeBlock(){
+void World::removeBlock() {
     Gizmos.lc_chunk->removeBlockFromChunk(Gizmos.look_cube->position);
 
     // Modifies the chunk only if had actual modifications in it

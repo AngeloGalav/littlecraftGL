@@ -33,14 +33,15 @@ clock_t fps = 0;
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 mat4 Projection, Model, View;
 
-void init(void){
+void init(void)
+{
 	mainCamera = Camera();
 	mainCamera.initCamera();
 
-	char *vertexShader = (char *) "shaders/plain.vert.glsl";
-	char *fragmentShader = (char *) "shaders/plain.frag.glsl";
-	char *fragmentShader_texture = (char *) "shaders/texture.frag.glsl";
-	char *vertexShader_texture = (char *) "shaders/texture.vert.glsl";
+	char *vertexShader = (char *)"shaders/plain.vert.glsl";
+	char *fragmentShader = (char *)"shaders/plain.frag.glsl";
+	char *fragmentShader_texture = (char *)"shaders/texture.frag.glsl";
+	char *vertexShader_texture = (char *)"shaders/texture.vert.glsl";
 
 	programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
 	texture_programId = ShaderMaker::createProgram(vertexShader_texture, fragmentShader_texture);
@@ -52,46 +53,42 @@ void init(void){
 	main_world.initWorld();
 }
 
-void drawScene(GLFWwindow* window)
+void drawScene(GLFWwindow *window)
 {
 	current_ticks = clock();
-	glClearColor(52.9/100.0, 80.8/100.0, 92.2/100.0, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
+	glClearColor(52.9 / 100.0, 80.8 / 100.0, 92.2 / 100.0, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // GL_DEPTH_BUFFER_BIT risolve il bug dello z-indexing su linux
 	// Passo al Vertex Shader il puntatore alla matrice Projection, che sar� associata alla variabile Uniform mat4 Projection
 	// all'interno del Vertex shader. Uso l'identificatio MatrixProj
 
-	glUseProgram(programId);
-	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
-
-	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
-
-	// Costruisco la matrice di Vista che applicata ai vertici in coordinate del mondo li trasforma nel sistema di riferimento della camera.
-	View = lookAt(vec3(mainCamera.ViewSetup.position), vec3(mainCamera.ViewSetup.target), vec3(mainCamera.ViewSetup.upVector));
-
-	// Passo al Vertex Shader il puntatore alla matrice View, che sar� associata alla variabile Uniform mat4 Projection
-	// all'interno del Vertex shader. Uso l'identificatio MatView
-	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
-
-	main_world.updateGizmos();
-	main_world.drawGizmos(MatModel);
-
-	// lo stesso che abbiamo fatto prima lo dobbiamo ripetere per il nostro nuovo shader
+	// draw world
 	glUseProgram(texture_programId);
 	glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
 	glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(View));
-
 	textureMaker.useTexture();
-
-	// renderizza il mondo
 	main_world.renderWorld(MatModel_texture);
 
-	// fps counter
-	delta_ticks = clock() - current_ticks;
-    if(delta_ticks > 0) fps = CLOCKS_PER_SEC / delta_ticks;
+	// enable blending to draw transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	imGuiLoop(&show_demo_window, (int) fps);
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	// draw gizmo cube
+	glUseProgram(programId);
+	Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY), mainCamera.PerspectiveSetup.aspect, mainCamera.PerspectiveSetup.near_plane, mainCamera.PerspectiveSetup.far_plane);
+	glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
+	View = lookAt(vec3(mainCamera.ViewSetup.position), vec3(mainCamera.ViewSetup.target), vec3(mainCamera.ViewSetup.upVector));
+	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
+	main_world.updateGizmos();
+	main_world.drawGizmos(MatModel);
+
+	// fps counter and gui
+	delta_ticks = clock() - current_ticks;
+	if (delta_ticks > 0)
+		fps = CLOCKS_PER_SEC / delta_ticks;
+
+	// imGuiLoop(&show_demo_window, (int) fps);
+	// ImGui::Render();
+	// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 	main_world.updateWorld();
@@ -101,26 +98,28 @@ int main(int argc, char *argv[])
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); //this tells us that we are using version 3.3 of glfw
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "littleCraft", NULL, NULL);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // this tells us that we are using version 3.3 of glfw
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "littleCraft", NULL, NULL);
 	if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
 
 	glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  //calls the function whenever the framebuffer size (window size) is changed
+	// removes vsync
+	glfwSwapInterval(0);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // calls the function whenever the framebuffer size (window size) is changed
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, cursor_position_callback);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
+	}
 
 	init();
 
@@ -140,13 +139,13 @@ int main(int argc, char *argv[])
 
 	imGuiInit(window);
 
-	while(!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window))
 	{
 		drawScene(window);
 	}
 
 	imGuiShutdown();
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+	glfwDestroyWindow(window);
+	glfwTerminate();
 }
