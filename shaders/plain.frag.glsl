@@ -6,9 +6,10 @@ uniform int remove_mode;
 
 void main()
 {
-	if (remove_mode == 0) {
-		FragColor = ourColor;
-	} else {
-		FragColor = vec4(1.0, 0.0, 0.0, 0.5);
-	}
+	// if (remove_mode == 0) {
+	// 	FragColor = ourColor;
+	// } else {
+	// 	FragColor = vec4(1.0, 0.0, 0.0, 0.5);
+	// }
+	FragColor = ourColor;
 }
