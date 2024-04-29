@@ -49,7 +49,8 @@ The project also uses two additional libraries: `json.hpp` and `gltext.h`, which
 ## Benchmarking
 I suggest using mangohud to analyze the game's framerate:
 ```
-
+export MANGOHUD_DLSYM=1
+mangohud ./littlecraftGL
 ```
 
 ## Origin of the project
