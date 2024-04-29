@@ -27,7 +27,6 @@ cmake .. && make
 
 and that's pretty much it.
 
-
 ## Dependencies
 
 This project uses the following libraries:
@@ -42,11 +41,19 @@ Both can be easily downloaded with `pacman` or `apt-get`.
 The project also uses two additional libraries: `json.hpp` and `gltext.h`, which are both included in the project.
 
 ## Known Issues
- - It is missing some key features, that will be added sooner or later.
- - The code is very rough, and could use some refactoring. This is due to some GLUT quirks and the fact that some workarounds have been applied to solve some problems encountered during development. Also, I was extremely strict on time.
- - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the effect.
 
-## Origin
+- It is missing some key features, that will be added sooner or later.
+- The code is very rough, and could use some refactoring. This is due to some GLUT quirks and the fact that some workarounds have been applied to solve some problems encountered during development. Also, I was extremely strict on time.
+- Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the effect.
+
+## Benchmarking
+I suggest using mangohud to analyze the game's framerate:
+```
+
+```
+
+## Origin of the project
+
 Originally, this was essentially my second project for the Computer Graphics course at the University Of Bologna. The goal was to make an interactable 3D scene in OpenGL. At the time, I decided to make a clone of the popular game "Minecraft", in order to challenge my knowledge and capabilities.
 
 You can take a look at the original version of this project, made using GLUT, [in this fork](https://github.com/AngeloGalav/littlecraftGL/tree/glut-consegna).

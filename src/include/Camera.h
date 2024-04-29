@@ -8,10 +8,17 @@ class Camera {
 public:
     struct {
         vec4 position;
-        vec4 target;
+        vec4 target; // target is always position + direction
         vec4 upVector;
         vec4 direction;
     } ViewSetup; // camera setup
+
+    struct {
+        vec3 cameraPos;
+        vec3 cameraUp;
+        vec3 cameraRigh;
+        vec3 cameraForward;
+    } ExtendedViewSetup;
 
 
     vec3 cameraRotation;

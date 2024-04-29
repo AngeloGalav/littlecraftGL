@@ -25,7 +25,7 @@ void imGuiLoop(bool active_window, int fps){
 
     std::string fps_string = std::to_string(fps);
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(20,20));
+    ImGui::SetNextWindowSize(ImVec2(40,20));
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar |
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     ImGui::Begin("window", &active_window, flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)

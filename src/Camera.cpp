@@ -9,20 +9,20 @@ Camera::Camera(){
 
 void Camera::moveCameraLeft()
 {
-	glm::vec3 direzione_scorrimento = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));   //direzione perpendicolare al piano individuato da direction e upvector
-	ViewSetup.position -= glm::vec4(direzione_scorrimento, 0.0) * playerSpeed;
+	// direzione perpendicolare al piano individuato da direction e upvector
+	glm::vec3 direction = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));
+	ViewSetup.position -= glm::vec4(direction, 0.0) * playerSpeed;
 	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
 }
 
 void Camera::moveCameraRight()
 {
-	glm::vec3 direzione_scorrimento = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));
-	ViewSetup.position += glm::vec4(direzione_scorrimento, 0.0) * playerSpeed;
+	glm::vec3 direction = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));
+	ViewSetup.position += glm::vec4(direction, 0.0) * playerSpeed;
 	ViewSetup.target = ViewSetup.position +ViewSetup.direction;
 }
 
 void Camera::moveCameraForward() {
-	
 	ViewSetup.position += ViewSetup.direction * playerSpeed;
 	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
 }
@@ -54,9 +54,34 @@ void Camera::initCamera(void)
 	rotateCamera(0,0);
 }
 
-/** General purpose function/wrapper to easily get the camera direction 
- * 
+/** General purpose function/wrapper to easily get the camera direction
+ *
  */
 vec3 Camera::get_ray_from_camera(){
 	return vec3(ViewSetup.direction.x, ViewSetup.direction.y, ViewSetup.direction.z);
 }
+
+
+// void function () {
+// 	std::array<glm::vec3, 8> _cameraFrustumCornerVertices{
+// 		{
+// 			{ -1.0f, -1.0f, 1.0f }, { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f }, { -1.0f, 1.0f, 1.0f },
+// 			{ -1.0f, -1.0f, -1.0f }, { 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, -1.0f }, { -1.0f, 1.0f, -1.0f },
+// 		}
+// 	};
+
+// 	const auto proj = glm::inverse(initialCameraProjection * initialCameraView);
+
+// 	const auto proj = glm::inverse(initialCameraProjection * initialCameraView);
+// 	std::array<glm::vec3, 8> _frustumVertices;
+
+// 	std::transform(
+// 		_cameraFrustumCornerVertices.begin(),
+// 		_cameraFrustumCornerVertices.end(),
+// 		_frustumVertices.begin(),
+// 		[&](glm::vec3 p) {
+// 			auto v = proj * glm::vec4(p, 1.0f);
+// 			return glm::vec3(v) / v.w;
+// 		}
+// 	);
+// }
