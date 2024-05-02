@@ -51,7 +51,7 @@ void World::initWorld() {
 
     handleFacesBetweenChunks();
 
-    Gizmos.look_cube->setScaleFactor(vec3(2, 2, 2));
+    Gizmos.look_cube->setScale(vec3(1.2, 1.2, 1.2));
     Gizmos.look_cube->initCube(false); // gizmo cube has no texture
     Gizmos.lc_chunk_position = ivec2(0, 0);
     Gizmos.lc_prev_position = Gizmos.look_cube->position;

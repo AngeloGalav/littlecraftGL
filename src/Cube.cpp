@@ -3,23 +3,23 @@
 #include <iostream>
 
 Cube::Cube() {
-    faces[0].quadColor = (vec4(0.0, 1.0f, 0.0, 1.0f));
-    faces[0].initQuadWithSingleColor();
+    faces[FRONT].quadColor = (vec4(0.0, 1.0f, 0.0, 1.0f));
+    faces[FRONT].initQuadWithSingleColor();
 
-    faces[1].quadColor = (vec4(1.0f, 0.0f, 0.0, 1.0f));
-    faces[1].initQuadWithSingleColor();
+    faces[RIGHT].quadColor = (vec4(1.0f, 0.0f, 0.0, 1.0f));
+    faces[RIGHT].initQuadWithSingleColor();
 
-    faces[2].quadColor = (vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    faces[2].initQuadWithSingleColor();
+    faces[BACK].quadColor = (vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    faces[BACK].initQuadWithSingleColor();
 
-    faces[3].quadColor = (vec4(0.0, 1.0f, 1.0f, 1.0f));
-    faces[3].initQuadWithSingleColor();
+    faces[LEFT].quadColor = (vec4(0.0, 1.0f, 1.0f, 1.0f));
+    faces[LEFT].initQuadWithSingleColor();
 
-    faces[4].quadColor = (vec4(1.0f, 1.0f, 0.0, 1.0f));
-    faces[4].initQuadWithSingleColor();
+    faces[UP].quadColor = (vec4(1.0f, 1.0f, 0.0, 1.0f));
+    faces[UP].initQuadWithSingleColor();
 
-    faces[5].quadColor = (vec4(1.0f, 0.0f, 1.0f, 1.0f));
-    faces[5].initQuadWithSingleColor();
+    faces[DOWN].quadColor = (vec4(1.0f, 0.0f, 1.0f, 1.0f));
+    faces[DOWN].initQuadWithSingleColor();
 
     isAir = false;
     for (int i = 0; i < 6; i++) must_be_drawn[i] = true;
@@ -48,62 +48,76 @@ void Cube::initTextures() {
         faces[i].texture_coords_offset = atlas_offset[2];
     }
 
-    faces[4].texture_coords_offset = atlas_offset[0];
-    faces[5].texture_coords_offset = atlas_offset[1];
+    faces[UP].texture_coords_offset = atlas_offset[0];
+    faces[DOWN].texture_coords_offset = atlas_offset[1];
 
     for (int i = 0; i < 6; i++) faces[i].initQuad(true);
 }
 
-void Cube::setScaleFactor(vec3 scalef) { scaleF = scalef; }
+void Cube::setScale(vec3 scalef) { scaleF = scalef; }
 
+// REMEMBER: TRANSFORMATION ARE APPLIED IN THE REVERSE ORDER!
 void Cube::initCube(bool hasTextures) {
     if (hasTextures) initTextures();
 
-    faces[0].initVAO(hasTextures);
-    faces[0].Model = mat4(1.0);
-    faces[0].Model =
-        scale(faces[0].Model,
+    faces[FRONT].initVAO(hasTextures);
+    faces[FRONT].Model = mat4(1.0);
+    faces[FRONT].Model =
+        scale(faces[FRONT].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[0].Model = translate(faces[0].Model, vec3(0.0f, 0.0f, 1.0f));
+    faces[FRONT].Model = translate(faces[FRONT].Model, vec3(0.0f, 0.0f, 1.0f));
 
-    faces[1].initVAO(hasTextures);
-    faces[1].Model = mat4(1.0);
-    faces[1].Model =
-        scale(faces[1].Model,
+    faces[RIGHT].initVAO(hasTextures);
+    faces[RIGHT].Model = mat4(1.0);
+    faces[RIGHT].Model =
+        scale(faces[RIGHT].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[1].Model = translate(faces[1].Model, vec3(1.0f, 0.0, 0.0f));
-    faces[1].Model = rotate(faces[1].Model, radians(-90.0f), vec3(0, 1, 0));
+    faces[RIGHT].Model = translate(faces[RIGHT].Model, vec3(1.0f, 0.0, 0.0f));
+    faces[RIGHT].Model =
+        rotate(faces[RIGHT].Model, radians(-90.0f), vec3(0, 1, 0));
+    faces[RIGHT].Model =
+        rotate(faces[RIGHT].Model, radians(-180.0f), vec3(0, 1, 0));
 
-    faces[2].initVAO(hasTextures);
-    faces[2].Model = mat4(1.0);
-    faces[2].Model =
-        scale(faces[2].Model,
+    faces[BACK].initVAO(hasTextures);
+    faces[BACK].Model = mat4(1.0);
+    faces[BACK].Model =
+        scale(faces[BACK].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[2].Model = translate(faces[2].Model, vec3(0.0, 0.0, -1.0f));
+    faces[BACK].Model = translate(faces[BACK].Model, vec3(0.0, 0.0, -1.0f));
+    faces[BACK].Model =
+        rotate(faces[BACK].Model, radians(-180.0f), vec3(0, 1, 0));
 
-    faces[3].initVAO(hasTextures);
-    faces[3].Model = mat4(1.0);
-    faces[3].Model =
-        scale(faces[3].Model,
+    faces[LEFT].initVAO(hasTextures);
+    faces[LEFT].Model = mat4(1.0);
+    faces[LEFT].Model =
+        scale(faces[LEFT].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[3].Model = translate(faces[3].Model, vec3(-1.0f, 0.0, 0.0f));
-    faces[3].Model = rotate(faces[3].Model, radians(90.0f), vec3(0, 1, 0));
+    faces[LEFT].Model = translate(faces[LEFT].Model, vec3(-1.0f, 0.0, 0.0f));
+    faces[LEFT].Model =
+        rotate(faces[LEFT].Model, radians(90.0f), vec3(0, 1, 0));
+    faces[LEFT].Model =
+        rotate(faces[LEFT].Model, radians(-180.0f), vec3(0, 1, 0));
 
-    faces[4].initVAO(hasTextures);
-    faces[4].Model = mat4(1.0);
-    faces[4].Model =
-        scale(faces[4].Model,
+    faces[UP].initVAO(hasTextures);
+    faces[UP].Model = mat4(1.0);
+    faces[UP].Model =
+        scale(faces[UP].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[4].Model = translate(faces[4].Model, vec3(0, 1.0f, 0.0f));
-    faces[4].Model = rotate(faces[4].Model, radians(90.0f), vec3(1, 0, 0));
+    faces[UP].Model = translate(faces[UP].Model, vec3(0, 1.0f, 0.0f));
+    faces[UP].Model = rotate(faces[UP].Model, radians(90.0f), vec3(1, 0, 0));
+    faces[UP].Model =
+        rotate(faces[UP].Model, radians(-180.0f), vec3(0, 1, 0));
 
-    faces[5].initVAO(hasTextures);
-    faces[5].Model = mat4(1.0);
-    faces[5].Model =
-        scale(faces[5].Model,
+    faces[DOWN].initVAO(hasTextures);
+    faces[DOWN].Model = mat4(1.0);
+    faces[DOWN].Model =
+        scale(faces[DOWN].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[5].Model = translate(faces[5].Model, vec3(0.0, -1.0f, 0.0f));
-    faces[5].Model = rotate(faces[5].Model, radians(-90.0f), vec3(1, 0, 0));
+    faces[DOWN].Model = translate(faces[DOWN].Model, vec3(0.0, -1.0f, 0.0f));
+    faces[DOWN].Model =
+        rotate(faces[DOWN].Model, radians(-90.0f), vec3(1, 0, 0));
+    faces[DOWN].Model =
+        rotate(faces[DOWN].Model, radians(-180.0f), vec3(0, 1, 0));
 
     ModelCube = mat4(1.0);
     moveTo(position);  // gets initialized to the start position

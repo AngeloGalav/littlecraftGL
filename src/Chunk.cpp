@@ -120,32 +120,32 @@ void Chunk::drawChunk(int Model_Uniform) {
 void Chunk::checkNeighbours(int i, int j, int k) {
     // la faccia di sopra viene disegnata solo se è il primo strato visibile (di
     // base)
-    chunk_blocks[i][j][k].must_be_drawn[Up] = (k == 0);
-    chunk_blocks[i][j][k].must_be_drawn[Down] = false;
+    chunk_blocks[i][j][k].must_be_drawn[UP] = (k == 0);
+    chunk_blocks[i][j][k].must_be_drawn[DOWN] = false;
 
     // Controlla i vicini. Se sono più alti dei vicini, allora devo disegnare
     // quella faccia (questo siccome semplicemente non abbiamo caverne, sennò la
     // cosa diventava più complessa)
     if (i > 0) {
-        chunk_blocks[i][j][k].must_be_drawn[Left] =
+        chunk_blocks[i][j][k].must_be_drawn[LEFT] =
             (chunk_blocks[i][j][k].position.y >
              chunk_blocks[i - 1][j][0].position.y);
     }
 
     if (i < CHUNK_SIZE - 1) {
-        chunk_blocks[i][j][k].must_be_drawn[Right] =
+        chunk_blocks[i][j][k].must_be_drawn[RIGHT] =
             (chunk_blocks[i][j][k].position.y >
              chunk_blocks[i + 1][j][0].position.y);
     }
 
     if (j > 0) {
-        chunk_blocks[i][j][k].must_be_drawn[Back] =
+        chunk_blocks[i][j][k].must_be_drawn[BACK] =
             (chunk_blocks[i][j][k].position.y >
              chunk_blocks[i][j - 1][0].position.y);
     }
 
     if (j < CHUNK_SIZE - 1) {
-        chunk_blocks[i][j][k].must_be_drawn[Front] =
+        chunk_blocks[i][j][k].must_be_drawn[FRONT] =
             (chunk_blocks[i][j][k].position.y >
              chunk_blocks[i][j + 1][0].position.y);
     }
@@ -186,11 +186,11 @@ void Chunk::checkNeighbouringChunk(Chunk* neighbour, bool checkHorizontal) {
     if (checkHorizontal) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_HEIGHT; z++) {
-                chunk_blocks[CHUNK_SIZE - 1][y][z].must_be_drawn[Right] =
+                chunk_blocks[CHUNK_SIZE - 1][y][z].must_be_drawn[RIGHT] =
                     (chunk_blocks[CHUNK_SIZE - 1][y][z].position.y >
                      neighbour->chunk_blocks[0][y][0].position.y);
 
-                neighbour->chunk_blocks[0][y][z].must_be_drawn[Left] =
+                neighbour->chunk_blocks[0][y][z].must_be_drawn[LEFT] =
                     (neighbour->chunk_blocks[0][y][z].position.y >
                      chunk_blocks[CHUNK_SIZE - 1][y][0].position.y);
             }
@@ -198,11 +198,11 @@ void Chunk::checkNeighbouringChunk(Chunk* neighbour, bool checkHorizontal) {
     } else {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int z = 0; z < CHUNK_HEIGHT; z++) {
-                chunk_blocks[x][CHUNK_SIZE - 1][z].must_be_drawn[Front] =
+                chunk_blocks[x][CHUNK_SIZE - 1][z].must_be_drawn[FRONT] =
                     (chunk_blocks[x][CHUNK_SIZE - 1][z].position.y >
                      neighbour->chunk_blocks[x][0][0].position.y);
 
-                neighbour->chunk_blocks[x][0][z].must_be_drawn[Back] =
+                neighbour->chunk_blocks[x][0][z].must_be_drawn[BACK] =
                     (neighbour->chunk_blocks[x][0][z].position.y >
                      chunk_blocks[x][CHUNK_SIZE - 1][0].position.y);
             }
@@ -260,11 +260,11 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
         dirty = true;
 
         if (k > 0) {
-            chunk_blocks[i][j][k - 1].must_be_drawn[Down] = true;
+            chunk_blocks[i][j][k - 1].must_be_drawn[DOWN] = true;
         }
 
         if (k < CHUNK_HEIGHT - 1) {
-            chunk_blocks[i][j][k + 1].must_be_drawn[Up] = true;
+            chunk_blocks[i][j][k + 1].must_be_drawn[UP] = true;
         }
 
         if (i > 0) {
@@ -273,7 +273,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
                     [i - 1 + (chunk_position.x + WORLD_SIZE / 2) * CHUNK_SIZE]
                     [j + (chunk_position.y + WORLD_SIZE / 2) * CHUNK_SIZE];
 
-            chunk_blocks[i - 1][j][k].must_be_drawn[Right] = true;
+            chunk_blocks[i - 1][j][k].must_be_drawn[RIGHT] = true;
         }
 
         if (i < CHUNK_SIZE - 1) {
@@ -282,7 +282,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
                     [i + 1 + (chunk_position.x + WORLD_SIZE / 2) * CHUNK_SIZE]
                     [j + (chunk_position.y + WORLD_SIZE / 2) * CHUNK_SIZE];
 
-            chunk_blocks[i + 1][j][k].must_be_drawn[Left] = true;
+            chunk_blocks[i + 1][j][k].must_be_drawn[LEFT] = true;
         }
 
         if (j > 0) {
@@ -291,7 +291,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
                     [i + (chunk_position.x + WORLD_SIZE / 2) * CHUNK_SIZE]
                     [j - 1 + (chunk_position.y + WORLD_SIZE / 2) * CHUNK_SIZE];
 
-            chunk_blocks[i][j - 1][k].must_be_drawn[Front] = true;
+            chunk_blocks[i][j - 1][k].must_be_drawn[FRONT] = true;
         }
 
         if (j < CHUNK_SIZE - 1) {
@@ -300,7 +300,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
                     [i + (chunk_position.x + WORLD_SIZE / 2) * CHUNK_SIZE]
                     [j + 1 + (chunk_position.y + WORLD_SIZE / 2) * CHUNK_SIZE];
 
-            chunk_blocks[i][j + 1][k].must_be_drawn[Back] = true;
+            chunk_blocks[i][j + 1][k].must_be_drawn[BACK] = true;
         }
     } else if (added_blocks.size() >
                0) {  // caso in cui sto eliminando un cubo aggiunto deall'utente

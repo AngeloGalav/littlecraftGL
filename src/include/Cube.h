@@ -25,14 +25,14 @@ class Cube {
     void initTextures();
     void moveTo(ivec3 position);
     void translateCube(ivec3 translate_vector);
-    void setScaleFactor(vec3 scaleFactor);
+    void setScale(vec3 scaleFactor);
     void drawMesh(int Model_Uniform);
 
     Cube(vec4 color);
     Cube();
 };
 
-enum Direction { Front = 0, Right, Back, Left, Up, Down };
+enum Direction { FRONT = 0, RIGHT, BACK, LEFT, UP, DOWN };
 
 /** Le facce sono organizzate in questo modo:
  *  0 - front, 1 - right, 2 - back,
