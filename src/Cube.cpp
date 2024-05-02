@@ -51,22 +51,22 @@ void Cube::initTextures() {
     faces[4].texture_coords_offset = atlas_offset[0];
     faces[5].texture_coords_offset = atlas_offset[1];
 
-    for (int i = 0; i < 6; i++) faces[i].initQuadTexture();
+    for (int i = 0; i < 6; i++) faces[i].initQuad(true);
 }
 
-void Cube::setScaleFactor(vec3 scalef) {}
+void Cube::setScaleFactor(vec3 scalef) { scaleF = scalef; }
 
-void Cube::initTexturedCube() {
-    initTextures();
+void Cube::initCube(bool hasTextures) {
+    if (hasTextures) initTextures();
 
-    faces[0].initVAO_textures();
+    faces[0].initVAO(hasTextures);
     faces[0].Model = mat4(1.0);
     faces[0].Model =
         scale(faces[0].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
     faces[0].Model = translate(faces[0].Model, vec3(0.0f, 0.0f, 1.0f));
 
-    faces[1].initVAO_textures();
+    faces[1].initVAO(hasTextures);
     faces[1].Model = mat4(1.0);
     faces[1].Model =
         scale(faces[1].Model,
@@ -74,14 +74,14 @@ void Cube::initTexturedCube() {
     faces[1].Model = translate(faces[1].Model, vec3(1.0f, 0.0, 0.0f));
     faces[1].Model = rotate(faces[1].Model, radians(-90.0f), vec3(0, 1, 0));
 
-    faces[2].initVAO_textures();
+    faces[2].initVAO(hasTextures);
     faces[2].Model = mat4(1.0);
     faces[2].Model =
         scale(faces[2].Model,
               vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
     faces[2].Model = translate(faces[2].Model, vec3(0.0, 0.0, -1.0f));
 
-    faces[3].initVAO_textures();
+    faces[3].initVAO(hasTextures);
     faces[3].Model = mat4(1.0);
     faces[3].Model =
         scale(faces[3].Model,
@@ -89,7 +89,7 @@ void Cube::initTexturedCube() {
     faces[3].Model = translate(faces[3].Model, vec3(-1.0f, 0.0, 0.0f));
     faces[3].Model = rotate(faces[3].Model, radians(90.0f), vec3(0, 1, 0));
 
-    faces[4].initVAO_textures();
+    faces[4].initVAO(hasTextures);
     faces[4].Model = mat4(1.0);
     faces[4].Model =
         scale(faces[4].Model,
@@ -97,58 +97,7 @@ void Cube::initTexturedCube() {
     faces[4].Model = translate(faces[4].Model, vec3(0, 1.0f, 0.0f));
     faces[4].Model = rotate(faces[4].Model, radians(90.0f), vec3(1, 0, 0));
 
-    faces[5].initVAO_textures();
-    faces[5].Model = mat4(1.0);
-    faces[5].Model =
-        scale(faces[5].Model,
-              vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[5].Model = translate(faces[5].Model, vec3(0.0, -1.0f, 0.0f));
-    faces[5].Model = rotate(faces[5].Model, radians(-90.0f), vec3(1, 0, 0));
-
-    ModelCube = mat4(1.0);
-    moveTo(position);
-}
-
-void Cube::initCube() {
-    faces[0].initVAO();
-    faces[0].Model = mat4(1.0);
-    faces[0].Model =
-        scale(faces[0].Model,
-              vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[0].Model = translate(faces[0].Model, vec3(0.0f, 0.0f, 1.0f));
-
-    faces[1].initVAO();
-    faces[1].Model = mat4(1.0);
-    faces[1].Model =
-        scale(faces[1].Model,
-              vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[1].Model = translate(faces[1].Model, vec3(1.0f, 0.0, 0.0f));
-    faces[1].Model = rotate(faces[1].Model, radians(-90.0f), vec3(0, 1, 0));
-
-    faces[2].initVAO();
-    faces[2].Model = mat4(1.0);
-    faces[2].Model =
-        scale(faces[2].Model,
-              vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[2].Model = translate(faces[2].Model, vec3(0.0, 0.0, -1.0f));
-
-    faces[3].initVAO();
-    faces[3].Model = mat4(1.0);
-    faces[3].Model =
-        scale(faces[3].Model,
-              vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[3].Model = translate(faces[3].Model, vec3(-1.0f, 0.0, 0.0f));
-    faces[3].Model = rotate(faces[3].Model, radians(90.0f), vec3(0, 1, 0));
-
-    faces[4].initVAO();
-    faces[4].Model = mat4(1.0);
-    faces[4].Model =
-        scale(faces[4].Model,
-              vec3(2.0f * scaleF.x, 2.0f * scaleF.y, 2.0f * scaleF.z));
-    faces[4].Model = translate(faces[4].Model, vec3(0, 1.0f, 0.0f));
-    faces[4].Model = rotate(faces[4].Model, radians(90.0f), vec3(1, 0, 0));
-
-    faces[5].initVAO();
+    faces[5].initVAO(hasTextures);
     faces[5].Model = mat4(1.0);
     faces[5].Model =
         scale(faces[5].Model,

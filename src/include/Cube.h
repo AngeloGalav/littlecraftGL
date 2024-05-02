@@ -21,8 +21,7 @@ class Cube {
 
     vec3 scaleF;
 
-    void initCube();
-    void initTexturedCube();
+    void initCube(bool hasTextures);
     void initTextures();
     void moveTo(ivec3 position);
     void translateCube(ivec3 translate_vector);
