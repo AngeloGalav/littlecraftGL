@@ -231,7 +231,7 @@ void Chunk::addBlockToChunk(ivec3 position, Cube block_added) {
                        [j + (chunk_position.y + WORLD_SIZE / 2) * CHUNK_SIZE];
 
     if (0 <= k && k < CHUNK_HEIGHT && !chunk_blocks[i][j][k].isAir) {
-        cout << "cant add blocks to terrain..." << endl;
+        std::cout << "cant add blocks to terrain..." << std::endl;
         delete new_block;
     } else {
         new_block->moveTo(position);
@@ -254,7 +254,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
 
     // caso in cui sto eliminando un cubo del terreno
     if (0 <= k && k < CHUNK_HEIGHT && !chunk_blocks[i][j][k].isAir) {
-        cout << "There was an attempt to remove this cube" << endl;
+        std::cout << "There was an attempt to remove this cube" << std::endl;
 
         chunk_blocks[i][j][k].isAir = true;
         dirty = true;
@@ -307,21 +307,24 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
         for (int x = 0; x < added_blocks.size(); x++) {
             if (added_blocks[x]->position == position) {
                 dirty = true;
-                cout << "trying to remove block at position: "
-                     << added_blocks[x]->position.x << ", "
-                     << added_blocks[x]->position.y << ", "
-                     << added_blocks[x]->position.z << endl;
+                std::cout << "trying to remove block at position: "
+                          << added_blocks[x]->position.x << ", "
+                          << added_blocks[x]->position.y << ", "
+                          << added_blocks[x]->position.z << std::endl;
 
-                cout << "wanted removal position is: " << position.x << ", "
-                     << position.y << ", " << position.z << endl;
+                std::cout << "wanted removal position is: " << position.x
+                          << ", " << position.y << ", " << position.z
+                          << std::endl;
+
                 added_blocks.erase(added_blocks.begin() + x);
 
-                cout << "@ chunk pos: " << chunk_position.x << ", "
-                     << chunk_position.y << endl;
+                std::cout << "@ chunk pos: " << chunk_position.x << ", "
+                          << chunk_position.y << std::endl;
 
-                cout << "now size is: " << added_blocks.size() << endl;
+                std::cout << "now size is: " << added_blocks.size()
+                          << std::endl;
             } else {
-                cout << "cant remove this" << endl;
+                std::cout << "cant remove this" << std::endl;
             }
         }
     }

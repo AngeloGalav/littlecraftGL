@@ -17,7 +17,7 @@ public:
     Cube chunk_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_HEIGHT];
     ivec2 chunk_position; // position of the chunk between 0 and WORLD_SIZE-1
     bool state_changed;
-    vector<Cube*> added_blocks;
+    std::vector<Cube*> added_blocks;
 
     World *world_instance;
 

@@ -5,10 +5,10 @@
 
 class Mesh {
    public:
-    vector<vec3> vertices;
-    vector<vec4> colors;
-    vector<GLuint> indices;
-    vector<vec2> texture_coordinates;
+    std::vector<vec3> vertices;
+    std::vector<vec4> colors;
+    std::vector<GLuint> indices;
+    std::vector<vec2> texture_coordinates;
 
     mat4 Model;
     GLuint VAO;

@@ -105,7 +105,7 @@ void World::initNoise() {
         for (int x = 0; x < WORLD_SIZE * CHUNK_SIZE; x++)
             noiseData[x][y] = (int)16 * noise.GetNoise((float)x, (float)y);
 
-    cout << "\nLoaded noise" << endl;
+    std::cout << "\nLoaded noise" << std::endl;
 }
 
 void World::renderWorld(int Model_Uniform) {
@@ -196,7 +196,7 @@ void World::updateWorld() {
             //     currently_displayed_chunks[k]->translateChunkInWorld(ivec2(i,
             //     j));
             // } else {
-            //     cout << "segfault causato da modified_chunks" << endl;
+            //     std::cout << "segfault causato da modified_chunks" << std::endl;
             //     currently_displayed_chunks[k] = modified_chunks[x][y];
             //     has_modified_chunk[k] = true;
             // }
@@ -223,7 +223,7 @@ void World::removeBlock() {
 
     // Modifies the chunk only if had actual modifications in it
     // if (Gizmos.lc_chunk->dirty) {
-    //     // cout << "segfault causato da dirty" << endl;
+    //     // std::cout << "segfault causato da dirty" << std::endl;
     //     modified_chunks
     //     [Gizmos.lc_chunk->chunk_position.x + WORLD_SIZE/2]
     //     [Gizmos.lc_chunk->chunk_position.y + WORLD_SIZE/2] = Gizmos.lc_chunk;

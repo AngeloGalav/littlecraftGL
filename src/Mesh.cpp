@@ -46,7 +46,7 @@ void Mesh::initVAO(bool hasTextures) {
 }
 
 void Mesh::drawMesh(int ModelUniform) {
-    cout << "debug_ERROR: wrong call" << endl;
+    std::cout << "debug_ERROR: wrong call" << std::endl;
 }
 
 void Mesh::flushData() {

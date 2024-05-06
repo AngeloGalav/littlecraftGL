@@ -1,7 +1,5 @@
 #include "include/Culling.h"
 
-using namespace glm;
-
 struct Plane
 {
     // unit vector

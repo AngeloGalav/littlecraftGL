@@ -24,7 +24,7 @@ void Texture::initTexture(unsigned int *texture_programId){
 	}
 	else
 	{
-		cout << "Failed to load texture" << endl;
+		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
 

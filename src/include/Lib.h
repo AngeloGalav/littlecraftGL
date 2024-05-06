@@ -13,6 +13,5 @@
 #include <iostream>
 
 using namespace glm;
-using namespace std;
 
 #endif
