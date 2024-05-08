@@ -2,6 +2,7 @@
 
 Voxel engine made in OpenGL and C++, using GLFW and GLAD.
 It has recently become my pet project.
+Runs on both Linux and Windows (64-bit only).
 
 ## Screenshots
 
@@ -17,6 +18,7 @@ It has recently become my pet project.
 
 ## How to compile
 
+### Linux
 To compile and run in Linux, simply use the following commands:
 
 ```
@@ -27,6 +29,22 @@ cmake .. && make
 
 and that's pretty much it.
 
+### Windows
+On Windows, using CMake, the compilation setup is a bit more tedius. Provided that you're using `MinGW` as your compiler, follow these steps:
+
+1. Install the libraries `glfw3` and `glm` manually, by downloading them from their official page (remember to download the proper archive for your CPU architecture!). 
+2. Unzip them and place them into your User folder (i.e. `C:\[your_user_name]\`). Rename to `glfw` and `glm` respectively.
+
+3. After that, go to your extracted `glfw` folder and copy the contents of `lib-mingw-w64` inside your `MinGW/lib` folder (you'll to find the path of the `MinGW` compiler yourself). 
+
+4. Open a Windows terminal and use the commands:
+```
+mkdir build
+cd build
+cmake .. -G "MinGW Makefiles"; make -j8
+```
+
+
 ## Dependencies
 
 This project uses the following libraries:
@@ -36,7 +54,7 @@ This project uses the following libraries:
 - glm - the openGL math library
 - [FastNoiseLite](https://github.com/Auburn/FastNoiseLite) - A single header lib to generate the Perlin noise map
 
-Both can be easily downloaded with `pacman` or `apt-get`.
+Both GLFW and glm can be easily downloaded with `pacman` or `apt-get` on Linux. On Windows, you'll have to install them manually (see 'How to compile').
 
 The project also uses two additional libraries: `json.hpp` and `gltext.h`, which are both included in the project.
 
@@ -47,7 +65,7 @@ The project also uses two additional libraries: `json.hpp` and `gltext.h`, which
 - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the effect.
 
 ## Benchmarking
-I suggest using mangohud to analyze the game's framerate:
+On Linux, I suggest using MangoHud to analyze the game's framerate:
 ```
 export MANGOHUD_DLSYM=1
 mangohud ./littlecraftGL

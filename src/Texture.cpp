@@ -1,7 +1,12 @@
 #include "include/Texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+
+#ifdef __linux__ 
+	#include <stb/stb_image.h>
+#elif _WIN32
+	#include <stb_image.h>
+#endif
 
 Texture::Texture() {}
 

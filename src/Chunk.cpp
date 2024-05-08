@@ -15,11 +15,12 @@ void Chunk::initChunk() {
     to_move = false;
     modified = false;
     map_out_of_bounds = false;
-
+    int x = 0;
     for (int i = 0; i < CHUNK_SIZE; i++) {
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int k = 0; k < CHUNK_HEIGHT; k++) {
                 // setting cube texture offsets
+                x++;
                 if (k == 0) {
                     chunk_blocks[i][j][k].atlas_offset[0] = vec2(0, 15);
                     chunk_blocks[i][j][k].atlas_offset[1] = vec2(2, 15);
@@ -33,10 +34,13 @@ void Chunk::initChunk() {
                         chunk_blocks[i][j][k].atlas_offset[1] =
                             chunk_blocks[i][j][k].atlas_offset[2] = vec2(1, 15);
                 }
+                    printf("cube number is %i\n", x);
 
                 chunk_blocks[i][j][k].initCube(
                     true);  // le textures sono già state inizializ. dal
                             // costruttore
+                                printf("assss\n");
+
                 for (int d = 0; d < 6; d++)
                     chunk_blocks[i][j][k].must_be_drawn[d] = false;
 
