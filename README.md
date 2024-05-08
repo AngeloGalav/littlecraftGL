@@ -19,6 +19,7 @@ Runs on both Linux and Windows (64-bit only).
 ## How to compile
 
 ### Linux
+
 To compile and run in Linux, simply use the following commands:
 
 ```
@@ -30,20 +31,21 @@ cmake .. && make
 and that's pretty much it.
 
 ### Windows
+
 On Windows, using CMake, the compilation setup is a bit more tedius. Provided that you're using `MinGW` as your compiler, follow these steps:
 
-1. Install the libraries `glfw3` and `glm` manually, by downloading them from their official page (remember to download the proper archive for your CPU architecture!). 
+1. Install the libraries `glfw3` and `glm` manually, by downloading them from their official page (remember to download the proper archive for your CPU architecture!).
 2. Unzip them and place them into your User folder (i.e. `C:\[your_user_name]\`). Rename to `glfw` and `glm` respectively.
 
-3. After that, go to your extracted `glfw` folder and copy the contents of `lib-mingw-w64` inside your `MinGW/lib` folder (you'll to find the path of the `MinGW` compiler yourself). 
+3. After that, go to your extracted `glfw` folder and copy the contents of `lib-mingw-w64` inside your `MinGW/lib` folder (you'll need to find the path of the `MinGW` compiler yourself).
 
 4. Open a Windows terminal and use the commands:
+
 ```
 mkdir build
 cd build
 cmake .. -G "MinGW Makefiles"; make -j8
 ```
-
 
 ## Dependencies
 
@@ -65,7 +67,9 @@ The project also uses two additional libraries: `json.hpp` and `gltext.h`, which
 - Blocks removal is not persistent, so if you delete a cube and roam around the map, you won't be able to see the effect.
 
 ## Benchmarking
+
 On Linux, I suggest using MangoHud to analyze the game's framerate:
+
 ```
 export MANGOHUD_DLSYM=1
 mangohud ./littlecraftGL
