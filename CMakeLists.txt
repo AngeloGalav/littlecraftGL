@@ -16,32 +16,31 @@ find_package(OpenGL REQUIRED)
 add_executable(littlecraftGL ${SRC_FILES})
 
 if(WIN32)
- # set stuff for windows
- target_include_directories(littlecraftGL
-  PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/imgui
-  ${USERPROFILE}/glfw/include
-  ${USERPROFILE}/glm
-  ${USERPROFILE}/stb)
+    # set stuff for windows
+    target_include_directories(littlecraftGL
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/imgui
+        ${USERPROFILE}/glfw/include
+        ${USERPROFILE}/glm
+        ${USERPROFILE}/stb)
 
- target_link_libraries(littlecraftGL
- PUBLIC
- opengl32
- glfw3
- pthread)
+    target_link_libraries(littlecraftGL
+        PUBLIC
+        opengl32
+        glfw3
+        pthread)
 
-else() 
+else()
+    target_include_directories(littlecraftGL
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/imgui
+        ${OPENGL_INCLUDE_DIR})
 
- target_include_directories(littlecraftGL
-  PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/imgui
-  ${OPENGL_INCLUDE_DIR})
-
- target_link_libraries(littlecraftGL
-    PUBLIC
-    GL
-    glfw
-    pthread)
+    target_link_libraries(littlecraftGL
+        PUBLIC
+        GL
+        glfw
+        pthread)
 endif()
