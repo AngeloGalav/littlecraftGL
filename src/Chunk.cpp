@@ -5,7 +5,7 @@
 Chunk::Chunk() { chunk_position = ivec2(0, 0); }
 
 Chunk::~Chunk() {
-    for (int i = 0; i < added_blocks.size(); i++) {
+    for (int i = 0; i < (int)added_blocks.size(); i++) {
         delete added_blocks[i];
     }
 }
@@ -34,12 +34,11 @@ void Chunk::initChunk() {
                         chunk_blocks[i][j][k].atlas_offset[1] =
                             chunk_blocks[i][j][k].atlas_offset[2] = vec2(1, 15);
                 }
-                    printf("cube number is %i\n", x);
+                printf("cube number is %i\n", x);
 
                 chunk_blocks[i][j][k].initCube(
                     true);  // le textures sono già state inizializ. dal
                             // costruttore
-                                printf("assss\n");
 
                 for (int d = 0; d < 6; d++)
                     chunk_blocks[i][j][k].must_be_drawn[d] = false;
@@ -113,7 +112,7 @@ void Chunk::drawChunk(int Model_Uniform) {
         }
     }
 
-    for (int i = 0; i < added_blocks.size(); i++) {
+    for (int i = 0; i < (int)added_blocks.size(); i++) {
         added_blocks[i]->drawMesh(Model_Uniform);
     }
 }
@@ -308,7 +307,7 @@ void Chunk::removeBlockFromChunk(ivec3 position) {
         }
     } else if (added_blocks.size() >
                0) {  // caso in cui sto eliminando un cubo aggiunto deall'utente
-        for (int x = 0; x < added_blocks.size(); x++) {
+        for (int x = 0; x < (int)added_blocks.size(); x++) {
             if (added_blocks[x]->position == position) {
                 dirty = true;
                 std::cout << "trying to remove block at position: "
