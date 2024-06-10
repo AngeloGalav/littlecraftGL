@@ -102,7 +102,7 @@ void drawScene(GLFWwindow *window) {
     main_world.updateWorld();
 }
 
-int main(int argc, char *argv[]) {
+int main() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,

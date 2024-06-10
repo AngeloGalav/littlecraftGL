@@ -98,9 +98,6 @@ void World::initNoise() {
     noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
     noise.SetFrequency(0.1);
 
-    // Gather noise data
-    int index = 0;
-
     for (int y = 0; y < WORLD_SIZE * CHUNK_SIZE; y++)
         for (int x = 0; x < WORLD_SIZE * CHUNK_SIZE; x++)
             noiseData[x][y] = (int)16 * noise.GetNoise((float)x, (float)y);

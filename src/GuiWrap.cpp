@@ -34,8 +34,8 @@ void imGuiLoop(bool active_window, int fps){
 }
 
 void imGuiFpsCounter(){
-    float samples[100];
-    ImGui::PlotLines("Samples", samples, 100);
+    // float samples[100];
+    // ImGui::PlotLines("Samples", samples, 100);
 }
 
 void imGuiShutdown(){
