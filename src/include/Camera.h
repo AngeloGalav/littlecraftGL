@@ -3,6 +3,7 @@
 #include "Lib.h"
 
 extern int width, height;
+using namespace glm;
 
 class Camera {
 public:

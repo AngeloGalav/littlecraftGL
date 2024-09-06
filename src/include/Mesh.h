@@ -3,6 +3,8 @@
 #include "Lib.h"
 #include "definitions.h"
 
+using namespace glm;
+
 class Mesh {
    public:
     std::vector<vec3> vertices;

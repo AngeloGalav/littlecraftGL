@@ -18,6 +18,4 @@
 #include <string>
 #include <iostream>
 
-using namespace glm;
-
 #endif
