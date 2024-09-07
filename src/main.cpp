@@ -96,6 +96,7 @@ void drawScene(GLFWwindow *window) {
     test_chunk.draw(MatModel);
 
 
+    test_cube3.draw(MatModel);
     // enable blending to draw transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
