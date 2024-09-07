@@ -2,6 +2,7 @@
 #define LIB_H
 
 #include <map>
+#include <cstddef>
 // #include <GL/glew.h>
 #include "glad.h"
 #include <GLFW/glfw3.h>

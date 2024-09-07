@@ -3,9 +3,9 @@
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
-#define WIDTH_2  200;
-#define HEIGHT_2  200;
-#define PI   3.14159265358979323846
+#define WIDTH_2 200;
+#define HEIGHT_2 200;
+#define PI 3.14159265358979323846
 #define UNIT_SIZE 4
 #define CHUNK_SIZE 16
 #define CHUNK_HEIGHT 32
@@ -17,5 +17,6 @@
 #define LOOKCUBE_COLOR vec4(0, 1.0f, 0, 0.5f)
 #define WORLD_HEIGHT_OFFSET -2
 #define DEBUG_MODE false
+#define SKY_COLOR 52.9 / 100.0, 80.8 / 100.0, 92.2 / 100.0, 0
 
 #endif

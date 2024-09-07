@@ -34,7 +34,7 @@ void Chunk::initChunk() {
                         chunk_blocks[i][j][k].atlas_offset[1] =
                             chunk_blocks[i][j][k].atlas_offset[2] = vec2(1, 15);
                 }
-                printf("cube number is %i\n", x);
+                // printf("cube number is %i\n", x);
 
                 chunk_blocks[i][j][k].initCube(
                     true);  // le textures sono già state inizializ. dal
