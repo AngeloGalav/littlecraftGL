@@ -8,13 +8,16 @@ GLuint render_mode;
 
 Quad::Quad(vec4 color) {
     this->quadColor = color;
-    initQuadWithSingleColor();
+    // initQuadWithSingleColor();
     hasTexture = false;
+    Model = mat4(1.0);
+
 }
 
 Quad::Quad() {
     texture_coords_offset = vec2(1, 15);
     hasTexture = false;
+    Model = mat4(1.0);
 }
 
 void Quad::initQuad(bool hasTextures) {

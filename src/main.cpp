@@ -16,6 +16,10 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+// new code
+#include "include/Cube2.h"
+
+
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
 
@@ -35,6 +39,11 @@ clock_t fps = 0;
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 mat4 Projection, Model, View;
 
+//  DEBUG STUFF
+Cube test_cube;
+NewCube test_cube2;
+NewCube test_cube3(glm::vec3(15, -5, 0));
+
 void init(void) {
     mainCamera = Camera();
     mainCamera.initCamera();
@@ -53,11 +62,21 @@ void init(void) {
     textureMaker.initTexture(&texture_programId);
 
     main_world.initWorld();
+
+    test_cube.initCube(false);
+    test_cube.translateCube(ivec3(10, -4, 0));
+
+
+    // new cube
+    test_cube2.init();
+    test_cube2.setup();
+    test_cube3.init();
+    test_cube3.setup();
 }
 
 void drawScene(GLFWwindow *window) {
     current_ticks = clock();
-    glClearColor(52.9 / 100.0, 80.8 / 100.0, 92.2 / 100.0, 0);
+    glClearColor(SKY_COLOR);
     glClear(GL_COLOR_BUFFER_BIT |
             GL_DEPTH_BUFFER_BIT);  // GL_DEPTH_BUFFER_BIT risolve il bug dello
                                    // z-indexing su linux
@@ -69,8 +88,10 @@ void drawScene(GLFWwindow *window) {
     glUseProgram(texture_programId);
     glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
     glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(View));
-    textureMaker.useTexture();
-    main_world.renderWorld(MatModel_texture);
+    // textureMaker.useTexture();
+    // main_world.renderWorld(MatModel_texture);
+    test_cube3.draw(MatModel);
+
 
     // enable blending to draw transparency
     glEnable(GL_BLEND);
@@ -89,6 +110,9 @@ void drawScene(GLFWwindow *window) {
     glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
     main_world.updateGizmos();
     main_world.drawGizmos(MatModel);
+    test_cube.drawMesh(MatModel);
+
+    test_cube2.draw(MatModel);
 
     // fps counter and gui
     delta_ticks = clock() - current_ticks;
@@ -99,7 +123,7 @@ void drawScene(GLFWwindow *window) {
     // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);
     glfwPollEvents();
-    main_world.updateWorld();
+    // main_world.updateWorld();
 }
 
 int main() {

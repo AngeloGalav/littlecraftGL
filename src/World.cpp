@@ -27,29 +27,29 @@ World::~World() {
 }
 
 void World::initWorld() {
-    initNoise();
+    // initNoise();
 
-    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
-        currently_displayed_chunks[i] = new Chunk();
-        currently_displayed_chunks[i]->world_instance = this;
-        currently_displayed_chunks[i]->chunk_position = curr_chunks_index[i];
-        currently_displayed_chunks[i]->initChunk();
-    }
+    // for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+    //     currently_displayed_chunks[i] = new Chunk();
+    //     currently_displayed_chunks[i]->world_instance = this;
+    //     currently_displayed_chunks[i]->chunk_position = curr_chunks_index[i];
+    //     currently_displayed_chunks[i]->initChunk();
+    // }
 
-    for (int i = 0; i < WORLD_SIZE; i++) {
-        for (int j = 0; j < WORLD_SIZE; j++) {
-            modified_chunks[i][j] = NULL;
-        }
-    }
+    // for (int i = 0; i < WORLD_SIZE; i++) {
+    //     for (int j = 0; j < WORLD_SIZE; j++) {
+    //         modified_chunks[i][j] = NULL;
+    //     }
+    // }
 
-    for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
-        has_modified_chunk[i] = false;
-    }
+    // for (int i = 0; i < DISPLAYED_CHUNKS; i++) {
+    //     has_modified_chunk[i] = false;
+    // }
 
     Gizmos.can_draw_lc = true;
     Gizmos.remove_mode = false;
 
-    handleFacesBetweenChunks();
+    // handleFacesBetweenChunks();
 
     Gizmos.look_cube->setScale(vec3(1.2, 1.2, 1.2));
     Gizmos.look_cube->initCube(false); // gizmo cube has no texture
