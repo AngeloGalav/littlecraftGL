@@ -11,8 +11,8 @@ Runs on both Linux and Windows (64-bit only).
 
 ## How to play
 
-- Use `W,A,S,D` to fly inside the world. Use `I,J,K,L` to rotate the camera.
-- You can also use your mouse to rotate the camera for precise movements, although it's a bit wonky since GLUT doesn't provide an easy way to properly handle mouse movement (es. mouse capture).
+- Use `W,A,S,D` to fly inside the world.
+- Use your mouse to rotate the camera, and your scrollwheel to zoom.
 - You can press `x` for a wireframe view of the currently generated world.
 - Press `q` to remove blocks, and `e` to place a wooden plank.
 

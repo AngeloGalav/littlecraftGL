@@ -4,12 +4,8 @@
 #include "Camera.h"
 #include "Lib.h"
 
-// rotates camera using the keyboard
-void rotateCameraKeyboard(int x, int y);
-// rotates camera using mouse
-void rotateCamera(int xpos, int ypos);
-
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow *window, double xposIn, double yposIn);
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 #endif

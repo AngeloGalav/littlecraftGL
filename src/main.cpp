@@ -25,20 +25,18 @@ static unsigned int texture_programId, MatrixProj_texture, MatModel_texture,
 
 World main_world;
 
-Camera mainCamera;
 Texture textureMaker;
-bool show_demo_window = true;
 
-clock_t current_ticks, delta_ticks;
-clock_t fps = 0;
+// camera
+Camera mainCamera(vec3(0.0f, 0.0f, 3.0f));
 
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
-mat4 Projection, Model, View;
+// timing
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+mat4 Model;
 
 void init(void) {
-    mainCamera = Camera();
-    mainCamera.initCamera();
-
     char *vertexShader = (char *)"shaders/plain.vert.glsl";
     char *fragmentShader = (char *)"shaders/plain.frag.glsl";
     char *fragmentShader_texture = (char *)"shaders/texture.frag.glsl";
@@ -56,19 +54,17 @@ void init(void) {
 }
 
 void drawScene(GLFWwindow *window) {
-    current_ticks = clock();
-    glClearColor(52.9 / 100.0, 80.8 / 100.0, 92.2 / 100.0, 0);
+    glClearColor(SKY_COLOR);
     glClear(GL_COLOR_BUFFER_BIT |
             GL_DEPTH_BUFFER_BIT);  // GL_DEPTH_BUFFER_BIT risolve il bug dello
                                    // z-indexing su linux
-    // Passo al Vertex Shader il puntatore alla matrice Projection, che sar�
-    // associata alla variabile Uniform mat4 Projection all'interno del Vertex
-    // shader. Uso l'identificatio MatrixProj
+
+    mainCamera.updateCameraMatrices();
 
     // draw world
     glUseProgram(texture_programId);
-    glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(Projection));
-    glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(View));
+    glUniformMatrix4fv(MatrixProj_texture, 1, GL_FALSE, value_ptr(mainCamera.ProjectionMatrix));
+    glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(mainCamera.ViewMatrix));
     textureMaker.useTexture();
     main_world.renderWorld(MatModel_texture);
 
@@ -78,27 +74,14 @@ void drawScene(GLFWwindow *window) {
 
     // draw gizmo cube
     glUseProgram(programId);
-    Projection = perspective(radians(mainCamera.PerspectiveSetup.fovY),
-                             mainCamera.PerspectiveSetup.aspect,
-                             mainCamera.PerspectiveSetup.near_plane,
-                             mainCamera.PerspectiveSetup.far_plane);
-    glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(Projection));
-    View = lookAt(vec3(mainCamera.ViewSetup.position),
-                  vec3(mainCamera.ViewSetup.target),
-                  vec3(mainCamera.ViewSetup.upVector));
-    glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
+
+    glUniformMatrix4fv(MatrixProj, 1, GL_FALSE, value_ptr(mainCamera.ProjectionMatrix));
+    glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(mainCamera.ViewMatrix));
+
+    // draw and update gizmo cube (the cube to set other cubes)
     main_world.updateGizmos();
     main_world.drawGizmos(MatModel);
 
-    // fps counter and gui
-    delta_ticks = clock() - current_ticks;
-    if (delta_ticks > 0) fps = CLOCKS_PER_SEC / delta_ticks;
-
-    // imGuiLoop(&show_demo_window, (int) fps);
-    // ImGui::Render();
-    // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    glfwSwapBuffers(window);
-    glfwPollEvents();
     main_world.updateWorld();
 }
 
@@ -116,6 +99,8 @@ int main() {
         return -1;
     }
 
+    // set as non resizable for now
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, false);
     glfwMakeContextCurrent(window);
     // removes vsync
     glfwSwapInterval(0);
@@ -123,8 +108,11 @@ int main() {
         window, framebuffer_size_callback);  // calls the function whenever the
                                              // framebuffer size (window size)
                                              // is changed
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_position_callback);
+
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    // mouse capture
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -154,7 +142,15 @@ int main() {
     imGuiInit(window);
 
     while (!glfwWindowShouldClose(window)) {
+        //  frame dependent movement
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        // process input first
+        processInput(window);
         drawScene(window);
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 
     imGuiShutdown();
@@ -162,3 +158,4 @@ int main() {
     glfwDestroyWindow(window);
     glfwTerminate();
 }
+

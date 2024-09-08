@@ -1,87 +1,95 @@
 #include "include/Camera.h"
-#include "include/InputHandler.h"
-#include <iostream>
 
-Camera::Camera(){
-    playerSpeed = 0.5;
-    initCamera();
+// constructor with vectors
+Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+    : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+      MovementSpeed(SPEED),
+      MouseSensitivity(SENSITIVITY),
+      Zoom(ZOOM) {
+    Position = position;
+    WorldUp = up;
+    Yaw = yaw;
+    Pitch = pitch;
+    updateCameraVectors();
+}
+// constructor with scalar values
+Camera::Camera(float posX, float posY, float posZ, float upX, float upY,
+               float upZ, float yaw, float pitch)
+    : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+      MovementSpeed(SPEED),
+      MouseSensitivity(SENSITIVITY),
+      Zoom(ZOOM) {
+    Position = glm::vec3(posX, posY, posZ);
+    WorldUp = glm::vec3(upX, upY, upZ);
+    Yaw = yaw;
+    Pitch = pitch;
+    updateCameraVectors();
 }
 
-void Camera::moveCameraLeft()
-{
-	// direzione perpendicolare al piano individuato da direction e upvector
-	glm::vec3 direction = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));
-	ViewSetup.position -= glm::vec4(direction, 0.0) * playerSpeed;
-	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
+// returns the view matrix calculated using Euler Angles and the LookAt Matrix
+glm::mat4 Camera::GetViewMatrix() {
+    // std::cout << "cout position" << Position.x <<", " << Position.y << ","
+    // <<Position.z << std::endl;
+    return glm::lookAt(Position, Position + Front, Up);
 }
 
-void Camera::moveCameraRight()
-{
-	glm::vec3 direction = glm::cross(vec3(ViewSetup.direction), glm::vec3(ViewSetup.upVector));
-	ViewSetup.position += glm::vec4(direction, 0.0) * playerSpeed;
-	ViewSetup.target = ViewSetup.position +ViewSetup.direction;
+// processes input received from any keyboard-like input system. Accepts input
+// parameter in the form of camera defined ENUM (to abstract it from windowing
+// systems)
+void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
+    float velocity = MovementSpeed * deltaTime;
+    if (direction == CAM_FORWARD) Position += Front * velocity;
+    if (direction == CAM_BACKWARD) Position -= Front * velocity;
+    if (direction == CAM_LEFT) Position -= Right * velocity;
+    if (direction == CAM_RIGHT) Position += Right * velocity;
 }
 
-void Camera::moveCameraForward() {
-	ViewSetup.position += ViewSetup.direction * playerSpeed;
-	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
+// processes input received from a mouse input system. Expects the offset value
+// in both the x and y direction.
+void Camera::ProcessMouseMovement(float xoffset, float yoffset,
+                                  GLboolean constrainPitch) {
+    xoffset *= MouseSensitivity;
+    yoffset *= MouseSensitivity;
+
+    Yaw += xoffset;
+    Pitch += yoffset;
+
+    // make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (constrainPitch) {
+        if (Pitch > 89.0f) Pitch = 89.0f;
+        if (Pitch < -89.0f) Pitch = -89.0f;
+    }
+
+    // update Front, Right and Up Vectors using the updated Euler angles
+    updateCameraVectors();
 }
 
-void Camera::moveCameraBack() {
-	ViewSetup.position -= ViewSetup.direction * playerSpeed;
-	ViewSetup.target = ViewSetup.position + ViewSetup.direction;
+// processes input received from a mouse scroll-wheel event. Only requires input
+// on the vertical wheel-axis
+void Camera::ProcessMouseScroll(float yoffset) {
+    Zoom -= (float)yoffset;
+    if (Zoom < 1.0f) Zoom = 1.0f;
+    if (Zoom > 60.0f) Zoom = 60.0f;
 }
 
-void Camera::initCamera(void)
-{
-	//Imposto la telecamera
-	// ViewSetup = {};
-	ViewSetup.position = glm::vec4(20, 0.0, 20, 0.0);
-	ViewSetup.target = glm::vec4(0.0, 0.0, 0.0, 0.0);
-	ViewSetup.direction = ViewSetup.target - ViewSetup.position;
-	ViewSetup.upVector = glm::vec4(0.0, 1.0, 0.0, 0.0);
-
-
-	//Imposto la proiezione prospettica
-	// PerspectiveSetup = {};
-	PerspectiveSetup.aspect = (GLfloat)width / (GLfloat)height;
-	PerspectiveSetup.fovY = 45.0f;
-	PerspectiveSetup.far_plane = 2000.0f;
-	PerspectiveSetup.near_plane = 0.1f;
-
-	// workaround per risolvere il bug del comportamento della camera
-	// all'avvio dell'app
-	rotateCamera(0,0);
+void Camera::updateCameraVectors() {
+    // calculate the new Front vector
+    glm::vec3 front;
+    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    front.y = sin(glm::radians(Pitch));
+    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    Front = glm::normalize(front);
+    // also re-calculate the Right and Up vector
+    Right = glm::normalize(glm::cross(
+        Front, WorldUp));  // normalize the vectors, because their length gets
+                           // closer to 0 the more you look up or down which
+                           // results in slower movement.
+    Up = glm::normalize(glm::cross(Right, Front));
 }
 
-/** General purpose function/wrapper to easily get the camera direction
- *
- */
-vec3 Camera::get_ray_from_camera(){
-	return vec3(ViewSetup.direction.x, ViewSetup.direction.y, ViewSetup.direction.z);
+void Camera::updateCameraMatrices(){
+    ProjectionMatrix = glm::perspective(glm::radians(Zoom),
+                                  (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,
+                                  0.1f, 100.0f);
+    ViewMatrix = glm::lookAt(Position, Position + Front, Up);
 }
-
-
-// void function () {
-// 	std::array<glm::vec3, 8> _cameraFrustumCornerVertices{
-// 		{
-// 			{ -1.0f, -1.0f, 1.0f }, { 1.0f, -1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f }, { -1.0f, 1.0f, 1.0f },
-// 			{ -1.0f, -1.0f, -1.0f }, { 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, -1.0f }, { -1.0f, 1.0f, -1.0f },
-// 		}
-// 	};
-
-// 	const auto proj = glm::inverse(initialCameraProjection * initialCameraView);
-
-// 	const auto proj = glm::inverse(initialCameraProjection * initialCameraView);
-// 	std::array<glm::vec3, 8> _frustumVertices;
-
-// 	std::transform(
-// 		_cameraFrustumCornerVertices.begin(),
-// 		_cameraFrustumCornerVertices.end(),
-// 		_frustumVertices.begin(),
-// 		[&](glm::vec3 p) {
-// 			auto v = proj * glm::vec4(p, 1.0f);
-// 			return glm::vec3(v) / v.w;
-// 		}
-// 	);
-// }

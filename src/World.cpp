@@ -79,11 +79,11 @@ void World::handleFacesBetweenChunks() {
 
 void World::updateGizmos() {
     // sets the position of the cube based on the direction of the camera
-    vec3 lk_position = mainCamera.get_ray_from_camera();
+    vec3 lk_position = mainCamera.Front;
     Gizmos.look_cube->moveTo(
-        vec3(floor(mainCamera.ViewSetup.position.x / UNIT_SIZE),
-             floor(mainCamera.ViewSetup.position.y / UNIT_SIZE),
-             floor(mainCamera.ViewSetup.position.z / UNIT_SIZE)) +
+        vec3(floor(mainCamera.Position.x / UNIT_SIZE),
+             floor(mainCamera.Position.y / UNIT_SIZE),
+             floor(mainCamera.Position.z / UNIT_SIZE)) +
         vec3(floor(DISTANCE_FROM_CAMERA * lk_position.x),
              floor(DISTANCE_FROM_CAMERA * lk_position.y),
              floor(DISTANCE_FROM_CAMERA * lk_position.z)));
@@ -116,7 +116,7 @@ void World::updateWorld() {
 
     // posizione del giocatore relativa alla mappa
     vec2 player_position_to_map =
-        vec2(mainCamera.ViewSetup.position.x, mainCamera.ViewSetup.position.z);
+        vec2(mainCamera.Position.x, mainCamera.Position.z);
 
     // c'è stato un cambio di posizione del cubo
     if (Gizmos.look_cube->position.x != Gizmos.lc_prev_position.x ||
