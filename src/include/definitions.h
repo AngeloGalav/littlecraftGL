@@ -8,6 +8,7 @@
 #define PI 3.14159265358979323846
 #define UNIT_SIZE 4
 #define CHUNK_SIZE 16
+#define CUBE_TYPES 5
 #define CHUNK_HEIGHT 32
 #define TEX_ATLAS_UNIT_SIZE 16
 // number of chunk in the world

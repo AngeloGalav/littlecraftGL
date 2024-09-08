@@ -18,7 +18,7 @@
 
 // new code
 #include "include/Cube2.h"
-
+#include "include/Chunk2.h"
 
 int width = SCREEN_WIDTH;
 int height = SCREEN_HEIGHT;
@@ -43,6 +43,7 @@ mat4 Projection, Model, View;
 Cube test_cube;
 NewCube test_cube2;
 NewCube test_cube3(glm::vec3(15, -5, 0));
+NewChunk test_chunk;
 
 void init(void) {
     mainCamera = Camera();
@@ -72,6 +73,10 @@ void init(void) {
     test_cube2.setup();
     test_cube3.init();
     test_cube3.setup();
+
+    // NEW CHUNK
+    test_chunk.build();
+    test_chunk.setup();
 }
 
 void drawScene(GLFWwindow *window) {
@@ -91,6 +96,7 @@ void drawScene(GLFWwindow *window) {
     // textureMaker.useTexture();
     // main_world.renderWorld(MatModel_texture);
     test_cube3.draw(MatModel);
+    test_chunk.draw(MatModel);
 
 
     // enable blending to draw transparency

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <cstddef>
+#include <algorithm>  // for std::transform
 // #include <GL/glew.h>
 #include "glad.h"
 #include <GLFW/glfw3.h>
