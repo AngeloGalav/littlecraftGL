@@ -153,8 +153,8 @@ void NewCube::draw(int ModelUniform) {
     glDrawElements(GL_TRIANGLES, (indices.size() - 1) * sizeof(GLuint),
                    GL_UNSIGNED_INT, 0);
     // keep it glfront for debug
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    // glPolygonMode(GL_FRONT, GL_FILL);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT, GL_FILL);
 
     glBindVertexArray(0);
 }

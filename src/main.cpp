@@ -4,17 +4,12 @@
 #include "include/Chunk.h"
 #include "include/EventHandler.h"
 #include "include/FastNoiseLite.h"
-#include "include/GuiWrap.h"
 #include "include/InputHandler.h"
 #include "include/Lib.h"
 #include "include/Mesh.h"
 #include "include/ShaderMaker.h"
 #include "include/Texture.h"
 #include "include/definitions.h"
-// Dear ImGui
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 
 // new code
 #include "include/Cube2.h"
@@ -175,8 +170,6 @@ int main() {
     MatView = glGetUniformLocation(programId, "View");
     MatView_texture = glGetUniformLocation(texture_programId, "View");
 
-    imGuiInit(window);
-
     while (!glfwWindowShouldClose(window)) {
         //  frame dependent movement
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -188,8 +181,6 @@ int main() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    imGuiShutdown();
 
     glfwDestroyWindow(window);
     glfwTerminate();

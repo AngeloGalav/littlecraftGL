@@ -39,13 +39,12 @@ void NewChunk::setup() {
 }
 
 void NewChunk::build() {
-
-        
     // Chunk generation placeholder
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                if (y < CHUNK_SIZE / 2)
+                if ((y <= CHUNK_SIZE/2 - x + 20 && y <= x - CHUNK_SIZE/2 + 20) &&
+                    (y <= CHUNK_SIZE/2 - z + 20 && y <= z - CHUNK_SIZE/2 + 20))
                     chunk_map[x][y][z] = 1;
                 else
                     chunk_map[x][y][z] = 0;
@@ -75,6 +74,7 @@ void NewChunk::addCube(glm::vec3 position) {
     unsigned int indexOffset = (int) vertices.size();
     std::vector<Vertex>& cube_vertices = cube.getVertexData();
     vertices.insert(vertices.end(), cube_vertices.begin(), cube_vertices.end());
+
     //local indices
     std::vector<GLuint>& cube_indices = cube.getIndices();
 
