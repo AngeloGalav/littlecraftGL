@@ -19,6 +19,8 @@ class NewChunk {
     void build();
     void setup();
     void addCube(glm::vec3 position);
+    // todo: finalize this so it replaces addcube
+    void addFace(glm::vec3 position, glm::ivec3 direction);
 
     void translate(glm::vec3 translate_vector);
     void moveTo(glm::vec3 position);

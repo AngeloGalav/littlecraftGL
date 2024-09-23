@@ -37,6 +37,8 @@ public:
     std::vector<Vertex>& getVertexData();
     std::vector<GLuint>& getIndices();
 
+    std::pair<int, int>getFaceVertexRange(glm::ivec3 direction);
+
     NewCube();
     NewCube(glm::vec3 position);
 };

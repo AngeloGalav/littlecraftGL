@@ -156,8 +156,9 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-    // enables front face culling
-    glEnable(GL_CULL_FACE);
+    // enables front face culling (will disable in release build
+    // for better performance)
+    // glEnable(GL_CULL_FACE);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

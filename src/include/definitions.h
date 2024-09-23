@@ -3,8 +3,6 @@
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
-#define WIDTH_2 200;
-#define HEIGHT_2 200;
 #define PI 3.14159265358979323846
 #define UNIT_SIZE 4
 #define CHUNK_SIZE 32
