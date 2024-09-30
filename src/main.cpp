@@ -41,6 +41,8 @@ Cube test_cube;
 NewCube test_cube2;
 NewCube test_cube3(glm::vec3(15, -5, 0));
 NewChunk test_chunk;
+NewChunk test_chunk2;
+
 
 void init(void) {
     char *vertexShader = (char *)"shaders/plain.vert.glsl";
@@ -69,8 +71,13 @@ void init(void) {
     test_cube3.setup();
 
     // NEW CHUNK
-    test_chunk.build();
+    test_chunk.build(1);
     test_chunk.setup();
+
+    // DEBUG CHUNK (TODO: DELETE LATER)
+    test_chunk2.build(0);
+    test_chunk2.setup();
+    test_chunk2.translate(vec3(10, 0, 5));
 }
 
 void drawScene(GLFWwindow *window) {
@@ -87,12 +94,11 @@ void drawScene(GLFWwindow *window) {
     glUniformMatrix4fv(MatView_texture, 1, GL_FALSE, value_ptr(mainCamera.ViewMatrix));
     // textureMaker.useTexture();
     // main_world.renderWorld(MatModel_texture);
-    test_cube3.draw(MatModel);
-    test_chunk.draw(MatModel);
-
 
     test_cube3.draw(MatModel);
     test_chunk.draw(MatModel);
+
+    test_chunk2.draw(MatModel);
 
 
     // enable blending to draw transparency
@@ -112,6 +118,7 @@ void drawScene(GLFWwindow *window) {
 
     test_cube2.draw(MatModel);
 
+    // pyramid
 
     // main_world.updateWorld();
 }

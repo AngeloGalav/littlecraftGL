@@ -1,6 +1,7 @@
 #include "include/Chunk2.h"
-
 // TODO: ADD REFERENCE TO CHUNK POSITION, AND TRANSFORM THE CHUNK ACCORDINGLY!
+
+// TODO: REMOVE CHUNK NOISE WHEN DONE WITH DEBUGGING
 
 NewChunk::NewChunk() {}
 
@@ -38,23 +39,50 @@ void NewChunk::setup() {
     glEnableVertexAttribArray(2);
 }
 
-void NewChunk::build() {
+// DEBUG noise function
+void NewChunk::quickNoisedChunk(){
+
+    // change to diffnoise (layered?)
+    noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+    noise.SetFrequency(0.1);
+
+    for (int y = 0; y < CHUNK_SIZE; y++) {
+        for (int x = 0; x <  CHUNK_SIZE; x++)
+        {
+            noiseData[x][y] = (int)CHUNK_SIZE * noise.GetNoise((float)x, (float)y) + 10;
+        }
+    }
+
+    std::cout << "\n [DEBUG] Loaded CHUNK noise" << std::endl;
+
+}
+
+void NewChunk::build(bool debug) {
+    // TODO: remove after generating the World class
+    quickNoisedChunk();
+    
     // Chunk generation placeholder
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                if ((z <= CHUNK_SIZE/2 - x + 20 && z <= x - CHUNK_SIZE/2 + 20) &&
-                    (z <= CHUNK_SIZE/2 - y + 20 && z <= y - CHUNK_SIZE/2 + 20))
-                    chunk_map[x][y][z] = 1;
-                else
-                    chunk_map[x][y][z] = 0;
+                if (debug) {
+                    if ((z <= CHUNK_SIZE/2 - x + 20 && z <= x - CHUNK_SIZE/2 + 20) &&
+                        (z <= CHUNK_SIZE/2 - y + 20 && z <= y - CHUNK_SIZE/2 + 20))
+                        chunk_map[x][y][z] = 1;
+                    else
+                        chunk_map[x][y][z] = 0;
+                }
+                // non-debug (noised chunk) 
+                else 
+                {
+                    if (noiseData[x][y] <= z)
+                        chunk_map[x][y][z] = 1;
+                    else
+                        chunk_map[x][y][z] = 0;
+                    
+                    if (x==0 || y == 0 || z == 0) chunk_map[x][y][z] = 1;
+                }
 
-                // if (z > 1 && z <= CHUNK_SIZE/2 &&
-                //     x > 1 && x <= CHUNK_SIZE/2 &&
-                //     y > 1 && y <= CHUNK_SIZE/2)
-                //     chunk_map[x][y][z] = 1;
-                // else
-                //     chunk_map[x][y][z] = 0;
             }
         }
     }
