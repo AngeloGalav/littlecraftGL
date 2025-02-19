@@ -60,11 +60,11 @@ void NewChunk::quickNoisedChunk(){
 void NewChunk::build(bool debug) {
     // TODO: remove after generating the World class
     quickNoisedChunk();
-    
+
     // Chunk generation placeholder
-    for (int x = 0; x < CHUNK_SIZE; x++) {
-        for (int y = 0; y < CHUNK_SIZE; y++) {
-            for (int z = 0; z < CHUNK_SIZE; z++) {
+    for (int x = 1; x < CHUNK_SIZE-1; x++) {
+        for (int y = 1; y < CHUNK_SIZE-1; y++) {
+            for (int z = 1; z < CHUNK_SIZE-1; z++) {
                 if (debug) {
                     if ((z <= CHUNK_SIZE/2 - x + 20 && z <= x - CHUNK_SIZE/2 + 20) &&
                         (z <= CHUNK_SIZE/2 - y + 20 && z <= y - CHUNK_SIZE/2 + 20))
@@ -73,14 +73,17 @@ void NewChunk::build(bool debug) {
                         chunk_map[x][y][z] = 0;
                 }
                 // non-debug (noised chunk) 
-                else 
+                else
                 {
-                    if (noiseData[x][y] <= z)
+                    if (noiseData[x][y] >= z)
                         chunk_map[x][y][z] = 1;
                     else
                         chunk_map[x][y][z] = 0;
-                    
                     if (x==0 || y == 0 || z == 0) chunk_map[x][y][z] = 1;
+                    // if ((z % 2 == 0))
+                    //     chunk_map[x][y][z] = 1;
+                    // else
+                    //     chunk_map[x][y][z] = 0;
                 }
 
             }
@@ -91,7 +94,8 @@ void NewChunk::build(bool debug) {
 
 
     // Chunk generation placeholder
-    // todo: find another way to guard arrays
+    // todo: find another way to guard arrays (!!!)
+    // otherwise you'll have holes between chunks
     for (int x = 1; x < CHUNK_SIZE-1; x++) {
         for (int y = 1; y < CHUNK_SIZE-1; y++) {
             for (int z = 1; z < CHUNK_SIZE-1; z++) {

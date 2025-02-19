@@ -40,8 +40,8 @@ mat4 Model;
 Cube test_cube;
 NewCube test_cube2;
 NewCube test_cube3(glm::vec3(15, -5, 0));
-NewChunk test_chunk;
-NewChunk test_chunk2;
+NewChunk test_chunk_pyramid;
+NewChunk test_chunk_noised;
 
 
 void init(void) {
@@ -71,13 +71,13 @@ void init(void) {
     test_cube3.setup();
 
     // NEW CHUNK
-    test_chunk.build(1);
-    test_chunk.setup();
+    test_chunk_pyramid.build(1);
+    test_chunk_pyramid.setup();
 
     // DEBUG CHUNK (TODO: DELETE LATER)
-    test_chunk2.build(0);
-    test_chunk2.setup();
-    test_chunk2.translate(vec3(10, 0, 5));
+    test_chunk_noised.build(0);
+    test_chunk_noised.setup();
+    test_chunk_noised.translate(vec3(10, 0, 5));
 }
 
 void drawScene(GLFWwindow *window) {
@@ -96,9 +96,9 @@ void drawScene(GLFWwindow *window) {
     // main_world.renderWorld(MatModel_texture);
 
     test_cube3.draw(MatModel);
-    test_chunk.draw(MatModel);
+    test_chunk_pyramid.draw(MatModel);
 
-    test_chunk2.draw(MatModel);
+    test_chunk_noised.draw(MatModel);
 
 
     // enable blending to draw transparency
