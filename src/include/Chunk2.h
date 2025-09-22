@@ -10,7 +10,7 @@ class NewChunk {
    private:
    public:
     GLuint VBO, EBO, VAO;
-    glm::vec3 position;
+    glm::vec3 chunkPosition;
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
     glm::vec4 color;

@@ -5,7 +5,9 @@
 
 NewChunk::NewChunk() {}
 
-NewChunk::NewChunk(glm::vec3 position){}
+NewChunk::NewChunk(glm::vec3 position){
+    this->chunkPosition = position;
+}
 
 void NewChunk::setup() {
 
@@ -58,71 +60,63 @@ void NewChunk::quickNoisedChunk(){
 }
 
 void NewChunk::build(bool debug) {
-    // TODO: remove after generating the World class
-    quickNoisedChunk();
+    vertices.clear();
+    indices.clear();
+    memset(chunk_map, 0, sizeof(chunk_map));
+    
+    if (!debug) {
+        // Generate noise using world coordinates
+        noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+        noise.SetFrequency(0.1);
+        
+        for (int y = 0; y < CHUNK_SIZE; y++) {
+            for (int x = 0; x < CHUNK_SIZE; x++) {
+                float worldX = chunkPosition.x + x;
+                float worldY = chunkPosition.y + y;
+                noiseData[x][y] = (int)CHUNK_SIZE * noise.GetNoise(worldX, worldY) + 10;
+            }
+        }
+    }
 
-    // Chunk generation placeholder
+    // Generate terrain (keep your original logic)
     for (int x = 1; x < CHUNK_SIZE-1; x++) {
         for (int y = 1; y < CHUNK_SIZE-1; y++) {
             for (int z = 1; z < CHUNK_SIZE-1; z++) {
                 if (debug) {
+                    // Your debug pattern
                     if ((z <= CHUNK_SIZE/2 - x + 20 && z <= x - CHUNK_SIZE/2 + 20) &&
                         (z <= CHUNK_SIZE/2 - y + 20 && z <= y - CHUNK_SIZE/2 + 20))
                         chunk_map[x][y][z] = 1;
                     else
                         chunk_map[x][y][z] = 0;
-                }
-                // non-debug (noised chunk) 
-                else
-                {
+                } else {
+                    // Your noise logic
                     if (noiseData[x][y] >= z)
                         chunk_map[x][y][z] = 1;
                     else
                         chunk_map[x][y][z] = 0;
-                    if (x==0 || y == 0 || z == 0) chunk_map[x][y][z] = 1;
-                    // if ((z % 2 == 0))
-                    //     chunk_map[x][y][z] = 1;
-                    // else
-                    //     chunk_map[x][y][z] = 0;
                 }
-
             }
         }
     }
 
-    chunk_map[CHUNK_SIZE/2 + 10][CHUNK_SIZE/2 + 10][CHUNK_SIZE/2 + 10] = 1;
-
-
-    // Chunk generation placeholder
-    // todo: find another way to guard arrays (!!!)
-    // otherwise you'll have holes between chunks
+    // Face generation - add chunk offset to positions
     for (int x = 1; x < CHUNK_SIZE-1; x++) {
         for (int y = 1; y < CHUNK_SIZE-1; y++) {
             for (int z = 1; z < CHUNK_SIZE-1; z++) {
                 if (chunk_map[x][y][z]) {
-                    if (!chunk_map[x+1][y][z]) addFace(glm::vec3(y,z,x), glm::ivec3(1,0,0));
-                    if (!chunk_map[x-1][y][z]) addFace(glm::vec3(y,z,x), glm::ivec3(-1,0,0));
-                    if (!chunk_map[x][y+1][z]) addFace(glm::vec3(y,z,x), glm::ivec3(0,1,0));
-                    if (!chunk_map[x][y-1][z]) addFace(glm::vec3(y,z,x), glm::ivec3(0,-1,0));
-                    if (!chunk_map[x][y][z+1]) addFace(glm::vec3(y,z,x), glm::ivec3(0,0,1));
-                    if (!chunk_map[x][y][z-1]) addFace(glm::vec3(y,z,x), glm::ivec3(0,0,-1));
-                    
-                    // out of bounds face check (will be replaced by btwn chunks check in the future)
-                    // todo: change
-                    // if (z-1 < 1)          addFace(glm::vec3(y,-1,x), glm::ivec3(0,0,-1));
-                    // if (z+1 > CHUNK_SIZE-1) addFace(glm::vec3(y, 1,x), glm::ivec3(0,0, 1));
-                    // if (x-1 < 1)          addFace(glm::vec3(y,z,-1), glm::ivec3(-1,0,0));
-                    // if (x+1 > CHUNK_SIZE-1) addFace(glm::vec3(y,z, 1), glm::ivec3( 1,0,0));
-                    // if (z-1 < 1)          addFace(glm::vec3(-1,z,x), glm::ivec3(0,-1,0));
-                    // if (z+1 > CHUNK_SIZE-1) addFace(glm::vec3(-1,z,x), glm::ivec3(0, 1,0));
+                    glm::vec3 worldPos = chunkPosition + glm::vec3(y, z, x); // Keep your coordinate order
+
+                    if (!chunk_map[x+1][y][z]) addFace(worldPos, glm::ivec3(1,0,0));
+                    if (!chunk_map[x-1][y][z]) addFace(worldPos, glm::ivec3(-1,0,0));
+                    if (!chunk_map[x][y+1][z]) addFace(worldPos, glm::ivec3(0,1,0));
+                    if (!chunk_map[x][y-1][z]) addFace(worldPos, glm::ivec3(0,-1,0));
+                    if (!chunk_map[x][y][z+1]) addFace(worldPos, glm::ivec3(0,0,1));
+                    if (!chunk_map[x][y][z-1]) addFace(worldPos, glm::ivec3(0,0,-1));
                 }
             }
         }
     }
-
-    std::cout << "Finished building" << std::endl;
-    std::cout << "indices size is " << indices.size() << std::endl;
-    std::cout << "vertex size is " << vertices.size() << std::endl;
 }
 
 void NewChunk::addCube(glm::vec3 position) {
@@ -191,6 +185,6 @@ void NewChunk::translate(glm::vec3 translate_vector) {
 }
 
 void NewChunk::moveTo(glm::vec3 position) {
-    translate(position - this->position);
-    this->position = position;
+    translate(position - this->chunkPosition);
+    this->chunkPosition = position;
 }

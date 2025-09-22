@@ -42,7 +42,7 @@ NewCube test_cube2;
 NewCube test_cube3(glm::vec3(15, -5, 0));
 NewChunk test_chunk_pyramid;
 NewChunk test_chunk_noised;
-
+NewChunk multiplechunk_test[9];
 
 void init(void) {
     char *vertexShader = (char *)"shaders/plain.vert.glsl";
@@ -54,6 +54,13 @@ void init(void) {
     texture_programId = ShaderMaker::createProgram(vertexShader_texture,
                                                    fragmentShader_texture);
     glUseProgram(programId);
+    
+    // TODO: delete after testing
+    for (int i = 0; i < 9; i++) {
+        multiplechunk_test[i] = NewChunk(glm::vec3((i % 3) * CHUNK_SIZE, 0, (i / 3) * CHUNK_SIZE));
+        multiplechunk_test[i].build(0);
+        multiplechunk_test[i].setup();
+    }
 
     // inizializza la texture usando il programId dello shader
     textureMaker.initTexture(&texture_programId);
@@ -99,6 +106,10 @@ void drawScene(GLFWwindow *window) {
     test_chunk_pyramid.draw(MatModel);
 
     test_chunk_noised.draw(MatModel);
+
+    for (int i = 0; i < 9; i++) {
+        multiplechunk_test[i].draw(MatModel);
+    }
 
 
     // enable blending to draw transparency

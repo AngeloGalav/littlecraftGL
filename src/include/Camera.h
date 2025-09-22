@@ -66,5 +66,13 @@ class Camera {
    private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors();
+
+    float raycastDistance = 10.0f;
+
+    // does raycasting and returns true if a block has been hit
+    bool raycastToBlock(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, 
+                   glm::vec3& outBlockPos);
+
+    void updateSelection();
 };
 #endif

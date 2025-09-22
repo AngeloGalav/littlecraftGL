@@ -93,3 +93,66 @@ void Camera::updateCameraMatrices(){
                                   0.1f, 100.0f);
     ViewMatrix = glm::lookAt(Position, Position + Front, Up);
 }
+
+// bool Camera::raycastToBlock(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, 
+//                    glm::vec3& outBlockPos) {
+//     // Simple implementation - step along the ray and check for blocks
+//     float step = 0.1f; // Step size
+    
+//     for (float dist = 0; dist < raycastDistance; dist += step) {
+//         glm::vec3 checkPos = rayOrigin + rayDirection * dist;
+        
+//         // Convert world position to chunk/block coordinates
+//         int blockX = floor(checkPos.x / UNIT_SIZE);
+//         int blockY = floor(checkPos.y / UNIT_SIZE);
+//         int blockZ = floor(checkPos.z / UNIT_SIZE);
+        
+//         // Calculate which chunk this belongs to
+//         int chunkX = floor(blockX / CHUNK_SIZE);
+//         int chunkY = floor(blockY / CHUNK_SIZE);
+//         int chunkZ = floor(blockZ / CHUNK_SIZE);
+        
+//         // Get local coordinates within chunk
+//         int localX = blockX - chunkX * CHUNK_SIZE;
+//         int localY = blockY - chunkY * CHUNK_SIZE;
+//         int localZ = blockZ - chunkZ * CHUNK_SIZE;
+        
+//         // Find the chunk and check if there's a block at these coordinates
+//         // (You'll need to adapt this to your chunk storage system)
+//         NewChunk* chunk = getChunkAt(chunkX, chunkY, chunkZ);
+//         if (chunk && chunk->chunk_map[localX][localY][localZ]) {
+//             outBlockPos = glm::vec3(blockX, blockY, blockZ) * (float)UNIT_SIZE;
+//             return true;
+//         }
+//     }
+    
+//     return false;
+// }
+
+// void Camera::updateSelection() {
+//     glm::vec3 selectedBlockPos;
+//     bool blockHit = raycastToBlock(Position, Front, selectedBlockPos);
+    
+//     // Clear previous selection
+//     for (auto& chunk : chunks) {
+//         chunk->resetHighlight();
+//     }
+    
+//     if (blockHit) {
+//         // Find which chunk this block belongs to
+//         int chunkX = floor(selectedBlockPos.x / UNIT_SIZE / CHUNK_SIZE);
+//         int chunkY = floor(selectedBlockPos.y / UNIT_SIZE / CHUNK_SIZE);
+//         int chunkZ = floor(selectedBlockPos.z / UNIT_SIZE / CHUNK_SIZE);
+        
+//         NewChunk* chunk = getChunkAt(chunkX, chunkY, chunkZ);
+//         if (chunk) {
+//             // Option 1: Highlight the block by changing its color
+//             chunk->highlightCube(selectedBlockPos);
+
+//             // Store selected block for later use (removing it)
+//             currentlySelectedBlock = selectedBlockPos;
+//         }
+//     } else {
+//         currentlySelectedBlock = glm::vec3(-1); // Invalid position to indicate no selection
+//     }
+// }
